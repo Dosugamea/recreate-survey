@@ -1,0 +1,137 @@
+# 実装計画書 - カスタマイズ自在なアンケートアプリ ✨
+
+## 今回やること！ (Goal Description)
+
+管理画面からポチポチするだけで、イケてるアンケートページが作れる Next.js アプリを作るよ！
+HTML とか書かなくても OK！画像やテーマカラーも自由に設定できるようにしちゃうし、ゲーム内の `auser_id` もちゃんと記録して、集計までできる優れものだよ 😎
+
+## せんぱい、確認してほしいこと！ (User Review Required)
+
+> [!IMPORTANT]
+> **デザインについて**
+> クラス名も参考にしながら、Tailwindで同じ見た目になるように作り込むね！✨
+>
+> **画像の扱い**
+> 画像のアップロード機能はナシ！全部 URL (文字列) を入力してもらう形にするね。
+> ユーザーさんに画像をどこかに置いておいてもらう必要があるけど、シンプルさ重視でいくよ！
+>
+> **データベースについて**
+> 手軽に始められるように `SQLite` を使う予定だよ！もし「もっと大規模なアクセスがあるから PostgreSQL がいい！」とかあれば教えてね！
+
+## 変更内容の提案 (Proposed Changes)
+
+### 使っちゃう技術スタック
+
+- **フレームワーク**: Next.js 14+ (App Router) - いまどきはコレっしょ！
+- **言語**: TypeScript - 型安全でバグを減らそう！
+- **スタイリング**: Tailwind CSS - オシャレな UI を爆速で作るよ！
+- **データベースアクセス**: Prisma - DB 操作も楽々！
+- **フォーム管理**: React Hook Form + Zod - バリデーションも完璧 ✨
+
+### データベースの設計図 (Schema)
+
+```prisma
+// アンケート自体の設定
+model Survey {
+  id            String    @id @default(cuid())
+  slug          String    @unique // URLの一部になるよ (例: /campaign-2025)
+  title         String    // アンケートのタイトル
+  description   String?   // 説明文 (HTMLタグ含めてもいいかも)
+  startAt       DateTime? // 開始日時
+  endAt         DateTime? // 終了日時
+
+  // 見た目のカスタマイズ
+  themeColor    String    @default("#6c4034") // テーマカラー (CSS変数 `--accent-color` とかにする)
+  headerImage   String?   // ヘッダー画像のURL (文字列のみ)
+  bgImage       String?   // 背景画像のURL (文字列のみ)
+
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  questions     Question[]
+  responses     Response[]
+}
+
+// 質問項目
+model Question {
+  id            String    @id @default(cuid())
+  surveyId      String
+  survey        Survey    @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+
+  type          String    // RADIO, SELECT, TEXT, CHECKBOX, EMAIL (バリデーション用)
+  label         String    // 質問文
+  order         Int       // 並び順
+  required      Boolean   @default(false) // 必須項目かどうか
+  maxLength     Int?      // 文字数制限！ (自由入力系で使う)
+
+  // 選択肢がある場合の中身
+  options       String?   // JSON文字列で保存 ["男性", "女性"] みたいな感じ
+
+  answers       Answer[]
+}
+
+// ユーザーからの回答（１回分）
+model Response {
+  id            String    @id @default(cuid())
+  surveyId      String
+  survey        Survey    @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+
+  userId        String    // これが auser_id だよ！
+  submittedAt   DateTime  @default(now())
+
+  answers       Answer[]
+}
+
+// 個別の質問への答え
+model Answer {
+  id            String    @id @default(cuid())
+  responseId    String
+  response      Response  @relation(fields: [responseId], references: [id], onDelete: Cascade)
+
+  questionId    String
+  question      Question  @relation(fields: [questionId], references: [id])
+
+  value         String    // ユーザーが選んだり入力した値
+}
+```
+
+### ディレクトリ構成案 (`survey-app/`)
+
+- `prisma/schema.prisma` - DB の設定はここ！
+- `app/`
+  - `admin/` - 管理画面エリア (Shadcn UI でリッチに、でもシンプルに！)
+    - `page.tsx`: ダッシュボード（アンケート一覧）
+    - `create/page.tsx`: 新規作成ページ
+    - `[id]/edit/page.tsx`: 質問を追加したり編集するページ
+    - `[id]/results/page.tsx`: みんなの回答を見るページ
+  - `[slug]/` - 公開ページエリア (リファレンス HTML 再現ゾーン！)
+    - `page.tsx`: 実際にユーザーが見るアンケート画面
+    - `layout.tsx`: `head` タグや `meta` 情報もリファレンスを意識して設定
+- `components/`
+  - `survey/`: 公開ページ用コンポーネント
+    - `SurveyContainer.tsx`: `#app-bg` > `#app-content` の枠組み
+    - `SurveyHeader.tsx`: タイトル画像や期間表示 (`#information`)
+    - `SurveyForm.tsx`: フォーム本体 (`#form`)、完了画面もここで制御
+    - `QuestionItem.tsx`: 各質問 (`.q-item`) のレンダリング
+
+## テスト計画 (Verification Plan)
+
+### 自動テスト
+
+- ビルド (`npm run build`) が通るかチェックして、TypeScript のエラーがないか確認するよ！
+
+### 手動チェック
+
+1.  **管理画面のチェック**:
+    - `/admin` にアクセスしてアンケートを作成。
+    - ヘッダー画像の URL を直接入力して、プレビューで表示されるか確認！
+    - 「自由記入欄」を作って、文字数制限を「10文字」に設定してみる 📏
+2.  **ユーザー画面のチェック**:
+    - リファレンスの HTML と見比べて、レイアウトが崩れてないかチェック！ 👀
+    - 文字数制限を超えたときにエラーが出るか確認。
+    - `auser_id` なしでアクセスしたときの挙動も確認 (エラーにするか、パラメータ待つか)。
+3.  **集計のチェック**:
+    - 管理画面で回答一覧を見て、ちゃんとデータが入ってるか確認！
+
+よしっ！これでせんぱいの希望通りになったかな？確認よろしくねっ！ 😆
