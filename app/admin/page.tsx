@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { format } from "date-fns";
-import { PlusCircle, Edit, BarChart } from "lucide-react";
+import { PlusCircle, Edit, BarChart, ExternalLink } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -57,17 +57,32 @@ export default async function AdminDashboardPage() {
                   <p>ステータス: {survey.isActive ? "公開中" : "非公開"}</p>
                 </div>
               </CardContent>
-              <CardFooter className="flex justify-between">
+              <CardFooter className="flex justify-between flex-wrap gap-2">
                 <Button variant="outline" size="sm" asChild>
                   <Link href={`/admin/${survey.id}/edit`}>
                     <Edit className="mr-2 h-4 w-4" /> 編集
                   </Link>
                 </Button>
-                <Button variant="secondary" size="sm" asChild>
-                  <Link href={`/admin/${survey.id}/results`}>
-                    <BarChart className="mr-2 h-4 w-4" /> 結果
-                  </Link>
-                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    asChild
+                    title="アンケートを開く"
+                  >
+                    <Link
+                      href={`/${survey.slug}?auser_id=dummy`}
+                      target="_blank"
+                    >
+                      <ExternalLink className="h-4 w-4" />
+                    </Link>
+                  </Button>
+                  <Button variant="secondary" size="sm" asChild>
+                    <Link href={`/admin/${survey.id}/results`}>
+                      <BarChart className="mr-2 h-4 w-4" /> 結果
+                    </Link>
+                  </Button>
+                </div>
               </CardFooter>
             </Card>
           ))
