@@ -79,26 +79,31 @@ export default async function SurveyResultsPage(props: {
                     const options = q.options ? JSON.parse(q.options) : [];
 
                     return (
-                      <div className="grid grid-cols-2 gap-2 text-sm">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                         {options.map((opt: string) => (
-                          <div key={opt} className="contents">
-                            <span>{opt}</span>
-                            <div className="flex items-center gap-2">
-                              <div className="h-2 bg-primary/20 rounded-full flex-1 overflow-hidden">
-                                <div
-                                  className="h-full bg-primary"
-                                  style={{
-                                    width: `${
-                                      ((counts[opt] || 0) /
-                                        (survey._count.responses || 1)) *
-                                      100
-                                    }%`,
-                                  }}
-                                />
-                              </div>
-                              <span className="w-8 text-right">
+                          <div
+                            key={opt}
+                            className="contents sm:block bg-muted/20 p-2 rounded"
+                          >
+                            <div className="flex justify-between items-center mb-1">
+                              <span className="font-medium break-words">
+                                {opt}
+                              </span>
+                              <span className="text-muted-foreground w-8 text-right">
                                 {counts[opt] || 0}
                               </span>
+                            </div>
+                            <div className="h-2 bg-primary/20 rounded-full w-full overflow-hidden">
+                              <div
+                                className="h-full bg-primary transition-all duration-500"
+                                style={{
+                                  width: `${
+                                    ((counts[opt] || 0) /
+                                      (survey._count.responses || 1)) *
+                                    100
+                                  }%`,
+                                }}
+                              />
                             </div>
                           </div>
                         ))}

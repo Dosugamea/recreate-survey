@@ -22,14 +22,16 @@ export default async function AdminDashboardPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">ダッシュボード</h2>
-          <p className="text-muted-foreground mt-2">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
+            ダッシュボード
+          </h2>
+          <p className="text-muted-foreground mt-2 text-sm sm:text-base">
             アンケートの管理や結果の確認ができます。
           </p>
         </div>
-        <Button asChild>
+        <Button asChild className="w-full sm:w-auto">
           <Link href="/admin/create">
             <PlusCircle className="mr-2 h-4 w-4" /> アンケート作成
           </Link>
@@ -38,7 +40,7 @@ export default async function AdminDashboardPage() {
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {surveys.length === 0 ? (
-          <div className="col-span-full text-center p-12 border rounded-lg border-dashed text-muted-foreground">
+          <div className="col-span-full text-center p-8 sm:p-12 border rounded-lg border-dashed text-muted-foreground">
             アンケートが見つかりません。新規作成して始めましょう！
           </div>
         ) : (
