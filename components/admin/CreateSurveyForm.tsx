@@ -103,10 +103,10 @@ export function CreateSurveyForm() {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Description</FormLabel>
+              <FormLabel>説明</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Please fill out this survey..."
+                  placeholder="このアンケートにご記入ください..."
                   {...field}
                 />
               </FormControl>
@@ -212,7 +212,7 @@ export function CreateSurveyForm() {
                     className="w-10 h-10 rounded-md border text-center pt-2 text-xs text-white"
                     style={{ backgroundColor: field.value }}
                   >
-                    Try
+                    確認
                   </div>
                 </div>
                 <FormMessage />

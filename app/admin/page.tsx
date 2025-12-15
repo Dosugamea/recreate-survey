@@ -60,7 +60,9 @@ export default async function AdminDashboardPage() {
               </CardHeader>
               <CardContent>
                 <div className="text-sm text-muted-foreground space-y-1">
-                  <p>作成日: {format(survey.createdAt, "PPP")}</p>
+                  <p>
+                    作成日時: {format(survey.createdAt, "yyyy/MM/dd HH:mm")}
+                  </p>
                   <p>回答数: {survey._count.responses}</p>
                   <p>ステータス: {survey.isActive ? "公開中" : "非公開"}</p>
                 </div>
