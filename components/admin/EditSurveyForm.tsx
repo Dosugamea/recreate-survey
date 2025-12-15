@@ -1,0 +1,321 @@
+"use client";
+
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { surveySchema, SurveySchema } from "@/lib/schemas";
+import { updateSurvey } from "@/app/actions/surveys";
+import { useState, useTransition } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { CalendarIcon, Loader2, HelpCircle } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { Switch } from "@/components/ui/switch";
+import type { Survey } from "@prisma/client";
+
+interface EditSurveyFormProps {
+  survey: Survey;
+}
+
+export function EditSurveyForm({ survey }: EditSurveyFormProps) {
+  const [isPending, startTransition] = useTransition();
+  const [serverError, setServerError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  const form = useForm<SurveySchema>({
+    resolver: zodResolver(surveySchema),
+    defaultValues: {
+      title: survey.title,
+      slug: survey.slug,
+      description: survey.description || "",
+      startAt: survey.startAt ? new Date(survey.startAt) : undefined,
+      endAt: survey.endAt ? new Date(survey.endAt) : undefined,
+      themeColor: survey.themeColor,
+      headerImage: survey.headerImage || "",
+      bgImage: survey.bgImage || "",
+      isActive: survey.isActive,
+    },
+  });
+
+  function onSubmit(data: SurveySchema) {
+    setServerError(null);
+    setSuccessMessage(null);
+    startTransition(async () => {
+      const response = await updateSurvey(survey.id, data);
+      if (response?.error) {
+        setServerError(response.error);
+      } else {
+        setSuccessMessage("アンケート情報を更新しました！");
+      }
+    });
+  }
+
+  return (
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-8 max-w-2xl"
+      >
+        {serverError && (
+          <div className="bg-destructive/15 text-destructive text-sm p-3 rounded-md">
+            {serverError}
+          </div>
+        )}
+
+        {successMessage && (
+          <div className="bg-green-500/15 text-green-600 text-sm p-3 rounded-md">
+            {successMessage}
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>タイトル</FormLabel>
+                <FormControl>
+                  <Input placeholder="秋のキャンペーンアンケート" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="slug"
+            render={({ field }) => (
+              <FormItem>
+                <div className="flex items-center gap-2">
+                  <FormLabel>スラッグ (URLパス)</FormLabel>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        type="button"
+                        className="inline-flex items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                        aria-label="スラッグについての説明"
+                      >
+                        <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>アンケートのURLとして使用される一意のIDです。</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+                <FormControl>
+                  <Input placeholder="autumn-campaign-2025" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>説明</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="このアンケートにご記入ください..."
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <FormField
+            control={form.control}
+            name="startAt"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>開始日</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-full pl-3 text-left font-normal",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        {field.value ? (
+                          format(field.value, "PPP")
+                        ) : (
+                          <span>日付を選択</span>
+                        )}
+                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={field.value}
+                      onSelect={field.onChange}
+                      disabled={(date) => date < new Date("1900-01-01")}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="endAt"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>終了日</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-full pl-3 text-left font-normal",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        {field.value ? (
+                          format(field.value, "PPP")
+                        ) : (
+                          <span>日付を選択</span>
+                        )}
+                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={field.value}
+                      onSelect={field.onChange}
+                      disabled={(date) => date < new Date("1900-01-01")}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <FormField
+            control={form.control}
+            name="themeColor"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>テーマカラー</FormLabel>
+                <div className="flex gap-2">
+                  <FormControl>
+                    <Input placeholder="#6c4034" {...field} />
+                  </FormControl>
+                  <div
+                    className="w-10 h-10 rounded-md border text-center pt-2 text-xs text-white"
+                    style={{ backgroundColor: field.value }}
+                  >
+                    確認
+                  </div>
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="isActive"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                <div className="space-y-0.5">
+                  <FormLabel className="text-base">公開ステータス</FormLabel>
+                  <FormDescription>
+                    アンケートを公開するかどうかを設定します。
+                  </FormDescription>
+                </div>
+                <FormControl>
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <FormField
+            control={form.control}
+            name="headerImage"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>ヘッダー画像URL</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="https://example.com/header.jpg"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="bgImage"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>背景画像URL</FormLabel>
+                <FormControl>
+                  <Input placeholder="https://example.com/bg.jpg" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <Button type="submit" disabled={isPending}>
+          {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          アンケート情報を更新
+        </Button>
+      </form>
+    </Form>
+  );
+}
