@@ -6,6 +6,31 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 
+import type { Metadata } from "next";
+import { prisma } from "@/lib/prisma";
+
+const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "アンケートアプリ";
+
+export async function generateMetadata(props: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const params = await props.params;
+  const survey = await prisma.survey.findUnique({
+    where: { id: params.id },
+  });
+
+  if (!survey) {
+    return {
+      title: `プレビュー | ${appName}`,
+    };
+  }
+
+  return {
+    title: `プレビュー | ${appName}`,
+    description: `「${survey.title}」のプレビュー`,
+  };
+}
+
 interface PageProps {
   params: Promise<{ id: string }>;
 }

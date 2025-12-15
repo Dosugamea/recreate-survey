@@ -3,8 +3,30 @@ import { notFound } from "next/navigation";
 import { SurveyContainer } from "@/components/survey/SurveyContainer";
 import { SurveyHeader } from "@/components/survey/SurveyHeader";
 import { SurveyForm } from "@/components/survey/SurveyForm";
+import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
+
+const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "アンケートアプリ";
+
+export async function generateMetadata(props: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const params = await props.params;
+  const survey = await prisma.survey.findUnique({
+    where: { slug: params.slug },
+  });
+
+  if (!survey) {
+    return {
+      title: `フォーム | ${appName}`,
+    };
+  }
+
+  return {
+    title: `${survey.title} | ${appName}`,
+  };
+}
 
 export default async function SurveyPublicPage(props: {
   params: Promise<{ slug: string }>;

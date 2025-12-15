@@ -1,8 +1,31 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
+import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
+
+const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "アンケートアプリ";
+
+export async function generateMetadata(props: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const params = await props.params;
+  const survey = await prisma.survey.findUnique({
+    where: { id: params.id },
+  });
+
+  if (!survey) {
+    return {
+      title: `アンケート結果 | ${appName}`,
+    };
+  }
+
+  return {
+    title: `アンケート結果 | ${appName}`,
+    description: `「${survey.title}」の結果`,
+  };
+}
 
 export default async function SurveyResultsPage(props: {
   params: Promise<{ id: string }>;

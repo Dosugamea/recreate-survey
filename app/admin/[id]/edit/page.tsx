@@ -1,5 +1,28 @@
+import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
+
+const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "アンケートアプリ";
+
+export async function generateMetadata(props: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const params = await props.params;
+  const survey = await prisma.survey.findUnique({
+    where: { id: params.id },
+  });
+
+  if (!survey) {
+    return {
+      title: `アンケート編集 | ${appName}`,
+    };
+  }
+
+  return {
+    title: `アンケート編集 | ${appName}`,
+    description: `「${survey.title}」の編集`,
+  };
+}
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";

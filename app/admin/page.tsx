@@ -1,4 +1,11 @@
-import Link from "next/link";
+import type { Metadata } from "next";
+
+const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "アンケートアプリ";
+
+export const metadata: Metadata = {
+  title: `ダッシュボード | ${appName}`,
+  description: "管理者ダッシュボード",
+};
 import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,6 +18,7 @@ import {
 } from "@/components/ui/card";
 import { format } from "date-fns";
 import { PlusCircle, Edit, BarChart, ExternalLink } from "lucide-react";
+import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 

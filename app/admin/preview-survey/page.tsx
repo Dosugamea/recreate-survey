@@ -3,7 +3,18 @@ import Link from "next/link";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 
-export default async function PreviewSurveyList() {
+import type { Metadata } from "next";
+
+const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "アンケートアプリ";
+
+export const metadata: Metadata = {
+  title: `プレビュー一覧 | ${appName}`,
+  description: "アンケートプレビュー一覧",
+};
+
+export const dynamic = "force-dynamic";
+
+export default async function PreviewSurveyListPage() {
   const surveys = await prisma.survey.findMany({
     orderBy: { createdAt: "desc" },
     include: { questions: true },
