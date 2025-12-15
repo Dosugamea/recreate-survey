@@ -56,3 +56,48 @@ export async function createSurvey(data: SurveySchema) {
     redirect(`/admin`); // Fallback
   }
 }
+
+export async function updateSurvey(surveyId: string, data: SurveySchema) {
+  const result = surveySchema.safeParse(data);
+
+  if (!result.success) {
+    return { error: "Invalid data" };
+  }
+
+  const {
+    title,
+    slug,
+    description,
+    startAt,
+    endAt,
+    themeColor,
+    headerImage,
+    bgImage,
+    isActive,
+  } = result.data;
+
+  try {
+    await prisma.survey.update({
+      where: { id: surveyId },
+      data: {
+        title,
+        slug,
+        description,
+        startAt,
+        endAt,
+        themeColor,
+        headerImage: headerImage || null,
+        bgImage: bgImage || null,
+        isActive: isActive !== undefined ? isActive : undefined,
+      },
+    });
+  } catch (e: any) {
+    if (e.code === "P2002") {
+      return { error: "Slug already exists. Please choose another one." };
+    }
+    console.error(e);
+    return { error: "Database error occurred." };
+  }
+
+  return { success: true };
+}
