@@ -204,16 +204,24 @@ export function CreateSurveyForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>テーマカラー</FormLabel>
-                <div className="flex gap-2">
+                <div className="flex gap-2 items-center">
                   <FormControl>
-                    <Input placeholder="#6c4034" {...field} />
+                    <div className="flex gap-2">
+                      <input
+                        type="color"
+                        value={field.value || "#6c4034"}
+                        onChange={(e) => field.onChange(e.target.value)}
+                        className="w-16 h-10 rounded-md border border-input cursor-pointer"
+                        title="カラーを選択"
+                      />
+                      <Input
+                        placeholder="#6c4034"
+                        value={field.value}
+                        onChange={field.onChange}
+                        className="flex-1"
+                      />
+                    </div>
                   </FormControl>
-                  <div
-                    className="w-10 h-10 rounded-md border text-center pt-2 text-xs text-white"
-                    style={{ backgroundColor: field.value }}
-                  >
-                    確認
-                  </div>
                 </div>
                 <FormMessage />
               </FormItem>
