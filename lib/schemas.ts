@@ -20,6 +20,7 @@ export const surveySchema = z.object({
     .url("有効なURLを入力してください")
     .optional()
     .or(z.literal("")),
+  isActive: z.boolean().optional(),
 });
 
 export type SurveySchema = z.infer<typeof surveySchema>;
