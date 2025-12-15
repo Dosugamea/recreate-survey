@@ -22,7 +22,7 @@ export function SurveyContainer({ survey, children }: SurveyContainerProps) {
       >
         <div
           id="app-content"
-          className="relative max-w-3xl mx-auto min-h-screen shadow-2xl pb-10 sm:px-4"
+          className="relative max-w-[640px] mx-auto min-h-screen shadow-xl pb-10"
           style={{
             color: themeColor,
             backgroundColor: "#ffffff",

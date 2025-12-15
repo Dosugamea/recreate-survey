@@ -56,10 +56,6 @@ export function SurveyForm({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="px-4 pb-8">
-      <div id="read" className="text-sm mb-6 font-medium">
-        以下の設問にお答えください。
-      </div>
-
       {questions.map((q) => (
         <QuestionItem
           key={q.id}

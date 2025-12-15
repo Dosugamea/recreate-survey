@@ -13,16 +13,16 @@ export function SurveyHeader({ survey }: SurveyHeaderProps) {
   const lightAccentBg = hexToRgba(themeColor, 0.2);
 
   return (
-    <article className="pt-4">
-      <div id="ttl" className="text-center pb-4 px-4">
+    <article>
+      <div id="ttl" className="text-center">
         {headerImage && (
           <img
             src={headerImage}
             alt="Header"
-            className="mx-auto max-w-full h-auto mb-4"
+            className="mx-auto w-full h-auto"
           />
         )}
-        <h2 className="text-2xl font-bold">{title}</h2>
+        {!headerImage && <h2 className="text-2xl font-bold">{title}</h2>}
       </div>
 
       <section id="information" className="mb-8">
@@ -30,19 +30,18 @@ export function SurveyHeader({ survey }: SurveyHeaderProps) {
           className="flex flex-col sm:flex-row text-white text-sm sm:text-base font-bold"
           style={{ backgroundColor: accentBg }}
         >
-          <span className="flex-1 py-1 px-2">キャンペーン概要</span>
+          <span className="flex-1 py-5 px-6 text-2xl">キャンペーン情報</span>
           {startAt && endAt && (
             <span
-              className="flex-1 sm:text-right py-1 px-2"
+              className="flex-1 text-center text-sm rounded my-auto py-3 h-full mx-6"
               style={{ backgroundColor: lightAccentBg }}
             >
-              期間: {format(startAt, "yyyy/MM/dd HH:mm")} -{" "}
-              {format(endAt, "yyyy/MM/dd HH:mm")}
+              実施期間: {format(endAt, "yyyy年MM月dd日 HH:mmまで")}
             </span>
           )}
         </h3>
         {description && (
-          <div className="p-4 text-sm leading-relaxed whitespace-pre-wrap">
+          <div className="p-5 text-sm leading-relaxed whitespace-pre-wrap">
             {description}
           </div>
         )}
