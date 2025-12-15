@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+  engineType = "library"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// アンケート自体の設定
+model Survey {
+  id            String    @id @default(cuid())
+  slug          String    @unique // URLの一部になるよ (例: /campaign-2025)
+  title         String    // アンケートのタイトル
+  description   String?   // 説明文 (HTMLタグ含めてもいいかも)
+  startAt       DateTime? // 開始日時
+  endAt         DateTime? // 終了日時
+
+  // 見た目のカスタマイズ
+  themeColor    String    @default("#6c4034") // テーマカラー (CSS変数 `--accent-color` とかにする)
+  headerImage   String?   // ヘッダー画像のURL (文字列のみ)
+  bgImage       String?   // 背景画像のURL (文字列のみ)
+
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  questions     Question[]
+  responses     Response[]
+}
+
+// 質問項目
+model Question {
+  id            String    @id @default(cuid())
+  surveyId      String
+  survey        Survey    @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+
+  type          String    // RADIO, SELECT, TEXT, CHECKBOX, EMAIL (バリデーション用)
+  label         String    // 質問文
+  order         Int       // 並び順
+  required      Boolean   @default(false) // 必須項目かどうか
+  maxLength     Int?      // 文字数制限！ (自由入力系で使う)
+
+  // 選択肢がある場合の中身
+  options       String?   // JSON文字列で保存 ["男性", "女性"] みたいな感じ
+
+  answers       Answer[]
+}
+
+// ユーザーからの回答（１回分）
+model Response {
+  id            String    @id @default(cuid())
+  surveyId      String
+  survey        Survey    @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+
+  userId        String    // これが auser_id だよ！
+  submittedAt   DateTime  @default(now())
+
+  answers       Answer[]
+}
+
+// 個別の質問への答え
+model Answer {
+  id            String    @id @default(cuid())
+  responseId    String
+  response      Response  @relation(fields: [responseId], references: [id], onDelete: Cascade)
+
+  questionId    String
+  question      Question  @relation(fields: [questionId], references: [id])
+
+  value         String    // ユーザーが選んだり入力した値
+}

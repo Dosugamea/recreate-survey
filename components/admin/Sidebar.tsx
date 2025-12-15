@@ -1,0 +1,49 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { LayoutDashboard, PlusCircle } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+
+type SidebarProps = React.HTMLAttributes<HTMLDivElement>;
+
+export function Sidebar({ className }: SidebarProps) {
+  const pathname = usePathname();
+
+  return (
+    <div
+      className={cn("pb-12 min-h-screen border-r bg-gray-100/40", className)}
+    >
+      <div className="space-y-4 py-4">
+        <div className="px-3 py-2">
+          <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
+            アンケート管理
+          </h2>
+          <div className="space-y-1">
+            <Button
+              asChild
+              variant={pathname === "/admin" ? "secondary" : "ghost"}
+              className="w-full justify-start"
+            >
+              <Link href="/admin">
+                <LayoutDashboard className="mr-2 h-4 w-4" />
+                ダッシュボード
+              </Link>
+            </Button>
+            <Button
+              asChild
+              variant={pathname === "/admin/create" ? "secondary" : "ghost"}
+              className="w-full justify-start"
+            >
+              <Link href="/admin/create">
+                <PlusCircle className="mr-2 h-4 w-4" />
+                新規作成
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
