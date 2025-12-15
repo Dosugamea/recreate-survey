@@ -1,11 +1,5 @@
 import type { Metadata } from "next";
 
-const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "アンケートアプリ";
-
-export const metadata: Metadata = {
-  title: `ダッシュボード | ${appName}`,
-  description: "管理者ダッシュボード",
-};
 import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,15 +11,21 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { format } from "date-fns";
-import { PlusCircle, Edit, BarChart, ExternalLink } from "lucide-react";
+import { PlusCircle, Eye, ExternalLink } from "lucide-react";
 import Link from "next/link";
+
+const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "アンケートアプリ";
+
+export const metadata: Metadata = {
+  title: `ダッシュボード | ${appName}`,
+  description: "管理者ダッシュボード",
+};
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminDashboardPage() {
   const surveys = await prisma.survey.findMany({
     orderBy: { createdAt: "desc" },
-    include: { _count: { select: { responses: true } } },
   });
 
   return (
@@ -56,43 +56,32 @@ export default async function AdminDashboardPage() {
             <Card key={survey.id}>
               <CardHeader>
                 <CardTitle className="truncate">{survey.title}</CardTitle>
-                <CardDescription>/{survey.slug}</CardDescription>
+                <CardDescription>
+                  <Link href={`/${survey.slug}?auser_id=dummy`} target="_blank">
+                    <div className="flex items-center gap-2">
+                      <span className="text-muted-foreground text-sm text-align-baseline">
+                        {" "}
+                        /{survey.slug}
+                      </span>
+                      <ExternalLink className="h-4 w-4" />
+                    </div>
+                  </Link>
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="text-sm text-muted-foreground space-y-1">
                   <p>
                     作成日時: {format(survey.createdAt, "yyyy/MM/dd HH:mm")}
                   </p>
-                  <p>回答数: {survey._count.responses}</p>
                   <p>ステータス: {survey.isActive ? "公開中" : "非公開"}</p>
                 </div>
               </CardContent>
-              <CardFooter className="flex justify-between flex-wrap gap-2">
+              <CardFooter className="flex justify-end flex-wrap gap-2">
                 <Button variant="outline" size="sm" asChild>
-                  <Link href={`/admin/${survey.id}/edit`}>
-                    <Edit className="mr-2 h-4 w-4" /> 編集
+                  <Link href={`/admin/${survey.id}`}>
+                    <Eye className="mr-2 h-4 w-4" /> 詳細
                   </Link>
                 </Button>
-                <div className="flex gap-2">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    asChild
-                    title="アンケートを開く"
-                  >
-                    <Link
-                      href={`/${survey.slug}?auser_id=dummy`}
-                      target="_blank"
-                    >
-                      <ExternalLink className="h-4 w-4" />
-                    </Link>
-                  </Button>
-                  <Button variant="secondary" size="sm" asChild>
-                    <Link href={`/admin/${survey.id}/results`}>
-                      <BarChart className="mr-2 h-4 w-4" /> 結果
-                    </Link>
-                  </Button>
-                </div>
               </CardFooter>
             </Card>
           ))
