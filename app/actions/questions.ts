@@ -30,20 +30,41 @@ export async function addQuestion(surveyId: string, data: QuestionFormSchema) {
       },
     });
 
-    revalidatePath(`/admin/${surveyId}/edit`); // Revalidate by ID? No, path uses ID usually?
-    // Wait, my routes are /admin/[id]/edit? Wait.
-    // In plan: [id]/edit/page.tsx
-    // createSurvey redirected to /admin/${survey.id}/edit.
-    // Yes, using ID.
-    revalidatePath(`/admin/surveys/${surveyId}/edit`); // Wait, createSurvey redirected to /admin/${id}/edit?
-    // Check createSurvey code: redirect(`/admin/${createdSurvey.id}/edit`);
-    // So path is /admin/[id]/edit.
     revalidatePath(`/admin/${surveyId}/edit`);
 
     return { success: true };
   } catch (e) {
     console.error(e);
     return { error: "Failed to add question" };
+  }
+}
+
+export async function updateQuestion(
+  questionId: string,
+  surveyId: string,
+  data: QuestionFormSchema
+) {
+  try {
+    const optionsJson = data.options
+      ? JSON.stringify(data.options.map((o) => o.value))
+      : null;
+
+    await prisma.question.update({
+      where: { id: questionId },
+      data: {
+        type: data.type,
+        label: data.label,
+        required: data.required,
+        maxLength: data.maxLength ? parseInt(data.maxLength, 10) : null,
+        options: optionsJson,
+      },
+    });
+
+    revalidatePath(`/admin/${surveyId}/edit`);
+    return { success: true };
+  } catch (e) {
+    console.error(e);
+    return { error: "Failed to update question" };
   }
 }
 
@@ -56,5 +77,27 @@ export async function deleteQuestion(questionId: string, surveyId: string) {
     return { success: true };
   } catch {
     return { error: "Failed to delete" };
+  }
+}
+
+export async function reorderQuestions(
+  items: { id: string; order: number }[],
+  surveyId: string
+) {
+  try {
+    // Use a transaction to ensure all updates happen or none
+    await prisma.$transaction(
+      items.map((item) =>
+        prisma.question.update({
+          where: { id: item.id },
+          data: { order: item.order },
+        })
+      )
+    );
+    revalidatePath(`/admin/${surveyId}/edit`);
+    return { success: true };
+  } catch (e) {
+    console.error(e);
+    return { error: "Failed to reorder" };
   }
 }
