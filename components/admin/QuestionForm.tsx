@@ -3,7 +3,7 @@
 import { useForm, useFieldArray, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { questionFormSchema, QuestionFormSchema } from "@/lib/schemas";
-import { addQuestion } from "@/app/actions/questions";
+import { addQuestion, updateQuestion } from "@/app/actions/questions";
 import { useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -26,23 +26,63 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Loader2, Plus, Trash2 } from "lucide-react";
 
-interface AddQuestionFormProps {
-  surveyId: string;
-  onSuccess: () => void;
+export interface Question {
+  id: string;
+  type: string;
+  label: string;
+  required: boolean;
+  maxLength: number | null;
+  options: string | null;
+  order: number;
 }
 
-export function AddQuestionForm({ surveyId, onSuccess }: AddQuestionFormProps) {
+interface QuestionFormProps {
+  surveyId: string;
+  onSuccess: () => void;
+  question?: Question; // If provided, we are in edit mode
+}
+
+export function QuestionForm({
+  surveyId,
+  onSuccess,
+  question,
+}: QuestionFormProps) {
   const [isPending, startTransition] = useTransition();
+
+  // Prepare default values
+  let defaultValues: QuestionFormSchema = {
+    type: "TEXT",
+    label: "",
+    required: false,
+    maxLength: undefined,
+    options: [],
+  };
+
+  if (question) {
+    let opts: { value: string }[] = [];
+    if (question.options) {
+      try {
+        const parsed = JSON.parse(question.options);
+        if (Array.isArray(parsed)) {
+          opts = parsed.map((v) => ({ value: String(v) }));
+        }
+      } catch (e) {
+        console.error("Failed to parse options", e);
+      }
+    }
+
+    defaultValues = {
+      type: question.type as any,
+      label: question.label,
+      required: question.required,
+      maxLength: question.maxLength?.toString(),
+      options: opts,
+    };
+  }
 
   const form = useForm<QuestionFormSchema>({
     resolver: zodResolver(questionFormSchema),
-    defaultValues: {
-      type: "TEXT",
-      label: "",
-      required: false,
-      maxLength: undefined,
-      options: [],
-    },
+    defaultValues,
   });
 
   const { fields, append, remove } = useFieldArray({
@@ -57,7 +97,11 @@ export function AddQuestionForm({ surveyId, onSuccess }: AddQuestionFormProps) {
 
   function onSubmit(data: QuestionFormSchema) {
     startTransition(async () => {
-      await addQuestion(surveyId, data);
+      if (question) {
+        await updateQuestion(question.id, surveyId, data);
+      } else {
+        await addQuestion(surveyId, data);
+      }
       onSuccess();
     });
   }
@@ -191,7 +235,7 @@ export function AddQuestionForm({ surveyId, onSuccess }: AddQuestionFormProps) {
 
         <Button type="submit" disabled={isPending} className="w-full">
           {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          質問を追加
+          {question ? "変更を保存" : "質問を追加"}
         </Button>
       </form>
     </Form>
