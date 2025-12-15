@@ -104,33 +104,16 @@ export function QuestionList({ surveyId, questions }: QuestionListProps) {
             <div
               key={q.id}
               className={cn(
-                "p-4 border rounded-lg bg-card flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 transition-all",
+                "p-4 border rounded-lg bg-card flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 transition-all",
                 isPending && "opacity-70 pointer-events-none"
               )}
             >
               <div className="flex gap-4 items-start w-full">
-                <div className="flex flex-col gap-1 mt-1">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-6 w-6"
-                    disabled={index === 0}
-                    onClick={() => handleMove(index, "up")}
-                  >
-                    <ArrowUp className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-6 w-6"
-                    disabled={index === questions.length - 1}
-                    onClick={() => handleMove(index, "down")}
-                  >
-                    <ArrowDown className="h-4 w-4" />
-                  </Button>
-                </div>
                 <div className="flex-1 min-w-0">
-                  <div className="flex flex-wrap items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2 mb-1">
+                    <span className="text-xs font-medium text-muted-foreground">
+                      Q{index + 1}
+                    </span>
                     <span className="font-medium bg-muted px-2 py-0.5 rounded text-xs shrink-0">
                       {q.type}
                     </span>
@@ -140,19 +123,22 @@ export function QuestionList({ surveyId, questions }: QuestionListProps) {
                       </span>
                     )}
                   </div>
-                  <p className="mt-1 font-medium break-words">{q.label}</p>
-                  {q.options && (
-                    <p className="text-sm text-muted-foreground mt-1 break-words">
-                      選択肢:{" "}
-                      {(() => {
-                        try {
-                          return JSON.parse(q.options).join(", ");
-                        } catch {
-                          return q.options;
-                        }
-                      })()}
-                    </p>
-                  )}
+                  <p className="mt-1 font-medium wrap-break-word">{q.label}</p>
+                  {q.options &&
+                    (q.type === "SELECT" ||
+                      q.type === "RADIO" ||
+                      q.type === "CHECKBOX") && (
+                      <p className="text-sm text-muted-foreground mt-1 wrap-break-word">
+                        選択肢:{" "}
+                        {(() => {
+                          try {
+                            return JSON.parse(q.options).join(", ");
+                          } catch {
+                            return q.options;
+                          }
+                        })()}
+                      </p>
+                    )}
                   {q.maxLength && (
                     <p className="text-sm text-muted-foreground">
                       最大文字数: {q.maxLength}
@@ -161,24 +147,46 @@ export function QuestionList({ surveyId, questions }: QuestionListProps) {
                 </div>
               </div>
               <div className="flex items-center gap-2 w-full sm:w-auto justify-end sm:justify-start">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setEditingQuestion(q)}
-                  className="flex-1 sm:flex-none"
-                >
-                  <Edit className="h-4 w-4 mr-2" />
-                  編集
-                </Button>
-                <Button
-                  variant="destructive"
-                  size="sm"
-                  onClick={() => handleDelete(q.id)}
-                  className="flex-1 sm:flex-none"
-                >
-                  <Trash2 className="h-4 w-4 mr-2" />
-                  削除
-                </Button>
+                <div className="flex flex-col gap-1 mx-2">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="h-8 w-8"
+                    disabled={index === 0}
+                    onClick={() => handleMove(index, "up")}
+                  >
+                    <ArrowUp className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="h-8 w-8"
+                    disabled={index === questions.length - 1}
+                    onClick={() => handleMove(index, "down")}
+                  >
+                    <ArrowDown className="h-4 w-4" />
+                  </Button>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setEditingQuestion(q)}
+                    className="w-full sm:w-auto"
+                  >
+                    <Edit className="h-4 w-4 mr-2" />
+                    編集
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    onClick={() => handleDelete(q.id)}
+                    className="w-full sm:w-auto"
+                  >
+                    <Trash2 className="h-4 w-4 mr-2" />
+                    削除
+                  </Button>
+                </div>
               </div>
             </div>
           ))
