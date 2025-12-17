@@ -11,6 +11,7 @@ export function SurveyPreview({ formData }: SurveyPreviewProps) {
   // SurveySchemaをSurvey型に変換
   const previewSurvey = {
     id: "preview",
+    appId: formData.appId || "",
     title: formData.title || "タイトル未設定",
     slug: formData.slug || "",
     description: formData.description || "",
@@ -54,7 +55,7 @@ export function SurveyPreview({ formData }: SurveyPreviewProps) {
               borderColor: themeColor,
             }}
           >
-            <SurveyHeader survey={previewSurvey as any} />
+            <SurveyHeader survey={previewSurvey} />
           </div>
         </div>
       </div>
