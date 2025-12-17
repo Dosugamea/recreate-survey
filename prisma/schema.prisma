@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider   = "prisma-client-js"
   engineType = "library"
 }
 
@@ -9,82 +9,83 @@ datasource db {
 
 // アプリ全体の設定
 model App {
-  id                  String    @id @default(cuid())
-  name                String    // アプリ名
-  slug                String    @unique // URLの一部になるよ (例: /my-app)
-  privacyPolicyUrl    String?   // プライバシーポリシーURL
-  faviconImageUrl     String?   // ファビコン画像URL
-  copyrightNotice     String?   // 権利者表記
-  contactUrl          String?   // お問い合わせ先
+  id               String  @id @default(cuid())
+  name             String // アプリ名
+  slug             String  @unique // URLの一部になるよ (例: /my-app)
+  privacyPolicyUrl String? // プライバシーポリシーURL
+  faviconImageUrl  String? // ファビコン画像URL
+  copyrightNotice  String? // 権利者表記
+  contactUrl       String? // お問い合わせ先
 
-  createdAt           DateTime  @default(now())
-  updatedAt           DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  surveys             Survey[]
+  surveys Survey[]
 }
 
 // アンケート自体の設定
 model Survey {
-  id            String    @id @default(cuid())
-  appId         String    // アプリID
-  app           App       @relation(fields: [appId], references: [id], onDelete: Cascade)
-  slug          String    @unique // URLの一部になるよ (例: /campaign-2025)
-  title         String    // アンケートのタイトル
-  description   String?   // 説明文 (HTMLタグ含めてもいいかも)
-  startAt       DateTime? // 開始日時
-  endAt         DateTime? // 終了日時
+  id          String    @id @default(cuid())
+  appId       String // アプリID
+  app         App       @relation(fields: [appId], references: [id], onDelete: Cascade)
+  slug        String    @unique // URLの一部になるよ (例: /campaign-2025)
+  title       String // アンケートのタイトル
+  description String? // 説明文 (HTMLタグ含めてもいいかも)
+  notes       String? // 注意事項 (フォームの下に表示)
+  startAt     DateTime? // 開始日時
+  endAt       DateTime? // 終了日時
 
   // 見た目のカスタマイズ
-  themeColor    String    @default("#6c4034") // テーマカラー (CSS変数 `--accent-color` とかにする)
-  headerImage   String?   // ヘッダー画像のURL (文字列のみ)
-  bgImage       String?   // 背景画像のURL (文字列のみ)
+  themeColor  String  @default("#6c4034") // テーマカラー (CSS変数 `--accent-color` とかにする)
+  headerImage String? // ヘッダー画像のURL (文字列のみ)
+  bgImage     String? // 背景画像のURL (文字列のみ)
 
-  isActive      Boolean   @default(true)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  questions     Question[]
-  responses     Response[]
+  questions Question[]
+  responses Response[]
 }
 
 // 質問項目
 model Question {
-  id            String    @id @default(cuid())
-  surveyId      String
-  survey        Survey    @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  id       String @id @default(cuid())
+  surveyId String
+  survey   Survey @relation(fields: [surveyId], references: [id], onDelete: Cascade)
 
-  type          String    // RADIO, SELECT, TEXT, CHECKBOX, EMAIL (バリデーション用)
-  label         String    // 質問文
-  order         Int       // 並び順
-  required      Boolean   @default(false) // 必須項目かどうか
-  maxLength     Int?      // 文字数制限！ (自由入力系で使う)
+  type      String // RADIO, SELECT, TEXT, CHECKBOX, EMAIL (バリデーション用)
+  label     String // 質問文
+  order     Int // 並び順
+  required  Boolean @default(false) // 必須項目かどうか
+  maxLength Int? // 文字数制限！ (自由入力系で使う)
 
   // 選択肢がある場合の中身
-  options       String?   // JSON文字列で保存 ["男性", "女性"] みたいな感じ
+  options String? // JSON文字列で保存 ["男性", "女性"] みたいな感じ
 
-  answers       Answer[]
+  answers Answer[]
 }
 
 // ユーザーからの回答（１回分）
 model Response {
-  id            String    @id @default(cuid())
-  surveyId      String
-  survey        Survey    @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  id       String @id @default(cuid())
+  surveyId String
+  survey   Survey @relation(fields: [surveyId], references: [id], onDelete: Cascade)
 
-  userId        String    // これが auser_id だよ！
-  submittedAt   DateTime  @default(now())
+  userId      String // これが auser_id だよ！
+  submittedAt DateTime @default(now())
 
-  answers       Answer[]
+  answers Answer[]
 }
 
 // 個別の質問への答え
 model Answer {
-  id            String    @id @default(cuid())
-  responseId    String
-  response      Response  @relation(fields: [responseId], references: [id], onDelete: Cascade)
+  id         String   @id @default(cuid())
+  responseId String
+  response   Response @relation(fields: [responseId], references: [id], onDelete: Cascade)
 
-  questionId    String
-  question      Question  @relation(fields: [questionId], references: [id])
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id])
 
-  value         String    // ユーザーが選んだり入力した値
+  value String // ユーザーが選んだり入力した値
 }

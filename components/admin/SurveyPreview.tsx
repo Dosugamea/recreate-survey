@@ -1,6 +1,7 @@
 "use client";
 
 import { SurveyHeader } from "@/components/survey/SurveyHeader";
+import { SurveyNotes } from "@/components/survey/SurveyNotes";
 import type { SurveySchema } from "@/lib/schemas";
 
 interface SurveyPreviewProps {
@@ -15,6 +16,7 @@ export function SurveyPreview({ formData }: SurveyPreviewProps) {
     title: formData.title || "タイトル未設定",
     slug: formData.slug || "",
     description: formData.description || "",
+    notes: formData.notes || "",
     startAt: formData.startAt || null,
     endAt: formData.endAt || null,
     themeColor: formData.themeColor || "#6c4034",
@@ -56,6 +58,7 @@ export function SurveyPreview({ formData }: SurveyPreviewProps) {
             }}
           >
             <SurveyHeader survey={previewSurvey} />
+            <SurveyNotes survey={previewSurvey} />
           </div>
         </div>
       </div>

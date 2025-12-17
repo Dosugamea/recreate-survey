@@ -65,6 +65,7 @@ export function EditSurveyForm({ survey }: EditSurveyFormProps) {
       title: survey.title,
       slug: survey.slug,
       description: survey.description || "",
+      notes: survey.notes || "",
       startAt: survey.startAt ? new Date(survey.startAt) : undefined,
       endAt: survey.endAt ? new Date(survey.endAt) : undefined,
       themeColor: survey.themeColor,
@@ -194,6 +195,26 @@ export function EditSurveyForm({ survey }: EditSurveyFormProps) {
                     {...field}
                   />
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="notes"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>注意事項</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="注意事項を入力してください..."
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription>
+                  フォームの下に表示される注意事項です。
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}

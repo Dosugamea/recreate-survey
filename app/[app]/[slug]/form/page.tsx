@@ -4,6 +4,7 @@ import { SurveyContainer } from "@/components/survey/SurveyContainer";
 import { SurveyIntroduction } from "@/components/survey/SurveryIntroduction";
 import { SurveyHeader } from "@/components/survey/SurveyHeader";
 import { SurveyForm } from "@/components/survey/SurveyForm";
+import { SurveyNotes } from "@/components/survey/SurveyNotes";
 import { SurveyFooter } from "@/components/survey/SurveyFooter";
 import { SurveyBackToTop } from "@/components/survey/SurveyBackToTop";
 import type { Metadata } from "next";
@@ -178,6 +179,7 @@ export default async function SurveyPublicPage(props: {
           userId={userId}
           themeColor={survey.themeColor}
         />
+        <SurveyNotes survey={survey} />
       </SurveyContainer>
       <SurveyFooter
         links={footerLinks.length > 0 ? footerLinks : undefined}

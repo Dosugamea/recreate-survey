@@ -53,6 +53,7 @@ export function CreateSurveyForm() {
       title: "",
       slug: "",
       description: "",
+      notes: "",
       themeColor: "#6c4034",
       headerImage: "",
       bgImage: "",
@@ -157,6 +158,26 @@ export function CreateSurveyForm() {
                     {...field}
                   />
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="notes"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>注意事項</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="注意事項を入力してください..."
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription>
+                  フォームの下に表示される注意事項です。
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}

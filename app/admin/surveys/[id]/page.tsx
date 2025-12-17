@@ -127,6 +127,17 @@ export default async function SurveyDetailPage(props: {
               </div>
             )}
 
+            {survey.notes && (
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">
+                  注意事項
+                </p>
+                <div className="mt-1 max-h-[100px] overflow-y-auto border rounded-md p-2 bg-muted/30 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                  <p className="whitespace-pre-wrap text-sm">{survey.notes}</p>
+                </div>
+              </div>
+            )}
+
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">

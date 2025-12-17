@@ -34,6 +34,7 @@ export const surveySchema = z.object({
     .min(1, "スラッグは必須です")
     .regex(/^[a-z0-9-]+$/, "スラッグは小文字英数字とハイフンのみ使用できます"),
   description: z.string().optional(),
+  notes: z.string().optional(),
   startAt: z.date().optional(),
   endAt: z.date().optional(),
   themeColor: z.string().min(4, "無効なカラーコードです"), // e.g., #fff or #ffffff
