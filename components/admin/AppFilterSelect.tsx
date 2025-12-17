@@ -35,13 +35,13 @@ export function AppFilterSelect({ apps, currentAppId }: AppFilterSelectProps) {
 
   return (
     <div className="flex items-center gap-2 w-full">
-      <label htmlFor="app-filter" className="text-sm font-medium whitespace-nowrap">
+      <label
+        htmlFor="app-filter"
+        className="text-sm font-medium whitespace-nowrap"
+      >
         アプリで絞り込み:
       </label>
-      <Select
-        value={currentAppId || "all"}
-        onValueChange={handleValueChange}
-      >
+      <Select value={currentAppId || "all"} onValueChange={handleValueChange}>
         <SelectTrigger id="app-filter" className="w-full">
           <SelectValue placeholder="すべてのアプリ" />
         </SelectTrigger>
@@ -57,4 +57,3 @@ export function AppFilterSelect({ apps, currentAppId }: AppFilterSelectProps) {
     </div>
   );
 }
-
