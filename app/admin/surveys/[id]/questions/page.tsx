@@ -40,6 +40,7 @@ export default async function EditQuestionsPage(props: {
       questions: {
         orderBy: { order: "asc" },
       },
+      app: true,
     },
   });
 
@@ -61,9 +62,9 @@ export default async function EditQuestionsPage(props: {
               質問項目編集: {survey.title}
             </h2>
             <div className="flex items-center gap-2 mt-1 text-muted-foreground">
-              <span>Slug:</span>
+              <span>URL:</span>
               <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm">
-                {survey.slug}
+                /{survey.app.slug}/{survey.slug}/form
               </code>
               <Button
                 variant="ghost"
@@ -72,7 +73,7 @@ export default async function EditQuestionsPage(props: {
                 asChild
                 title="アンケートを開く"
               >
-                <Link href={`/${survey.slug}?auser_id=dummy`} target="_blank">
+                <Link href={`/${survey.app.slug}/${survey.slug}/form?auser_id=dummy`} target="_blank">
                   <ExternalLink className="h-3 w-3" />
                 </Link>
               </Button>

@@ -44,6 +44,7 @@ export default async function SurveyDetailPage(props: {
       questions: {
         orderBy: { order: "asc" },
       },
+      app: true,
     },
   });
 
@@ -62,9 +63,9 @@ export default async function SurveyDetailPage(props: {
         <div className="flex-1">
           <h2 className="text-2xl font-bold tracking-tight">{survey.title}</h2>
           <div className="flex items-center gap-2 mt-1 text-muted-foreground">
-            <span>Slug:</span>
+            <span>URL:</span>
             <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm">
-              {survey.slug}
+              /{survey.app.slug}/{survey.slug}/form
             </code>
             <Button
               variant="ghost"
@@ -73,7 +74,7 @@ export default async function SurveyDetailPage(props: {
               asChild
               title="アンケートを開く"
             >
-              <Link href={`/${survey.slug}?auser_id=dummy`} target="_blank">
+              <Link href={`/${survey.app.slug}/${survey.slug}/form?auser_id=dummy`} target="_blank">
                 <ExternalLink className="h-3 w-3" />
               </Link>
             </Button>

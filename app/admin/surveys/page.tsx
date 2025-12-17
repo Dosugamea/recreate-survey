@@ -25,6 +25,9 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminSurveysPage() {
   const surveys = await prisma.survey.findMany({
+    include: {
+      app: true,
+    },
     orderBy: { createdAt: "desc" },
   });
 
@@ -57,11 +60,14 @@ export default async function AdminSurveysPage() {
               <CardHeader>
                 <CardTitle className="truncate">{survey.title}</CardTitle>
                 <CardDescription>
-                  <Link href={`/${survey.slug}?auser_id=dummy`} target="_blank">
+                  <Link
+                    href={`/${survey.app.slug}/${survey.slug}/form?auser_id=dummy`}
+                    target="_blank"
+                  >
                     <div className="flex items-center gap-2">
                       <span className="text-muted-foreground text-sm text-align-baseline">
                         {" "}
-                        /{survey.slug}
+                        /{survey.app.slug}/{survey.slug}/form
                       </span>
                       <ExternalLink className="h-4 w-4" />
                     </div>
