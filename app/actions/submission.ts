@@ -19,6 +19,20 @@ export async function submitSurvey(
       return { error: "Survey not found." };
     }
 
+    // アンケートがアクティブかどうか確認
+    if (!survey.isActive) {
+      return { error: "このアンケートは現在利用できません。" };
+    }
+
+    // 期間のバリデーション
+    const now = new Date();
+    if (survey.startAt && now < survey.startAt) {
+      return { error: "このアンケートはまだ開始されていません。" };
+    }
+    if (survey.endAt && now > survey.endAt) {
+      return { error: "このアンケートは終了しました。" };
+    }
+
     // questionIdが全て存在するか確認
     const questionIds = survey.questions.map((q) => q.id);
     const submittedQuestionIds = Object.keys(rawAnswers);

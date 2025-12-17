@@ -24,6 +24,11 @@ export async function createSurvey(data: SurveySchema) {
     bgImage,
   } = result.data;
 
+  // 期間の整合性チェック
+  if (startAt && endAt && startAt >= endAt) {
+    return { error: "開始日時は終了日時より前である必要があります。" };
+  }
+
   try {
     await prisma.survey.create({
       data: {
@@ -82,6 +87,11 @@ export async function updateSurvey(surveyId: string, data: SurveySchema) {
     isActive,
   } = result.data;
 
+  // 期間の整合性チェック
+  if (startAt && endAt && startAt >= endAt) {
+    return { error: "開始日時は終了日時より前である必要があります。" };
+  }
+
   try {
     await prisma.survey.update({
       where: { id: surveyId },
@@ -99,8 +109,8 @@ export async function updateSurvey(surveyId: string, data: SurveySchema) {
         isActive: isActive !== undefined ? isActive : undefined,
       },
     });
-  } catch (e: any) {
-    if (e.code === "P2002") {
+  } catch (e) {
+    if (e && typeof e === "object" && "code" in e && e.code === "P2002") {
       return { error: "Slug already exists. Please choose another one." };
     }
     console.error(e);
@@ -115,7 +125,7 @@ export async function deleteSurvey(surveyId: string) {
     await prisma.survey.delete({
       where: { id: surveyId },
     });
-  } catch (e: any) {
+  } catch (e) {
     console.error(e);
     return { error: "削除に失敗しました。" };
   }
