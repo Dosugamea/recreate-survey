@@ -132,3 +132,88 @@ export async function deleteSurvey(surveyId: string) {
 
   redirect("/admin/surveys");
 }
+
+function generateRandomSlug(): string {
+  // ランダム4桁の数字を生成（0000-9999）
+  const randomNumbers = Math.floor(Math.random() * 10000)
+    .toString()
+    .padStart(4, "0");
+
+  // ランダムな大文字小文字3桁の英字を生成
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+  const randomChars = Array.from({ length: 3 }, () =>
+    chars.charAt(Math.floor(Math.random() * chars.length))
+  ).join("");
+
+  return `enq-${randomNumbers}-${randomChars}`;
+}
+
+export async function duplicateSurvey(surveyId: string) {
+  try {
+    // 元のアンケートと質問を取得
+    const originalSurvey = await prisma.survey.findUnique({
+      where: { id: surveyId },
+      include: {
+        questions: {
+          orderBy: { order: "asc" },
+        },
+      },
+    });
+
+    if (!originalSurvey) {
+      return { error: "アンケートが見つかりませんでした。" };
+    }
+
+    // ランダムなslugを生成（重複チェック）
+    let newSlug = generateRandomSlug();
+    while (await prisma.survey.findUnique({ where: { slug: newSlug } })) {
+      newSlug = generateRandomSlug();
+    }
+
+    // 新しいタイトルを生成
+    const newTitle = `${originalSurvey.title} (コピー)`;
+
+    // トランザクションでアンケートと質問を複製
+    const duplicatedSurvey = await prisma.$transaction(async (tx) => {
+      // アンケートを作成（isActive = false）
+      const newSurvey = await tx.survey.create({
+        data: {
+          appId: originalSurvey.appId,
+          title: newTitle,
+          slug: newSlug,
+          description: originalSurvey.description,
+          notes: originalSurvey.notes,
+          startAt: originalSurvey.startAt,
+          endAt: originalSurvey.endAt,
+          themeColor: originalSurvey.themeColor,
+          headerImage: originalSurvey.headerImage,
+          bgImage: originalSurvey.bgImage,
+          isActive: false, // 非公開で複製
+        },
+      });
+
+      // 質問を全て複製
+      if (originalSurvey.questions.length > 0) {
+        await tx.question.createMany({
+          data: originalSurvey.questions.map((q) => ({
+            surveyId: newSurvey.id,
+            type: q.type,
+            label: q.label,
+            order: q.order,
+            required: q.required,
+            maxLength: q.maxLength,
+            options: q.options,
+          })),
+        });
+      }
+
+      return newSurvey;
+    });
+
+    // 複製したアンケートの詳細ページにリダイレクト
+    redirect(`/admin/surveys/${duplicatedSurvey.id}`);
+  } catch (e) {
+    console.error(e);
+    return { error: "複製に失敗しました。" };
+  }
+}

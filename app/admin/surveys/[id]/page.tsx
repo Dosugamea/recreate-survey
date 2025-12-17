@@ -3,12 +3,13 @@ import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { ExternalLink, Edit } from "lucide-react";
+import { Edit } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { DeleteSurveyButton } from "./DeleteSurveyButton";
+import { DuplicateSurveyButton } from "./DuplicateSurveyButton";
 import { PageHeader } from "@/components/admin/PageHeader";
 
 const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "アンケートアプリ";
@@ -294,8 +295,12 @@ export default async function SurveyDetailPage(props: {
         </Card>
       </div>
 
-      {/* 削除ボタン */}
-      <div className="pt-4 flex justify-center">
+      {/* アクションボタン */}
+      <div className="pt-4 flex justify-center gap-4">
+        <DuplicateSurveyButton
+          surveyId={survey.id}
+          surveyTitle={survey.title}
+        />
         <DeleteSurveyButton surveyId={survey.id} surveyTitle={survey.title} />
       </div>
     </div>
