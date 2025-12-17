@@ -161,14 +161,16 @@ export default async function SurveyPublicPage(props: {
     <>
       <SurveyContainer survey={survey}>
         <SurveyHeader survey={survey} />
-        <SurveyIntroduction themeColor={survey.themeColor} />
         {!isExpired && (
-          <SurveyForm
-            surveyId={survey.id}
-            questions={survey.questions}
-            userId={userId}
-            themeColor={survey.themeColor}
-          />
+          <>
+            <SurveyIntroduction themeColor={survey.themeColor} />
+            <SurveyForm
+              surveyId={survey.id}
+              questions={survey.questions}
+              userId={userId}
+              themeColor={survey.themeColor}
+            />
+          </>
         )}
         <SurveyNotes survey={survey} />
       </SurveyContainer>
