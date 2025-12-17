@@ -57,7 +57,7 @@ export function ConfirmationView({
             >
               {question.label}
               {question.required && (
-                <span className="text-red-500 ml-1">*</span>
+                <span className="text-red-500 ml-1">*必須</span>
               )}
             </legend>
             <div className="px-2">
@@ -77,7 +77,11 @@ export function ConfirmationView({
             type="button"
             variant="auto"
             className="w-full sm:w-auto px-12 py-6 text-lg font-bold rounded-lg border-2"
-            style={{ borderColor: themeColor, color: themeColor, backgroundColor: "transparent" }}
+            style={{
+              borderColor: themeColor,
+              color: themeColor,
+              backgroundColor: "transparent",
+            }}
             onClick={onBack}
             disabled={isPending}
           >

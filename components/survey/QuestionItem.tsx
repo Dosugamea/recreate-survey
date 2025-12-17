@@ -35,7 +35,7 @@ export function QuestionItem({
         style={legendStyle}
       >
         {question.label}
-        {question.required && <span className="text-red-500 ml-1">*</span>}
+        {question.required && <span className="text-red-500 ml-1">*必須</span>}
       </legend>
       <div className="px-2">
         {question.type === "TEXT" && (
@@ -95,10 +95,12 @@ export function QuestionItem({
               "bg-white text-gray-900 border-gray-300 focus:ring-offset-white",
               error && "border-red-500"
             )}
-            style={{
-              borderColor: error ? undefined : themeColor,
-              "--tw-ring-color": themeColor,
-            } as React.CSSProperties & { "--tw-ring-color": string }}
+            style={
+              {
+                borderColor: error ? undefined : themeColor,
+                "--tw-ring-color": themeColor,
+              } as React.CSSProperties & { "--tw-ring-color": string }
+            }
           >
             <option value="">選択してください</option>
             {options.map((opt: string) => (
