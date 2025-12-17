@@ -27,6 +27,30 @@ export function SurveyContainer({ survey, children }: SurveyContainerProps) {
             color: themeColor,
             backgroundColor: "#ffffff",
             borderColor: themeColor,
+            // フォーム専用のCSS変数を定義してグローバルテーマの影響を遮断
+            "--form-primary": themeColor,
+            "--form-primary-foreground": "#ffffff",
+            "--form-background": "#ffffff",
+            "--form-foreground": "#000000",
+            "--form-border": themeColor,
+            "--form-input": "#e5e7eb",
+            "--form-ring": themeColor,
+            "--form-muted": "#f3f4f6",
+            "--form-muted-foreground": "#6b7280",
+            "--form-accent": themeColor,
+            "--form-accent-foreground": "#ffffff",
+          } as React.CSSProperties & {
+            "--form-primary": string;
+            "--form-primary-foreground": string;
+            "--form-background": string;
+            "--form-foreground": string;
+            "--form-border": string;
+            "--form-input": string;
+            "--form-ring": string;
+            "--form-muted": string;
+            "--form-muted-foreground": string;
+            "--form-accent": string;
+            "--form-accent-foreground": string;
           }}
         >
           {children}

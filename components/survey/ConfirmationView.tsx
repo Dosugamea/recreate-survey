@@ -75,9 +75,9 @@ export function ConfirmationView({
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Button
             type="button"
-            variant="outline"
-            className="w-full sm:w-auto px-12 py-6 text-lg font-bold rounded-lg"
-            style={{ borderColor: themeColor, color: themeColor }}
+            variant="auto"
+            className="w-full sm:w-auto px-12 py-6 text-lg font-bold rounded-lg border-2"
+            style={{ borderColor: themeColor, color: themeColor, backgroundColor: "transparent" }}
             onClick={onBack}
             disabled={isPending}
           >
@@ -85,6 +85,7 @@ export function ConfirmationView({
           </Button>
           <Button
             type="button"
+            variant="auto"
             className="w-full sm:w-auto px-12 py-6 text-lg font-bold text-white shadow-md hover:opacity-90 transition-opacity rounded-lg"
             style={{ backgroundColor: themeColor }}
             onClick={onSubmit}

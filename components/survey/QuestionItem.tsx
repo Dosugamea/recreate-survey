@@ -91,9 +91,14 @@ export function QuestionItem({
           <select
             {...register(question.id, { required: question.required })}
             className={cn(
-              "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+              "flex h-10 w-full items-center justify-between rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+              "bg-white text-gray-900 border-gray-300 focus:ring-offset-white",
               error && "border-red-500"
             )}
+            style={{
+              borderColor: error ? undefined : themeColor,
+              "--tw-ring-color": themeColor,
+            } as React.CSSProperties & { "--tw-ring-color": string }}
           >
             <option value="">選択してください</option>
             {options.map((opt: string) => (
