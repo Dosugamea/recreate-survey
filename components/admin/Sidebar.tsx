@@ -8,11 +8,23 @@ import { Button } from "@/components/ui/button";
 
 type SidebarProps = React.HTMLAttributes<HTMLDivElement>;
 
+const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "アンケートアプリ";
+
 export function Sidebar({ className }: SidebarProps) {
   const pathname = usePathname();
 
   return (
     <div className={cn("pb-12 min-h-screen border-r bg-surface", className)}>
+      <Link
+        href="/admin"
+        className="block w-full border-b hover:opacity-80 transition-opacity cursor-pointer"
+      >
+        <div className="relative w-full h-24 bg-linear-to-br from-primary/10 via-primary/5 to-transparent flex items-center justify-center overflow-hidden px-4">
+          <h1 className="text-2xl font-bold tracking-wider text-primary drop-shadow-sm select-none">
+            {appName}
+          </h1>
+        </div>
+      </Link>
       <div className="space-y-4 py-4">
         <div className="px-3 py-2">
           <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
