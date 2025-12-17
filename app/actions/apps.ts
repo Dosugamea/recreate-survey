@@ -17,7 +17,7 @@ export async function createApp(data: AppSchema) {
     privacyPolicyUrl,
     faviconImageUrl,
     copyrightNotice,
-    contactEmail,
+    contactUrl,
   } = result.data;
 
   try {
@@ -28,7 +28,7 @@ export async function createApp(data: AppSchema) {
         privacyPolicyUrl: privacyPolicyUrl || null,
         faviconImageUrl: faviconImageUrl || null,
         copyrightNotice: copyrightNotice || null,
-        contactEmail: contactEmail || null,
+        contactUrl: contactUrl || null,
       },
     });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -53,7 +53,7 @@ export async function updateApp(appId: string, data: AppSchema) {
     privacyPolicyUrl,
     faviconImageUrl,
     copyrightNotice,
-    contactEmail,
+    contactUrl,
   } = result.data;
 
   try {
@@ -65,7 +65,7 @@ export async function updateApp(appId: string, data: AppSchema) {
         privacyPolicyUrl: privacyPolicyUrl || null,
         faviconImageUrl: faviconImageUrl || null,
         copyrightNotice: copyrightNotice || null,
-        contactEmail: contactEmail || null,
+        contactUrl: contactUrl || null,
       },
     });
   } catch (e: any) {

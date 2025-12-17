@@ -83,16 +83,18 @@ export default async function AppsPage() {
                     </a>
                   </div>
                 )}
-                {app.contactEmail && (
+                {app.contactUrl && (
                   <div className="text-sm">
                     <span className="text-muted-foreground">
                       お問い合わせ:{" "}
                     </span>
                     <a
-                      href={`mailto:${app.contactEmail}`}
+                      href={app.contactUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="text-primary hover:underline"
                     >
-                      {app.contactEmail}
+                      リンク
                     </a>
                   </div>
                 )}

@@ -31,7 +31,7 @@ export function CreateAppForm() {
       privacyPolicyUrl: "",
       faviconImageUrl: "",
       copyrightNotice: "",
-      contactEmail: "",
+      contactUrl: "",
     },
   });
 
@@ -142,19 +142,15 @@ export function CreateAppForm() {
 
         <FormField
           control={form.control}
-          name="contactEmail"
+          name="contactUrl"
           render={({ field }) => (
             <FormItem>
               <FormLabel>お問い合わせ先</FormLabel>
               <FormControl>
-                <Input
-                  type="email"
-                  placeholder="contact@example.com"
-                  {...field}
-                />
+                <Input placeholder="https://example.com/contact" {...field} />
               </FormControl>
               <FormDescription>
-                お問い合わせ先のメールアドレスを入力してください。
+                お問い合わせ先のURLを入力してください。
               </FormDescription>
               <FormMessage />
             </FormItem>

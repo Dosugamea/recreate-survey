@@ -160,10 +160,10 @@ export default async function SurveyPublicPage(props: {
     });
   }
 
-  if (app.contactEmail) {
+  if (app.contactUrl) {
     footerLinks.push({
       label: "お問い合わせ",
-      href: `mailto:${app.contactEmail}`,
+      href: app.contactUrl,
     });
   }
 

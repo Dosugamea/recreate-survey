@@ -15,7 +15,7 @@ model App {
   privacyPolicyUrl    String?   // プライバシーポリシーURL
   faviconImageUrl     String?   // ファビコン画像URL
   copyrightNotice     String?   // 権利者表記
-  contactEmail        String?   // お問い合わせ先
+  contactUrl          String?   // お問い合わせ先
 
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt

@@ -17,9 +17,9 @@ export const appSchema = z.object({
     .optional()
     .or(z.literal("")),
   copyrightNotice: z.string().optional(),
-  contactEmail: z
+  contactUrl: z
     .string()
-    .email("有効なメールアドレスを入力してください")
+    .url("有効なURLを入力してください")
     .optional()
     .or(z.literal("")),
 });
