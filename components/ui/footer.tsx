@@ -3,13 +3,23 @@
 import { useTheme } from "next-themes";
 import { Moon, Sun } from "lucide-react";
 import { Button } from "./button";
+import { useEffect, useState } from "react";
 
 export function Footer() {
   const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "アンケートアプリ";
-  const { theme, setTheme, resolvedTheme } = useTheme();
+  const { setTheme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
-  const currentTheme = resolvedTheme ?? theme;
-  const isDark = currentTheme === "dark";
+  // クライアント側でマウントされるまで待機して、ハイドレーションエラーを防ぐ
+  // next-themesの推奨パターン: https://github.com/pacocoursey/next-themes#avoid-hydration-mismatch
+  useEffect(() => {
+    // eslint-disable-next-line
+    setMounted(true);
+  }, []);
+
+  // マウントされるまでは常にMoonアイコンを表示（サーバー側とクライアント側で一貫性を保つ）
+  // マウントされた後にのみ、実際のテーマに基づいてアイコンを切り替える
+  const isDark = mounted && resolvedTheme === "dark";
 
   return (
     <footer className="w-full border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 py-3 px-4">
