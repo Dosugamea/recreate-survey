@@ -12,6 +12,7 @@ export async function createSurvey(data: SurveySchema) {
   }
 
   const {
+    appId,
     title,
     slug,
     description,
@@ -25,6 +26,7 @@ export async function createSurvey(data: SurveySchema) {
   try {
     await prisma.survey.create({
       data: {
+        appId,
         title,
         slug,
         description,
@@ -65,6 +67,7 @@ export async function updateSurvey(surveyId: string, data: SurveySchema) {
   }
 
   const {
+    appId,
     title,
     slug,
     description,
@@ -80,6 +83,7 @@ export async function updateSurvey(surveyId: string, data: SurveySchema) {
     await prisma.survey.update({
       where: { id: surveyId },
       data: {
+        appId,
         title,
         slug,
         description,

@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { surveySchema, SurveySchema } from "@/lib/schemas";
 import { updateSurvey } from "@/app/actions/surveys";
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { SurveyPreview } from "@/components/admin/SurveyPreview";
 import {
@@ -25,6 +25,13 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
@@ -33,7 +40,9 @@ import { CalendarIcon, Loader2, HelpCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { Switch } from "@/components/ui/switch";
+import { getAllApps } from "@/app/actions/apps";
 import type { Survey } from "@prisma/client";
+import type { App } from "@prisma/client";
 
 interface EditSurveyFormProps {
   survey: Survey;
@@ -43,10 +52,16 @@ export function EditSurveyForm({ survey }: EditSurveyFormProps) {
   const [isPending, startTransition] = useTransition();
   const [serverError, setServerError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [apps, setApps] = useState<App[]>([]);
+
+  useEffect(() => {
+    getAllApps().then(setApps);
+  }, []);
 
   const form = useForm<SurveySchema>({
     resolver: zodResolver(surveySchema),
     defaultValues: {
+      appId: survey.appId,
       title: survey.title,
       slug: survey.slug,
       description: survey.description || "",
@@ -89,6 +104,34 @@ export function EditSurveyForm({ survey }: EditSurveyFormProps) {
               {successMessage}
             </div>
           )}
+
+          <FormField
+            control={form.control}
+            name="appId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>アプリ</FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="アプリを選択してください" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {apps.map((app) => (
+                      <SelectItem key={app.id} value={app.id}>
+                        {app.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormDescription>
+                  このアンケートが属するアプリを選択してください。
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField
