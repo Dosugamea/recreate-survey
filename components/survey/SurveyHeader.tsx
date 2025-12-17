@@ -1,3 +1,5 @@
+"use client";
+
 import { Survey } from "@prisma/client";
 import { hexToRgba } from "@/lib/utils";
 import { format } from "date-fns";
@@ -6,9 +8,16 @@ import Image from "next/image";
 interface SurveyHeaderProps {
   survey: Survey;
   userId?: string;
+  isSubmitted?: boolean;
+  appName?: string;
 }
 
-export function SurveyHeader({ survey, userId }: SurveyHeaderProps) {
+export function SurveyHeader({
+  survey,
+  userId,
+  isSubmitted,
+  appName,
+}: SurveyHeaderProps) {
   const { title, description, startAt, endAt, themeColor, headerImage } =
     survey;
   const accentBg = hexToRgba(themeColor, 0.5);
@@ -64,7 +73,25 @@ export function SurveyHeader({ survey, userId }: SurveyHeaderProps) {
         </div>
       )}
 
-      <section id="information" className="mb-8">
+      {isSubmitted && (
+        <section id="completion">
+          <h3
+            className="flex flex-col sm:flex-row text-white text-sm sm:text-base font-bold"
+            style={{ backgroundColor: accentBg }}
+          >
+            <span className="flex-1 py-5 px-6 text-2xl">
+              内容の送信が完了しました
+            </span>
+          </h3>
+          <div className="text-sm leading-relaxed text-center p-4">
+            ご参加ありがとうございました。
+            <br />
+            今後とも『{appName || "アプリ"}』をよろしくお願いいたします。
+          </div>
+        </section>
+      )}
+
+      <section id="information">
         <h3
           className="flex flex-col sm:flex-row text-white text-sm sm:text-base font-bold"
           style={{ backgroundColor: accentBg }}

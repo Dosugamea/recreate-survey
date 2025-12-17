@@ -1,9 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import { SurveyContainer } from "@/components/survey/SurveyContainer";
-import { SurveyIntroduction } from "@/components/survey/SurveryIntroduction";
 import { SurveyHeader } from "@/components/survey/SurveyHeader";
-import { SurveyForm } from "@/components/survey/SurveyForm";
+import { SurveyContent } from "@/components/survey/SurveyContent";
 import { SurveyNotes } from "@/components/survey/SurveyNotes";
 import { SurveyFooter } from "@/components/survey/SurveyFooter";
 import { SurveyBackToTop } from "@/components/survey/SurveyBackToTop";
@@ -146,17 +145,15 @@ export default async function SurveyPublicPage(props: {
   return (
     <>
       <SurveyContainer survey={survey}>
-        <SurveyHeader survey={survey} userId={userId} />
-        {!isExpired && userId && (
-          <>
-            <SurveyIntroduction themeColor={survey.themeColor} />
-            <SurveyForm
-              surveyId={survey.id}
-              questions={survey.questions}
-              userId={userId}
-              themeColor={survey.themeColor}
-            />
-          </>
+        {!isExpired && userId ? (
+          <SurveyContent
+            survey={survey}
+            questions={survey.questions}
+            userId={userId}
+            appName={app.name}
+          />
+        ) : (
+          <SurveyHeader survey={survey} userId={userId} />
         )}
         <SurveyNotes survey={survey} />
       </SurveyContainer>

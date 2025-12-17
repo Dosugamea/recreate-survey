@@ -66,15 +66,10 @@ export function DeleteSurveyButton({
         </DialogContent>
       </Dialog>
 
-      <Button
-        variant="destructive"
-        size="sm"
-        onClick={() => setOpen(true)}
-      >
+      <Button variant="destructive" size="sm" onClick={() => setOpen(true)}>
         <Trash2 className="mr-2 h-4 w-4" />
         アンケートを削除
       </Button>
     </>
   );
 }
-

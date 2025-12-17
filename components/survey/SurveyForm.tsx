@@ -13,6 +13,7 @@ interface SurveyFormProps {
   questions: Question[];
   userId: string;
   themeColor: string;
+  onSubmitted?: () => void;
 }
 
 type Step = "input" | "confirmation";
@@ -22,6 +23,7 @@ export function SurveyForm({
   questions,
   userId,
   themeColor,
+  onSubmitted,
 }: SurveyFormProps) {
   const [step, setStep] = useState<Step>("input");
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -77,6 +79,7 @@ export function SurveyForm({
       const result = await submitSurvey(surveyId, userId, data);
       if (result.success) {
         setIsSubmitted(true);
+        onSubmitted?.();
       } else {
         const errorMessage = result.error || "送信に失敗しました";
         console.error("Submission error:", errorMessage);
@@ -101,17 +104,7 @@ export function SurveyForm({
   }, [step]);
 
   if (isSubmitted) {
-    return (
-      <div className="text-center p-12 bg-gray-50 m-4 rounded-lg">
-        <h3 className="text-xl font-bold mb-4" style={{ color: themeColor }}>
-          ありがとうございました！
-        </h3>
-        <p className="mb-4">回答を受け付けました。</p>
-        <div className="p-4 bg-white rounded shadow-sm inline-block">
-          <p className="text-sm text-gray-500">User ID: {userId}</p>
-        </div>
-      </div>
-    );
+    return null;
   }
 
   if (step === "confirmation") {
