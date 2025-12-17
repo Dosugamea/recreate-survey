@@ -2,11 +2,11 @@
 
 import { Question } from "@prisma/client";
 import { useForm, FieldValues } from "react-hook-form";
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import { submitSurvey } from "@/app/actions/submission";
 import { QuestionItem } from "./QuestionItem";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
+import { ConfirmationView } from "./ConfirmationView";
 
 interface SurveyFormProps {
   surveyId: string;
@@ -15,19 +15,62 @@ interface SurveyFormProps {
   themeColor: string;
 }
 
+type Step = "input" | "confirmation";
+
 export function SurveyForm({
   surveyId,
   questions,
   userId,
   themeColor,
 }: SurveyFormProps) {
+  const [step, setStep] = useState<Step>("input");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isPending, startTransition] = useTransition();
   const {
     register,
     handleSubmit,
     formState: { errors },
+    getValues,
+    trigger,
+    watch,
   } = useForm();
+
+  // 必須項目のIDを取得
+  const requiredQuestionIds = questions
+    .filter((q) => q.required)
+    .map((q) => q.id);
+
+  // フォームの値を監視
+  const formValues = watch();
+
+  // 必須項目が全て入力されているかチェック
+  const isAllRequiredFieldsFilled =
+    requiredQuestionIds.length === 0 ||
+    requiredQuestionIds.every((questionId) => {
+      const value = formValues[questionId];
+      if (Array.isArray(value)) {
+        return value.length > 0;
+      }
+      return value !== undefined && value !== null && value !== "";
+    });
+
+  const handleGoToConfirmation = async () => {
+    // バリデーションを実行
+    const isValid = await trigger();
+    if (!isValid) {
+      return;
+    }
+    setStep("confirmation");
+  };
+
+  const handleBackToInput = () => {
+    setStep("input");
+    // 戻る操作でもアンケート回答の位置にスクロールする
+    const surveyTitle = document.getElementById("survey-title");
+    if (surveyTitle) {
+      surveyTitle.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
 
   const onSubmit = (data: FieldValues) => {
     startTransition(async () => {
@@ -39,6 +82,21 @@ export function SurveyForm({
       }
     });
   };
+
+  const handleConfirmSubmit = () => {
+    const formData = getValues();
+    onSubmit(formData);
+  };
+
+  // 確認画面に進んだときにアンケートタイトルの位置にスクロールする
+  useEffect(() => {
+    if (step === "confirmation") {
+      const surveyTitle = document.getElementById("survey-title");
+      if (surveyTitle) {
+        surveyTitle.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+  }, [step]);
 
   if (isSubmitted) {
     return (
@@ -54,28 +112,47 @@ export function SurveyForm({
     );
   }
 
-  return (
-    <form onSubmit={handleSubmit(onSubmit)} className="px-4 pb-8">
-      {questions.map((q) => (
-        <QuestionItem
-          key={q.id}
-          question={q}
-          register={register}
-          themeColor={themeColor}
-          error={errors[q.id] ? "Required" : undefined}
-        />
-      ))}
+  if (step === "confirmation") {
+    return (
+      <ConfirmationView
+        questions={questions}
+        formData={getValues()}
+        themeColor={themeColor}
+        isPending={isPending}
+        onBack={handleBackToInput}
+        onSubmit={handleConfirmSubmit}
+      />
+    );
+  }
 
-      <div className="text-center mt-8">
-        <Button
-          type="submit"
-          className="w-full sm:w-auto px-12 py-6 text-lg font-bold text-white shadow-md hover:opacity-90 transition-opacity"
-          style={{ backgroundColor: themeColor }}
-          disabled={isPending}
-        >
-          {isPending ? <Loader2 className="animate-spin" /> : "回答を送信する"}
-        </Button>
+  return (
+    <div className="px-4 pb-8">
+      <div id="read" className="text-sm text-center my-8 font-medium">
+        以下の設問にお答えください。
       </div>
-    </form>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        {questions.map((q) => (
+          <QuestionItem
+            key={q.id}
+            question={q}
+            register={register}
+            themeColor={themeColor}
+            error={errors[q.id] ? "Required" : undefined}
+          />
+        ))}
+
+        <div className="text-center mt-8">
+          <Button
+            type="button"
+            className="w-full sm:w-auto px-12 py-6 text-lg font-bold text-white shadow-md hover:opacity-90 transition-opacity rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            style={{ backgroundColor: themeColor }}
+            onClick={handleGoToConfirmation}
+            disabled={!isAllRequiredFieldsFilled}
+          >
+            確認ページへ進む
+          </Button>
+        </div>
+      </form>
+    </div>
   );
 }
