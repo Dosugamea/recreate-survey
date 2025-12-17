@@ -1,6 +1,7 @@
 "use client";
 
-import { SurveyHeader } from "@/components/survey/SurveyHeader";
+import { SurveyTitle } from "@/components/survey/SurveyTitle";
+import { SurveyDescription } from "@/components/survey/SurveyDescription";
 import { SurveyNotes } from "@/components/survey/SurveyNotes";
 import type { SurveySchema } from "@/lib/schemas";
 
@@ -57,7 +58,18 @@ export function SurveyPreview({ formData }: SurveyPreviewProps) {
               borderColor: themeColor,
             }}
           >
-            <SurveyHeader survey={previewSurvey} />
+            <article>
+              <SurveyTitle
+                title={previewSurvey.title}
+                headerImage={previewSurvey.headerImage}
+              />
+              <SurveyDescription
+                description={previewSurvey.description}
+                themeColor={previewSurvey.themeColor}
+                startAt={previewSurvey.startAt}
+                endAt={previewSurvey.endAt}
+              />
+            </article>
             <SurveyNotes survey={previewSurvey} />
           </div>
         </div>

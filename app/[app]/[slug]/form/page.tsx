@@ -1,11 +1,14 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import { SurveyContainer } from "@/components/survey/SurveyContainer";
-import { SurveyHeader } from "@/components/survey/SurveyHeader";
+import { SurveyTitle } from "@/components/survey/SurveyTitle";
+import { SurveyWarn } from "@/components/survey/SurveyWarn";
+import { SurveyDescription } from "@/components/survey/SurveyDescription";
 import { SurveyContent } from "@/components/survey/SurveyContent";
 import { SurveyNotes } from "@/components/survey/SurveyNotes";
 import { SurveyFooter } from "@/components/survey/SurveyFooter";
 import { SurveyBackToTop } from "@/components/survey/SurveyBackToTop";
+import { isSurveyExpired } from "@/lib/survey-utils";
 import type { Metadata } from "next";
 import { metadata as notFoundMetadata } from "../../../not-found";
 
@@ -116,14 +119,13 @@ export default async function SurveyPublicPage(props: {
     notFound();
   }
 
-  // Check activity/dates
+  // Check activity
   if (!survey.isActive) {
     notFound();
   }
 
   // 期間外かどうかを判定（期間外の場合はフォームを表示しない）
-  const now = new Date();
-  const isExpired = survey.endAt ? now > survey.endAt : false;
+  const isExpired = isSurveyExpired(survey.endAt);
 
   // フッター用のリンクを構築
   const footerLinks: Array<{ label: string; href: string }> = [];
@@ -153,14 +155,25 @@ export default async function SurveyPublicPage(props: {
             appName={app.name}
           />
         ) : (
-          <SurveyHeader survey={survey} userId={userId} />
+          <article>
+            <SurveyTitle
+              title={survey.title}
+              headerImage={survey.headerImage}
+            />
+            <SurveyWarn show={!userId} />
+            <SurveyDescription
+              description={survey.description}
+              themeColor={survey.themeColor}
+              startAt={survey.startAt}
+              endAt={survey.endAt}
+            />
+          </article>
         )}
         <SurveyNotes survey={survey} />
       </SurveyContainer>
       <SurveyFooter
         links={footerLinks.length > 0 ? footerLinks : undefined}
         copyright={app.copyrightNotice ?? undefined}
-        poweredBy={app.name}
         themeColor={survey.themeColor}
       />
       <SurveyBackToTop />

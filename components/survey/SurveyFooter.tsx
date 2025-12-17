@@ -8,7 +8,6 @@ interface FooterLink {
 interface SurveyFooterProps {
   links?: FooterLink[];
   copyright?: string;
-  poweredBy?: string;
   themeColor?: string;
 }
 
