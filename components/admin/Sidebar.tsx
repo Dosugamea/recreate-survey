@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, PlusCircle, Settings } from "lucide-react";
+import { ClipboardList, PlusCircle, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -37,8 +37,8 @@ export function Sidebar({ className }: SidebarProps) {
               className="w-full justify-start"
             >
               <Link href="/admin/surveys">
-                <LayoutDashboard className="mr-2 h-4 w-4" />
-                ダッシュボード
+                <ClipboardList className="mr-2 h-4 w-4" />
+                アンケート一覧
               </Link>
             </Button>
             <Button

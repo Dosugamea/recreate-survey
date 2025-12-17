@@ -17,13 +17,13 @@ import Link from "next/link";
 const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "アンケートアプリ";
 
 export const metadata: Metadata = {
-  title: `ダッシュボード | ${appName}`,
-  description: "管理者ダッシュボード",
+  title: `アンケート一覧 | ${appName}`,
+  description: "作成したアンケートの一覧を表示します",
 };
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminDashboardPage() {
+export default async function AdminSurveysPage() {
   const surveys = await prisma.survey.findMany({
     orderBy: { createdAt: "desc" },
   });
@@ -33,10 +33,10 @@ export default async function AdminDashboardPage() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
-            ダッシュボード
+            アンケート一覧
           </h2>
           <p className="text-muted-foreground mt-2 text-sm sm:text-base">
-            アンケートの管理や結果の確認ができます。
+            作成したアンケートの一覧を表示しています。詳細の確認や編集ができます。
           </p>
         </div>
         <Button asChild className="w-full sm:w-auto">
