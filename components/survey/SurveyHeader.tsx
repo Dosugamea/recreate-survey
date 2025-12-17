@@ -1,6 +1,7 @@
 import { Survey } from "@prisma/client";
 import { hexToRgba } from "@/lib/utils";
 import { format } from "date-fns";
+import Image from "next/image";
 
 interface SurveyHeaderProps {
   survey: Survey;
@@ -16,10 +17,14 @@ export function SurveyHeader({ survey }: SurveyHeaderProps) {
     <article>
       <div id="ttl" className="text-center">
         {headerImage && (
-          <img
+          <Image
             src={headerImage}
             alt="Header"
+            width={1200}
+            height={600}
             className="mx-auto w-full h-auto"
+            sizes="100vw"
+            loading="eager"
           />
         )}
         {!headerImage && <h2 className="text-2xl font-bold py-8">{title}</h2>}
