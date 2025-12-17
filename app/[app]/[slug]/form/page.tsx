@@ -126,20 +126,6 @@ export default async function SurveyPublicPage(props: {
   const now = new Date();
   const isExpired = survey.endAt ? now > survey.endAt : false;
 
-  if (!userId) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-        <div className="bg-white p-8 rounded shadow text-center max-w-md">
-          <h1 className="text-xl font-bold text-red-600 mb-2">エラー</h1>
-          <p>
-            ユーザーID (auser_id)
-            が不足しています。アプリから再度アクセスしてください。
-          </p>
-        </div>
-      </div>
-    );
-  }
-
   // フッター用のリンクを構築
   const footerLinks: Array<{ label: string; href: string }> = [];
 
@@ -160,8 +146,8 @@ export default async function SurveyPublicPage(props: {
   return (
     <>
       <SurveyContainer survey={survey}>
-        <SurveyHeader survey={survey} />
-        {!isExpired && (
+        <SurveyHeader survey={survey} userId={userId} />
+        {!isExpired && userId && (
           <>
             <SurveyIntroduction themeColor={survey.themeColor} />
             <SurveyForm

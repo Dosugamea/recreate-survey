@@ -5,9 +5,10 @@ import Image from "next/image";
 
 interface SurveyHeaderProps {
   survey: Survey;
+  userId?: string;
 }
 
-export function SurveyHeader({ survey }: SurveyHeaderProps) {
+export function SurveyHeader({ survey, userId }: SurveyHeaderProps) {
   const { title, description, startAt, endAt, themeColor, headerImage } =
     survey;
   const accentBg = hexToRgba(themeColor, 0.5);
@@ -54,6 +55,14 @@ export function SurveyHeader({ survey }: SurveyHeaderProps) {
         )}
         {!headerImage && <h2 className="text-2xl font-bold py-8">{title}</h2>}
       </div>
+
+      {!userId && (
+        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 my-4">
+          <p className="text-sm text-yellow-700">
+            キャンペーンに参加するためにはアプリ内からアクセスいただく必要があります。
+          </p>
+        </div>
+      )}
 
       <section id="information" className="mb-8">
         <h3
