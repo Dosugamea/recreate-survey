@@ -27,6 +27,7 @@ export function CreateAppForm() {
     resolver: zodResolver(appSchema),
     defaultValues: {
       name: "",
+      slug: "",
       privacyPolicyUrl: "",
       faviconImageUrl: "",
       copyrightNotice: "",
@@ -65,6 +66,23 @@ export function CreateAppForm() {
               <FormControl>
                 <Input placeholder="アンケートアプリ" {...field} />
               </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="slug"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>スラッグ</FormLabel>
+              <FormControl>
+                <Input placeholder="my-app" {...field} />
+              </FormControl>
+              <FormDescription>
+                URLの一部として使用されます。小文字英数字とハイフンのみ使用できます。
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}

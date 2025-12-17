@@ -13,6 +13,7 @@ export async function createApp(data: AppSchema) {
 
   const {
     name,
+    slug,
     privacyPolicyUrl,
     faviconImageUrl,
     copyrightNotice,
@@ -23,6 +24,7 @@ export async function createApp(data: AppSchema) {
     await prisma.app.create({
       data: {
         name,
+        slug,
         privacyPolicyUrl: privacyPolicyUrl || null,
         faviconImageUrl: faviconImageUrl || null,
         copyrightNotice: copyrightNotice || null,
@@ -47,6 +49,7 @@ export async function updateApp(appId: string, data: AppSchema) {
 
   const {
     name,
+    slug,
     privacyPolicyUrl,
     faviconImageUrl,
     copyrightNotice,
@@ -58,6 +61,7 @@ export async function updateApp(appId: string, data: AppSchema) {
       where: { id: appId },
       data: {
         name,
+        slug,
         privacyPolicyUrl: privacyPolicyUrl || null,
         faviconImageUrl: faviconImageUrl || null,
         copyrightNotice: copyrightNotice || null,

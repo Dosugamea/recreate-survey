@@ -11,6 +11,7 @@ datasource db {
 model App {
   id                  String    @id @default(cuid())
   name                String    // アプリ名
+  slug                String    @unique // URLの一部になるよ (例: /my-app)
   privacyPolicyUrl    String?   // プライバシーポリシーURL
   faviconImageUrl     String?   // ファビコン画像URL
   copyrightNotice     String?   // 権利者表記
