@@ -14,6 +14,7 @@ import {
 import { format } from "date-fns";
 import { PlusCircle, Eye, ExternalLink } from "lucide-react";
 import Link from "next/link";
+import { AppFilterSelect } from "@/components/admin/AppFilterSelect";
 
 const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "アンケートアプリ";
 
@@ -24,8 +25,27 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminSurveysPage() {
+interface AdminSurveysPageProps {
+  searchParams: Promise<{ appId?: string }>;
+}
+
+export default async function AdminSurveysPage({
+  searchParams,
+}: AdminSurveysPageProps) {
+  const { appId } = await searchParams;
+
+  // アプリ一覧を取得
+  const apps = await prisma.app.findMany({
+    orderBy: { name: "asc" },
+    select: {
+      id: true,
+      name: true,
+    },
+  });
+
+  // アンケートを取得（appIdでフィルタリング）
   const surveys = await prisma.survey.findMany({
+    where: appId ? { appId } : undefined,
     include: {
       app: true,
     },
@@ -49,6 +69,8 @@ export default async function AdminSurveysPage() {
           </Link>
         </Button>
       </div>
+
+      {apps.length > 0 && <AppFilterSelect apps={apps} currentAppId={appId} />}
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {surveys.length === 0 ? (
