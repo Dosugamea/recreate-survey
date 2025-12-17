@@ -68,7 +68,7 @@ export function SurveyForm({
     // 戻る操作でもアンケート回答の位置にスクロールする
     const surveyTitle = document.getElementById("survey-title");
     if (surveyTitle) {
-      surveyTitle.scrollIntoView({ behavior: "smooth", block: "start" });
+      surveyTitle.scrollIntoView({ behavior: "auto", block: "start" });
     }
   };
 
@@ -78,7 +78,9 @@ export function SurveyForm({
       if (result.success) {
         setIsSubmitted(true);
       } else {
-        alert("送信に失敗しました");
+        const errorMessage = result.error || "送信に失敗しました";
+        console.error("Submission error:", errorMessage);
+        alert(`送信に失敗しました\n${errorMessage}`);
       }
     });
   };
@@ -93,7 +95,7 @@ export function SurveyForm({
     if (step === "confirmation") {
       const surveyTitle = document.getElementById("survey-title");
       if (surveyTitle) {
-        surveyTitle.scrollIntoView({ behavior: "smooth", block: "start" });
+        surveyTitle.scrollIntoView({ behavior: "auto", block: "start" });
       }
     }
   }, [step]);

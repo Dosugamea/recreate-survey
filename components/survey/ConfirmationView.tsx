@@ -28,7 +28,7 @@ export function ConfirmationView({
     if (!value) return "未回答";
 
     if (Array.isArray(value)) {
-      return value.map(item => `- ${item}`).join("\n");
+      return value.map((item) => `- ${item}`).join("\n");
     }
 
     return String(value);
@@ -44,15 +44,9 @@ export function ConfirmationView({
 
   return (
     <div className="px-4 pb-8">
-      <h2
-        className="text-2xl font-bold text-center my-8"
-        style={{ color: themeColor }}
-      >
-        入力内容の確認
-      </h2>
-      <p className="text-center text-gray-600 mb-8">
+      <div id="read" className="text-sm text-center my-8 font-medium">
         以下の内容で送信してもよろしいですか？
-      </p>
+      </div>
 
       <div className="space-y-6 mb-8">
         {questions.map((question) => (

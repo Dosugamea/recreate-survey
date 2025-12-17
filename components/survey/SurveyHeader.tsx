@@ -22,7 +22,7 @@ export function SurveyHeader({ survey }: SurveyHeaderProps) {
             className="mx-auto w-full h-auto"
           />
         )}
-        {!headerImage && <h2 className="text-2xl font-bold">{title}</h2>}
+        {!headerImage && <h2 className="text-2xl font-bold py-8">{title}</h2>}
       </div>
 
       <section id="information" className="mb-8">
