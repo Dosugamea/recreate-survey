@@ -2,9 +2,8 @@
 
 import { Question } from "@prisma/client";
 import { FieldValues } from "react-hook-form";
-import { cn, hexToRgba } from "@/lib/utils";
+import { hexToRgba } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { SubmitButton } from "./SubmitButton";
 
 interface ConfirmationViewProps {
   questions: Question[];

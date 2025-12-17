@@ -20,4 +20,3 @@ export function SurveyWarn({ show }: SurveyWarnProps) {
     </div>
   );
 }
-

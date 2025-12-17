@@ -70,7 +70,10 @@ export default async function EditSurveyPage(props: {
               asChild
               title="アンケートを開く"
             >
-              <Link href={`/${survey.app.slug}/${survey.slug}/form?auser_id=dummy`} target="_blank">
+              <Link
+                href={`/${survey.app.slug}/${survey.slug}/form?auser_id=dummy`}
+                target="_blank"
+              >
                 <ExternalLink className="h-3 w-3" />
               </Link>
             </Button>
@@ -83,4 +86,3 @@ export default async function EditSurveyPage(props: {
     </div>
   );
 }
-

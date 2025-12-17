@@ -31,8 +31,7 @@ export async function createApp(data: AppSchema) {
         contactUrl: contactUrl || null,
       },
     });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (e: any) {
+  } catch (e: unknown) {
     console.error(e);
     return { error: "Database error occurred." };
   }
@@ -68,7 +67,7 @@ export async function updateApp(appId: string, data: AppSchema) {
         contactUrl: contactUrl || null,
       },
     });
-  } catch (e: any) {
+  } catch (e: unknown) {
     console.error(e);
     return { error: "Database error occurred." };
   }

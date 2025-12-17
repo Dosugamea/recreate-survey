@@ -56,190 +56,190 @@
 
 :root {
   --radius: 0.625rem;
-  
+
   /* Material Theme Builder - Light Theme */
   /* Primary Colors */
-  --primary: #8C4E28;
-  --primary-foreground: #FFFFFF;
-  --primary-container: #FFDBC9;
-  --primary-container-foreground: #6F3813;
-  
+  --primary: #8c4e28;
+  --primary-foreground: #ffffff;
+  --primary-container: #ffdbc9;
+  --primary-container-foreground: #6f3813;
+
   /* Secondary Colors */
   --secondary: #765847;
-  --secondary-foreground: #FFFFFF;
-  --secondary-container: #FFDBC9;
-  --secondary-container-foreground: #5C4131;
-  --secondary-darken-1: #5C4131;
-  
+  --secondary-foreground: #ffffff;
+  --secondary-container: #ffdbc9;
+  --secondary-container-foreground: #5c4131;
+  --secondary-darken-1: #5c4131;
+
   /* Tertiary Colors */
   --tertiary: #626032;
-  --tertiary-foreground: #FFFFFF;
-  --tertiary-container: #E9E5AB;
-  --tertiary-container-foreground: #4A481D;
-  
+  --tertiary-foreground: #ffffff;
+  --tertiary-container: #e9e5ab;
+  --tertiary-container-foreground: #4a481d;
+
   /* Error Colors */
-  --error: #BA1A1A;
-  --error-foreground: #FFFFFF;
-  --error-container: #FFDAD6;
-  --error-container-foreground: #93000A;
-  --destructive: #BA1A1A;
-  
+  --error: #ba1a1a;
+  --error-foreground: #ffffff;
+  --error-container: #ffdad6;
+  --error-container-foreground: #93000a;
+  --destructive: #ba1a1a;
+
   /* Surface Colors */
-  --background: #FFF8F6;
-  --foreground: #221A15;
-  --surface: #FFF8F6;
-  --surface-foreground: #221A15;
-  --surface-variant: #F4DED4;
-  --surface-variant-foreground: #52443C;
-  
+  --background: #fff8f6;
+  --foreground: #221a15;
+  --surface: #fff8f6;
+  --surface-foreground: #221a15;
+  --surface-variant: #f4ded4;
+  --surface-variant-foreground: #52443c;
+
   /* Surface Container Colors */
-  --surface-container-lowest: #FFFFFF;
-  --surface-container-low: #FFF1EB;
-  --surface-container: #FCEAE2;
-  --surface-container-high: #F6E5DD;
-  --surface-container-highest: #F0DFD7;
-  
+  --surface-container-lowest: #ffffff;
+  --surface-container-low: #fff1eb;
+  --surface-container: #fceae2;
+  --surface-container-high: #f6e5dd;
+  --surface-container-highest: #f0dfd7;
+
   /* Outline Colors */
-  --outline: #85746B;
-  --outline-variant: #D7C2B8;
-  
+  --outline: #85746b;
+  --outline-variant: #d7c2b8;
+
   /* Card & Popover */
-  --card: #FFF8F6;
-  --card-foreground: #221A15;
-  --popover: #FFF8F6;
-  --popover-foreground: #221A15;
-  
+  --card: #fff8f6;
+  --card-foreground: #221a15;
+  --popover: #fff8f6;
+  --popover-foreground: #221a15;
+
   /* Accent (Tertiaryを使用) */
   --accent: #626032;
-  --accent-foreground: #FFFFFF;
-  
+  --accent-foreground: #ffffff;
+
   /* Muted (Surface Variantを使用) */
-  --muted: #F4DED4;
-  --muted-foreground: #52443C;
-  
+  --muted: #f4ded4;
+  --muted-foreground: #52443c;
+
   /* Border & Input */
-  --border: #85746B;
-  --input: #D7C2B8;
-  --ring: #8C4E28;
-  
+  --border: #85746b;
+  --input: #d7c2b8;
+  --ring: #8c4e28;
+
   /* Status Colors */
   --info: #4caf50;
   --success: #00bcd4;
   --warning: #ff9800;
-  
+
   /* Custom colors */
-  --kirakira-red: #FF6590;
-  --kirakira-blue: #719FFD;
-  
+  --kirakira-red: #ff6590;
+  --kirakira-blue: #719ffd;
+
   /* Chart Colors */
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  
+
   /* Sidebar Colors */
-  --sidebar: #FFF8F6;
-  --sidebar-foreground: #221A15;
-  --sidebar-primary: #8C4E28;
-  --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #F4DED4;
-  --sidebar-accent-foreground: #52443C;
-  --sidebar-border: #D7C2B8;
-  --sidebar-ring: #8C4E28;
+  --sidebar: #fff8f6;
+  --sidebar-foreground: #221a15;
+  --sidebar-primary: #8c4e28;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f4ded4;
+  --sidebar-accent-foreground: #52443c;
+  --sidebar-border: #d7c2b8;
+  --sidebar-ring: #8c4e28;
 }
 
 .dark {
   /* Material Theme Builder - Dark Theme */
   /* Primary Colors */
-  --primary: #FFB68D;
+  --primary: #ffb68d;
   --primary-foreground: #532200;
-  --primary-container: #6F3813;
-  --primary-container-foreground: #FFDBC9;
-  
+  --primary-container: #6f3813;
+  --primary-container-foreground: #ffdbc9;
+
   /* Secondary Colors */
-  --secondary: #E5BEAA;
-  --secondary-foreground: #432B1D;
-  --secondary-container: #5C4131;
-  --secondary-container-foreground: #FFDBC9;
-  --secondary-darken-1: #5C4131;
-  
+  --secondary: #e5beaa;
+  --secondary-foreground: #432b1d;
+  --secondary-container: #5c4131;
+  --secondary-container-foreground: #ffdbc9;
+  --secondary-darken-1: #5c4131;
+
   /* Tertiary Colors */
-  --tertiary: #CDC991;
+  --tertiary: #cdc991;
   --tertiary-foreground: #333208;
-  --tertiary-container: #4A481D;
-  --tertiary-container-foreground: #E9E5AB;
-  
+  --tertiary-container: #4a481d;
+  --tertiary-container-foreground: #e9e5ab;
+
   /* Error Colors */
-  --error: #FFB4AB;
+  --error: #ffb4ab;
   --error-foreground: #690005;
-  --error-container: #93000A;
-  --error-container-foreground: #FFDAD6;
-  --destructive: #FFB4AB;
-  
+  --error-container: #93000a;
+  --error-container-foreground: #ffdad6;
+  --destructive: #ffb4ab;
+
   /* Surface Colors */
-  --background: #1A120D;
-  --foreground: #F0DFD7;
-  --surface: #1A120D;
-  --surface-foreground: #F0DFD7;
-  --surface-variant: #52443C;
-  --surface-variant-foreground: #D7C2B8;
-  
+  --background: #1a120d;
+  --foreground: #f0dfd7;
+  --surface: #1a120d;
+  --surface-foreground: #f0dfd7;
+  --surface-variant: #52443c;
+  --surface-variant-foreground: #d7c2b8;
+
   /* Surface Container Colors */
-  --surface-container-lowest: #140D08;
-  --surface-container-low: #221A15;
-  --surface-container: #271E19;
+  --surface-container-lowest: #140d08;
+  --surface-container-low: #221a15;
+  --surface-container: #271e19;
   --surface-container-high: #312823;
-  --surface-container-highest: #3D332D;
-  
+  --surface-container-highest: #3d332d;
+
   /* Outline Colors */
-  --outline: #9F8D84;
-  --outline-variant: #52443C;
-  
+  --outline: #9f8d84;
+  --outline-variant: #52443c;
+
   /* Card & Popover */
-  --card: #1A120D;
-  --card-foreground: #F0DFD7;
-  --popover: #1A120D;
-  --popover-foreground: #F0DFD7;
-  
+  --card: #1a120d;
+  --card-foreground: #f0dfd7;
+  --popover: #1a120d;
+  --popover-foreground: #f0dfd7;
+
   /* Accent (Tertiaryを使用) */
-  --accent: #CDC991;
+  --accent: #cdc991;
   --accent-foreground: #333208;
-  
+
   /* Muted (Surface Variantを使用) */
-  --muted: #52443C;
-  --muted-foreground: #D7C2B8;
-  
+  --muted: #52443c;
+  --muted-foreground: #d7c2b8;
+
   /* Border & Input */
-  --border: #9F8D84;
-  --input: #52443C;
-  --ring: #FFB68D;
-  
+  --border: #9f8d84;
+  --input: #52443c;
+  --ring: #ffb68d;
+
   /* Status Colors */
   --info: #4caf50;
   --success: #00bcd4;
   --warning: #ff9800;
-  
+
   /* Custom colors */
-  --kirakira-red: #FF6590;
-  --kirakira-blue: #719FFD;
-  
+  --kirakira-red: #ff6590;
+  --kirakira-blue: #719ffd;
+
   /* Chart Colors */
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
-  
+
   /* Sidebar Colors */
-  --sidebar: #1A120D;
-  --sidebar-foreground: #F0DFD7;
-  --sidebar-primary: #FFB68D;
+  --sidebar: #1a120d;
+  --sidebar-foreground: #f0dfd7;
+  --sidebar-primary: #ffb68d;
   --sidebar-primary-foreground: #532200;
-  --sidebar-accent: #52443C;
-  --sidebar-accent-foreground: #D7C2B8;
-  --sidebar-border: #52443C;
-  --sidebar-ring: #FFB68D;
+  --sidebar-accent: #52443c;
+  --sidebar-accent-foreground: #d7c2b8;
+  --sidebar-border: #52443c;
+  --sidebar-ring: #ffb68d;
 }
 
 @layer base {

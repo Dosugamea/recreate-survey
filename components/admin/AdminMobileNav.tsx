@@ -9,21 +9,15 @@ import {
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import { Sidebar } from "@/components/admin/Sidebar";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { usePathname } from "next/navigation";
 
 export function AdminMobileNav() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
-  useEffect(() => {
-    if (open) {
-      setOpen(false);
-    }
-  }, [pathname]);
-
   return (
-    <Sheet open={open} onOpenChange={setOpen}>
+    <Sheet key={pathname} open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button variant="outline" size="icon" className="mr-4">
           <Menu className="h-4 w-4" />

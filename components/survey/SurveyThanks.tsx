@@ -12,11 +12,7 @@ interface SurveyThanksProps {
 /**
  * アンケート送信完了メッセージコンポーネント
  */
-export function SurveyThanks({
-  show,
-  themeColor,
-  appName,
-}: SurveyThanksProps) {
+export function SurveyThanks({ show, themeColor, appName }: SurveyThanksProps) {
   if (!show) {
     return null;
   }
@@ -41,4 +37,3 @@ export function SurveyThanks({
     </section>
   );
 }
-

@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { QuestionItem } from "./QuestionItem";
 import { fn } from "@storybook/test";
+import type { UseFormRegister } from "react-hook-form";
+import type { FieldValues } from "react-hook-form";
 
 const meta: Meta<typeof QuestionItem> = {
   title: "Survey/QuestionItem",
@@ -20,7 +22,7 @@ const mockRegister = fn(() => ({
   onChange: async () => {},
   onBlur: async () => {},
   ref: () => {},
-}));
+})) as unknown as UseFormRegister<FieldValues>;
 
 const baseQuestion = {
   id: "q-1",
@@ -38,7 +40,7 @@ export const TextQuestion: Story = {
       type: "TEXT",
       label: "お名前を教えてください",
     },
-    register: mockRegister as any,
+    register: mockRegister,
     themeColor: "#6c4034",
   },
 };
@@ -50,7 +52,7 @@ export const EmailQuestion: Story = {
       type: "EMAIL",
       label: "メールアドレス",
     },
-    register: mockRegister as any,
+    register: mockRegister,
     themeColor: "#6c4034",
   },
 };
@@ -63,7 +65,7 @@ export const RadioQuestion: Story = {
       label: "あなたの性別を教えてください",
       options: JSON.stringify(["男性", "女性", "その他"]),
     },
-    register: mockRegister as any,
+    register: mockRegister,
     themeColor: "#6c4034",
   },
 };
@@ -81,7 +83,7 @@ export const CheckboxQuestion: Story = {
         "マーケティング",
       ]),
     },
-    register: mockRegister as any,
+    register: mockRegister,
     themeColor: "#6c4034",
   },
 };
@@ -103,7 +105,7 @@ export const SelectQuestion: Story = {
         "九州/沖縄",
       ]),
     },
-    register: mockRegister as any,
+    register: mockRegister,
     themeColor: "#6c4034",
   },
 };
@@ -115,7 +117,7 @@ export const WithError: Story = {
       type: "TEXT",
       label: "必須項目です",
     },
-    register: mockRegister as any,
+    register: mockRegister,
     themeColor: "#6c4034",
     error: "Required",
   },

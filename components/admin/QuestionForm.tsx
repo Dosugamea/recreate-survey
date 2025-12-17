@@ -72,7 +72,7 @@ export function QuestionForm({
     }
 
     defaultValues = {
-      type: question.type as any,
+      type: question.type as QuestionFormSchema["type"],
       label: question.label,
       required: question.required,
       maxLength: question.maxLength?.toString(),

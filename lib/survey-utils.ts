@@ -12,4 +12,3 @@ export function isSurveyExpired(endAt: Date | null): boolean {
   const now = new Date();
   return now > endAt;
 }
-

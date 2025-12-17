@@ -88,6 +88,7 @@ export function EditSurveyForm({ survey }: EditSurveyFormProps) {
     });
   }
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const formValues = form.watch();
 
   return (
