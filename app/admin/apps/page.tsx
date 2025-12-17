@@ -19,13 +19,6 @@ export const dynamic = "force-dynamic";
 export default async function AppsPage() {
   const apps = await prisma.app.findMany({
     orderBy: { createdAt: "desc" },
-    include: {
-      surveys: {
-        select: {
-          id: true,
-        },
-      },
-    },
   });
 
   return (
@@ -78,7 +71,6 @@ export default async function AppsPage() {
               </CardHeader>
               <CardContent className="space-y-2 flex-1">
                 <div className="text-sm text-muted-foreground">
-                  <p>アンケート数: {app.surveys.length}</p>
                   <p>作成日: {format(app.createdAt, "yyyy/MM/dd")}</p>
                 </div>
                 {app.privacyPolicyUrl && (
