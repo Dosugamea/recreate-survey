@@ -15,9 +15,12 @@ export function SurveyContainer({ survey, children }: SurveyContainerProps) {
     <main className="min-h-screen font-sans bg-gray-50">
       <div
         id="app-bg"
-        className="relative min-h-screen bg-repeat"
+        className="relative min-h-screen"
         style={{
           backgroundImage: bgImage ? `url(${bgImage})` : undefined,
+          backgroundSize: bgImage ? "cover" : undefined,
+          backgroundRepeat: bgImage ? "no-repeat" : undefined,
+          backgroundPosition: bgImage ? "center" : undefined,
         }}
       >
         <div
