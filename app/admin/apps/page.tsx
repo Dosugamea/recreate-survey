@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PlusCircle, Edit } from "lucide-react";
 import { format } from "date-fns";
+import { PageHeader } from "@/components/admin/PageHeader";
 
 const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "アンケートアプリ";
 
@@ -23,21 +24,17 @@ export default async function AppsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
-            アプリ管理
-          </h2>
-          <p className="text-muted-foreground mt-2 text-sm sm:text-base">
-            アプリの基本情報を管理できます。
-          </p>
-        </div>
-        <Button asChild className="w-full sm:w-auto">
-          <Link href="/admin/apps/create">
-            <PlusCircle className="mr-2 h-4 w-4" /> アプリ作成
-          </Link>
-        </Button>
-      </div>
+      <PageHeader
+        title="アプリ管理"
+        description="アプリの基本情報を管理できます。"
+        action={
+          <Button asChild className="w-full sm:w-auto">
+            <Link href="/admin/apps/create">
+              <PlusCircle className="mr-2 h-4 w-4" /> アプリ作成
+            </Link>
+          </Button>
+        }
+      />
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {apps.length === 0 ? (

@@ -1,6 +1,5 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
-import { Separator } from "@/components/ui/separator";
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/admin/PageHeader";
 
@@ -58,7 +57,6 @@ export default async function SurveyResultsPage(props: {
         backHref={`/admin/surveys/${params.id}`}
         description={`総回答数: ${survey._count.responses}`}
       />
-      <Separator />
 
       <div className="space-y-8">
         {survey.questions.map((q) => (
@@ -104,7 +102,7 @@ export default async function SurveyResultsPage(props: {
                             className="contents sm:block bg-muted/20 p-2 rounded"
                           >
                             <div className="flex justify-between items-center mb-1">
-                              <span className="font-medium break-words">
+                              <span className="font-medium wrap-break-word">
                                 {opt}
                               </span>
                               <span className="text-muted-foreground w-8 text-right">

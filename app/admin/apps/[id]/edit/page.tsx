@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
-import { Separator } from "@/components/ui/separator";
 import { EditAppForm } from "@/components/admin/EditAppForm";
 import { PageHeader } from "@/components/admin/PageHeader";
 
@@ -48,7 +47,6 @@ export default async function EditAppPage(props: {
         backHref="/admin/apps"
         description={`「${app.name}」の基本情報を編集できます。`}
       />
-      <Separator />
       <EditAppForm app={app} />
     </div>
   );

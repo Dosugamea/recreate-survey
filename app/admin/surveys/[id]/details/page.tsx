@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
-import { Separator } from "@/components/ui/separator";
 import { EditSurveyForm } from "@/components/admin/EditSurveyForm";
 import { PageHeader } from "@/components/admin/PageHeader";
 
@@ -53,7 +52,6 @@ export default async function EditSurveyPage(props: {
         externalLinkHref={`/${survey.app.slug}/${survey.slug}/form?auser_id=dummy`}
         externalLinkTitle="アンケートを開く"
       />
-      <Separator />
 
       <EditSurveyForm survey={survey} />
     </div>

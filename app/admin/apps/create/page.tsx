@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Separator } from "@/components/ui/separator";
 import { CreateAppForm } from "@/components/admin/CreateAppForm";
 import { PageHeader } from "@/components/admin/PageHeader";
 
@@ -18,7 +17,6 @@ export default function CreateAppPage() {
         backHref="/admin/apps"
         description="アプリの基本情報を入力して新しいアプリを作成してください。"
       />
-      <Separator />
       <CreateAppForm />
     </div>
   );

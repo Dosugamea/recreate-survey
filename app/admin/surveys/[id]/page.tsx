@@ -7,7 +7,6 @@ import { ExternalLink, Edit } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { format } from "date-fns";
-import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { DeleteSurveyButton } from "./DeleteSurveyButton";
 import { PageHeader } from "@/components/admin/PageHeader";
@@ -63,8 +62,6 @@ export default async function SurveyDetailPage(props: {
         externalLinkHref={`/${survey.app.slug}/${survey.slug}/form?auser_id=dummy`}
         externalLinkTitle="アンケートを開く"
       />
-
-      <Separator />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:h-[calc(100vh-200px)]">
         {/* 左側：アンケート情報 */}

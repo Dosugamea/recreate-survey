@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { ReactNode } from "react";
 
 /**
  * ページヘッダーのプロパティ
@@ -15,13 +17,22 @@ interface PageHeaderProps {
   title: string;
 
   /**
-   * 戻るボタンのリンク先URL
+   * 戻るボタンのリンク先URL（オプション）
    * 親ページや一覧ページへのパスを指定します。
+   * 指定されない場合、戻るボタンは表示されません（一覧画面など）。
    * @example "/admin/surveys"
    * @example "/admin/apps"
    * @example "/admin/surveys/123"
    */
-  backHref: string;
+  backHref?: string;
+
+  /**
+   * アクションボタン（オプション）
+   * ヘッダーの右側に表示されるアクションボタンです。
+   * 一覧画面の「作成」ボタンなどに使用します。
+   * @example <Button asChild><Link href="/admin/surveys/create">作成</Link></Button>
+   */
+  action?: ReactNode;
 
   /**
    * ページの説明文（オプション）
@@ -67,7 +78,7 @@ interface PageHeaderProps {
  * 管理画面のページヘッダーコンポーネント
  *
  * 各ページの上部に表示される統一されたヘッダーです。
- * 左側に戻るボタン、右側にページタイトルとオプション情報を表示します。
+ * 左側に戻るボタン（オプション）、中央にページタイトルとオプション情報、右側にアクションボタン（オプション）を表示します。
  *
  * @example
  * // 基本的な使用例（タイトルと戻るボタンのみ）
@@ -82,6 +93,20 @@ interface PageHeaderProps {
  *   title="新しいアンケートを作成"
  *   backHref="/admin/surveys"
  *   description="詳細を入力して新しいアンケートキャンペーンを開始してください。"
+ * />
+ *
+ * @example
+ * // 一覧画面用（アクションボタン付き）
+ * <PageHeader
+ *   title="アンケート一覧"
+ *   description="作成したアンケートの一覧を表示しています。詳細の確認や編集ができます。"
+ *   action={
+ *     <Button asChild>
+ *       <Link href="/admin/surveys/create">
+ *         <PlusCircle className="mr-2 h-4 w-4" /> アンケート作成
+ *       </Link>
+ *     </Button>
+ *   }
  * />
  *
  * @example
@@ -104,41 +129,56 @@ export function PageHeader({
   url,
   externalLinkHref,
   externalLinkTitle,
+  action,
 }: PageHeaderProps) {
   return (
-    <div className="flex items-center gap-4 mb-4">
-      <Button variant="ghost" size="icon" asChild>
-        <Link href={backHref}>
-          <ArrowLeft className="h-4 w-4" />
-        </Link>
-      </Button>
-      <div className="flex-1">
-        <h2 className="text-2xl font-bold tracking-tight">{title}</h2>
-        {description && (
-          <p className="text-sm text-muted-foreground mt-1">{description}</p>
-        )}
-        {url && (
-          <div className="flex items-center gap-2 mt-1 text-muted-foreground">
-            <span>URL:</span>
-            <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm">
-              {url}
-            </code>
-            {externalLinkHref && (
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-6 w-6"
-                asChild
-                title={externalLinkTitle || "ページを開く"}
-              >
-                <Link href={externalLinkHref} target="_blank">
-                  <ExternalLink className="h-3 w-3" />
-                </Link>
-              </Button>
+    <>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-4 flex-1">
+          {backHref ? (
+            <Button variant="ghost" size="icon" asChild>
+              <Link href={backHref}>
+                <ArrowLeft className="h-4 w-4" />
+              </Link>
+            </Button>
+          ) : (
+            <div className="size-9" />
+          )}
+          <div className="flex-1">
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
+              {title}
+            </h2>
+            {description && (
+              <p className="text-muted-foreground mt-2 text-sm sm:text-base">
+                {description}
+              </p>
+            )}
+            {url && (
+              <div className="flex items-center gap-2 mt-1 text-muted-foreground">
+                <span>URL:</span>
+                <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm">
+                  {url}
+                </code>
+                {externalLinkHref && (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6"
+                    asChild
+                    title={externalLinkTitle || "ページを開く"}
+                  >
+                    <Link href={externalLinkHref} target="_blank">
+                      <ExternalLink className="h-3 w-3" />
+                    </Link>
+                  </Button>
+                )}
+              </div>
             )}
           </div>
-        )}
+        </div>
+        {action && <div className="w-full sm:w-auto">{action}</div>}
       </div>
-    </div>
+      <Separator className="mb-8" />
+    </>
   );
 }

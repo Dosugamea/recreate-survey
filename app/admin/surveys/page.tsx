@@ -15,6 +15,7 @@ import { format } from "date-fns";
 import { PlusCircle, Eye, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { AppFilterSelect } from "@/components/admin/AppFilterSelect";
+import { PageHeader } from "@/components/admin/PageHeader";
 
 const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "アンケートアプリ";
 
@@ -54,21 +55,17 @@ export default async function AdminSurveysPage({
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
-            アンケート一覧
-          </h2>
-          <p className="text-muted-foreground mt-2 text-sm sm:text-base">
-            作成したアンケートの一覧を表示しています。詳細の確認や編集ができます。
-          </p>
-        </div>
-        <Button asChild className="w-full sm:w-auto">
-          <Link href="/admin/surveys/create">
-            <PlusCircle className="mr-2 h-4 w-4" /> アンケート作成
-          </Link>
-        </Button>
-      </div>
+      <PageHeader
+        title="アンケート一覧"
+        description="作成したアンケートの一覧を表示しています。詳細の確認や編集ができます。"
+        action={
+          <Button asChild className="w-full sm:w-auto">
+            <Link href="/admin/surveys/create">
+              <PlusCircle className="mr-2 h-4 w-4" /> アンケート作成
+            </Link>
+          </Button>
+        }
+      />
 
       {apps.length > 0 && <AppFilterSelect apps={apps} currentAppId={appId} />}
 

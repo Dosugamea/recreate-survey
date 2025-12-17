@@ -1,5 +1,4 @@
 import { CreateSurveyForm } from "@/components/admin/CreateSurveyForm";
-import { Separator } from "@/components/ui/separator";
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/admin/PageHeader";
 
@@ -18,7 +17,6 @@ export default function CreateSurveyPage() {
         backHref="/admin/surveys"
         description="詳細を入力して新しいアンケートキャンペーンを開始してください。"
       />
-      <Separator />
       <CreateSurveyForm />
     </div>
   );
