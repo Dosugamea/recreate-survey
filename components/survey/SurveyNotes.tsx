@@ -14,7 +14,7 @@ export function SurveyNotes({ survey }: SurveyNotesProps) {
   }
 
   return (
-    <section id="notes" className="mb-8 px-4">
+    <section id="notes">
       <h3
         className="flex flex-col sm:flex-row text-white text-sm sm:text-base font-bold"
         style={{ backgroundColor: accentBg }}
@@ -27,4 +27,3 @@ export function SurveyNotes({ survey }: SurveyNotesProps) {
     </section>
   );
 }
-
