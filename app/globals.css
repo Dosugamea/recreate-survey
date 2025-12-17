@@ -56,88 +56,190 @@
 
 :root {
   --radius: 0.625rem;
-  /* Vuetifyテーマに基づいたカラーパレット */
-  --background: #FFF9F2;
-  /* Primary基準の読みやすいテキスト色 */
-  --foreground: oklch(0.25 0 0);
-  --surface: #FFFFFF;
-  --card: #FFFFFF;
-  --card-foreground: oklch(0.25 0 0);
-  --popover: #FFFFFF;
-  --popover-foreground: oklch(0.25 0 0);
-  /* Primary: brown.darken1 (#6D4C41) */
-  --primary: #8c4e28;
+  
+  /* Material Theme Builder - Light Theme */
+  /* Primary Colors */
+  --primary: #8C4E28;
   --primary-foreground: #FFFFFF;
-  /* Secondary: Primaryに似た、少しだけ色が違う茶色（brown.darken1を少し明るく） */
+  --primary-container: #FFDBC9;
+  --primary-container-foreground: #6F3813;
+  
+  /* Secondary Colors */
   --secondary: #765847;
   --secondary-foreground: #FFFFFF;
-  --secondary-darken-1: #5D4037;
-  /* Accent: Primaryと調和する色（控えめな茶色系） */
-  --accent:#626032;
-  --accent-foreground: oklch(0.25 0 0);
-  /* Custom colors */
-  --kirakira-red: #FF6590;
-  --kirakira-blue: #719FFD;
-  /* Status colors */
-  --error: #f44336;
+  --secondary-container: #FFDBC9;
+  --secondary-container-foreground: #5C4131;
+  --secondary-darken-1: #5C4131;
+  
+  /* Tertiary Colors */
+  --tertiary: #626032;
+  --tertiary-foreground: #FFFFFF;
+  --tertiary-container: #E9E5AB;
+  --tertiary-container-foreground: #4A481D;
+  
+  /* Error Colors */
+  --error: #BA1A1A;
+  --error-foreground: #FFFFFF;
+  --error-container: #FFDAD6;
+  --error-container-foreground: #93000A;
+  --destructive: #BA1A1A;
+  
+  /* Surface Colors */
+  --background: #FFF8F6;
+  --foreground: #221A15;
+  --surface: #FFF8F6;
+  --surface-foreground: #221A15;
+  --surface-variant: #F4DED4;
+  --surface-variant-foreground: #52443C;
+  
+  /* Surface Container Colors */
+  --surface-container-lowest: #FFFFFF;
+  --surface-container-low: #FFF1EB;
+  --surface-container: #FCEAE2;
+  --surface-container-high: #F6E5DD;
+  --surface-container-highest: #F0DFD7;
+  
+  /* Outline Colors */
+  --outline: #85746B;
+  --outline-variant: #D7C2B8;
+  
+  /* Card & Popover */
+  --card: #FFF8F6;
+  --card-foreground: #221A15;
+  --popover: #FFF8F6;
+  --popover-foreground: #221A15;
+  
+  /* Accent (Tertiaryを使用) */
+  --accent: #626032;
+  --accent-foreground: #FFFFFF;
+  
+  /* Muted (Surface Variantを使用) */
+  --muted: #F4DED4;
+  --muted-foreground: #52443C;
+  
+  /* Border & Input */
+  --border: #85746B;
+  --input: #D7C2B8;
+  --ring: #8C4E28;
+  
+  /* Status Colors */
   --info: #4caf50;
   --success: #00bcd4;
   --warning: #ff9800;
-  /* UI colors - 読みやすさを向上 */
-  --muted: oklch(0.94 0 0);
-  --muted-foreground: oklch(0.45 0 0);
-  --destructive: #f44336;
-  --border: oklch(0.85 0 0);
-  --input: oklch(0.88 0 0);
-  --ring: #6D4C41;
+  
+  /* Custom colors */
+  --kirakira-red: #FF6590;
+  --kirakira-blue: #719FFD;
+  
+  /* Chart Colors */
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  /* Sidebar colors - Primaryと調和 */
-  --sidebar: #FFFFFF;
-  --sidebar-foreground: oklch(0.25 0 0);
-  --sidebar-primary: #6D4C41;
+  
+  /* Sidebar Colors */
+  --sidebar: #FFF8F6;
+  --sidebar-foreground: #221A15;
+  --sidebar-primary: #8C4E28;
   --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: oklch(0.9 0.02 40);
-  --sidebar-accent-foreground: oklch(0.25 0 0);
-  --sidebar-border: oklch(0.85 0 0);
-  --sidebar-ring: #6D4C41;
+  --sidebar-accent: #F4DED4;
+  --sidebar-accent-foreground: #52443C;
+  --sidebar-border: #D7C2B8;
+  --sidebar-ring: #8C4E28;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  /* Material Theme Builder - Dark Theme */
+  /* Primary Colors */
+  --primary: #FFB68D;
+  --primary-foreground: #532200;
+  --primary-container: #6F3813;
+  --primary-container-foreground: #FFDBC9;
+  
+  /* Secondary Colors */
+  --secondary: #E5BEAA;
+  --secondary-foreground: #432B1D;
+  --secondary-container: #5C4131;
+  --secondary-container-foreground: #FFDBC9;
+  --secondary-darken-1: #5C4131;
+  
+  /* Tertiary Colors */
+  --tertiary: #CDC991;
+  --tertiary-foreground: #333208;
+  --tertiary-container: #4A481D;
+  --tertiary-container-foreground: #E9E5AB;
+  
+  /* Error Colors */
+  --error: #FFB4AB;
+  --error-foreground: #690005;
+  --error-container: #93000A;
+  --error-container-foreground: #FFDAD6;
+  --destructive: #FFB4AB;
+  
+  /* Surface Colors */
+  --background: #1A120D;
+  --foreground: #F0DFD7;
+  --surface: #1A120D;
+  --surface-foreground: #F0DFD7;
+  --surface-variant: #52443C;
+  --surface-variant-foreground: #D7C2B8;
+  
+  /* Surface Container Colors */
+  --surface-container-lowest: #140D08;
+  --surface-container-low: #221A15;
+  --surface-container: #271E19;
+  --surface-container-high: #312823;
+  --surface-container-highest: #3D332D;
+  
+  /* Outline Colors */
+  --outline: #9F8D84;
+  --outline-variant: #52443C;
+  
+  /* Card & Popover */
+  --card: #1A120D;
+  --card-foreground: #F0DFD7;
+  --popover: #1A120D;
+  --popover-foreground: #F0DFD7;
+  
+  /* Accent (Tertiaryを使用) */
+  --accent: #CDC991;
+  --accent-foreground: #333208;
+  
+  /* Muted (Surface Variantを使用) */
+  --muted: #52443C;
+  --muted-foreground: #D7C2B8;
+  
+  /* Border & Input */
+  --border: #9F8D84;
+  --input: #52443C;
+  --ring: #FFB68D;
+  
+  /* Status Colors */
+  --info: #4caf50;
+  --success: #00bcd4;
+  --warning: #ff9800;
+  
+  /* Custom colors */
+  --kirakira-red: #FF6590;
+  --kirakira-blue: #719FFD;
+  
+  /* Chart Colors */
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  
+  /* Sidebar Colors */
+  --sidebar: #1A120D;
+  --sidebar-foreground: #F0DFD7;
+  --sidebar-primary: #FFB68D;
+  --sidebar-primary-foreground: #532200;
+  --sidebar-accent: #52443C;
+  --sidebar-accent-foreground: #D7C2B8;
+  --sidebar-border: #52443C;
+  --sidebar-ring: #FFB68D;
 }
 
 @layer base {
