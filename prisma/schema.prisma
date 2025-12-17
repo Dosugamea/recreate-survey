@@ -7,9 +7,26 @@ datasource db {
   provider = "sqlite"
 }
 
+// アプリ全体の設定
+model App {
+  id                  String    @id @default(cuid())
+  name                String    // アプリ名
+  privacyPolicyUrl    String?   // プライバシーポリシーURL
+  faviconImageUrl     String?   // ファビコン画像URL
+  copyrightNotice     String?   // 権利者表記
+  contactEmail        String?   // お問い合わせ先
+
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  surveys             Survey[]
+}
+
 // アンケート自体の設定
 model Survey {
   id            String    @id @default(cuid())
+  appId         String    // アプリID
+  app           App       @relation(fields: [appId], references: [id], onDelete: Cascade)
   slug          String    @unique // URLの一部になるよ (例: /campaign-2025)
   title         String    // アンケートのタイトル
   description   String?   // 説明文 (HTMLタグ含めてもいいかも)

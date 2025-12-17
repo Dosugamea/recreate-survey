@@ -1,6 +1,29 @@
 import * as z from "zod";
 
+export const appSchema = z.object({
+  name: z.string().min(1, "アプリ名は必須です"),
+  privacyPolicyUrl: z
+    .string()
+    .url("有効なURLを入力してください")
+    .optional()
+    .or(z.literal("")),
+  faviconImageUrl: z
+    .string()
+    .url("有効なURLを入力してください")
+    .optional()
+    .or(z.literal("")),
+  copyrightNotice: z.string().optional(),
+  contactEmail: z
+    .string()
+    .email("有効なメールアドレスを入力してください")
+    .optional()
+    .or(z.literal("")),
+});
+
+export type AppSchema = z.infer<typeof appSchema>;
+
 export const surveySchema = z.object({
+  appId: z.string().min(1, "アプリIDは必須です"),
   title: z.string().min(1, "タイトルは必須です"),
   slug: z
     .string()
