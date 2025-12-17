@@ -5,6 +5,7 @@ import { SurveyIntroduction } from "@/components/survey/SurveryIntroduction";
 import { SurveyHeader } from "@/components/survey/SurveyHeader";
 import { SurveyForm } from "@/components/survey/SurveyForm";
 import type { Metadata } from "next";
+import { metadata as notFoundMetadata } from "../not-found";
 
 export const dynamic = "force-dynamic";
 
@@ -18,10 +19,8 @@ export async function generateMetadata(props: {
     where: { slug: params.slug },
   });
 
-  if (!survey) {
-    return {
-      title: `フォーム | ${appName}`,
-    };
+  if (!survey || !survey.isActive) {
+    return notFoundMetadata;
   }
 
   return {
@@ -53,11 +52,7 @@ export default async function SurveyPublicPage(props: {
   // Check activity/dates
   const now = new Date();
   if (!survey.isActive) {
-    return (
-      <div className="min-h-screen flex items-center justify-center p-4">
-        このアンケートは現在公開されていません。
-      </div>
-    );
+    notFound();
   }
   if (survey.startAt && now < survey.startAt) {
     return (
