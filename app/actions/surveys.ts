@@ -48,14 +48,14 @@ export async function createSurvey(data: SurveySchema) {
 
   // Redirect to the edit page for this survey (using ID would be better but slug is unique)
   // Wait, I need the ID. Or I can find by slug.
-  // Actually, I can redirect to `/admin/[id]/edit` if I get the ID from create.
+  // Actually, I can redirect to `/admin/[id]/details` if I get the ID from create.
   // Let's modify to get ID.
 
   const createdSurvey = await prisma.survey.findUnique({ where: { slug } });
   if (createdSurvey) {
-    redirect(`/admin/${createdSurvey.id}/edit`);
+    redirect(`/admin/surveys/${createdSurvey.id}/details`);
   } else {
-    redirect(`/admin`); // Fallback
+    redirect(`/admin/surveys`); // Fallback
   }
 }
 

@@ -30,7 +30,7 @@ export async function addQuestion(surveyId: string, data: QuestionFormSchema) {
       },
     });
 
-    revalidatePath(`/admin/${surveyId}/edit`);
+    revalidatePath(`/admin/surveys/${surveyId}/details`);
 
     return { success: true };
   } catch (e) {
@@ -60,7 +60,7 @@ export async function updateQuestion(
       },
     });
 
-    revalidatePath(`/admin/${surveyId}/edit`);
+    revalidatePath(`/admin/surveys/${surveyId}/details`);
     return { success: true };
   } catch (e) {
     console.error(e);
@@ -73,7 +73,7 @@ export async function deleteQuestion(questionId: string, surveyId: string) {
     await prisma.question.delete({
       where: { id: questionId },
     });
-    revalidatePath(`/admin/${surveyId}/edit`);
+    revalidatePath(`/admin/surveys/${surveyId}/details`);
     return { success: true };
   } catch {
     return { error: "Failed to delete" };
@@ -94,7 +94,7 @@ export async function reorderQuestions(
         })
       )
     );
-    revalidatePath(`/admin/${surveyId}/edit`);
+    revalidatePath(`/admin/surveys/${surveyId}/details`);
     return { success: true };
   } catch (e) {
     console.error(e);

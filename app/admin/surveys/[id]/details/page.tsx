@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
+import Link from "next/link";
+import { ExternalLink, ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { EditSurveyForm } from "@/components/admin/EditSurveyForm";
 
 const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "アンケートアプリ";
 
@@ -23,11 +28,6 @@ export async function generateMetadata(props: {
     description: `「${survey.title}」の編集`,
   };
 }
-import Link from "next/link";
-import { ExternalLink, ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { EditSurveyForm } from "@/components/admin/EditSurveyForm";
 
 export const dynamic = "force-dynamic";
 
@@ -47,7 +47,7 @@ export default async function EditSurveyPage(props: {
     <div className="space-y-6">
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="icon" asChild>
-          <Link href={`/admin/${survey.id}`}>
+          <Link href={`/admin/surveys/${survey.id}`}>
             <ArrowLeft className="h-4 w-4" />
           </Link>
         </Button>
@@ -80,3 +80,4 @@ export default async function EditSurveyPage(props: {
     </div>
   );
 }
+

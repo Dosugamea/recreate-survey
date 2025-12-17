@@ -21,20 +21,22 @@ export function Sidebar({ className }: SidebarProps) {
           <div className="space-y-1">
             <Button
               asChild
-              variant={pathname === "/admin" ? "secondary" : "ghost"}
+              variant={pathname === "/admin/surveys" ? "secondary" : "ghost"}
               className="w-full justify-start"
             >
-              <Link href="/admin">
+              <Link href="/admin/surveys">
                 <LayoutDashboard className="mr-2 h-4 w-4" />
                 ダッシュボード
               </Link>
             </Button>
             <Button
               asChild
-              variant={pathname === "/admin/create" ? "secondary" : "ghost"}
+              variant={
+                pathname === "/admin/surveys/create" ? "secondary" : "ghost"
+              }
               className="w-full justify-start"
             >
-              <Link href="/admin/create">
+              <Link href="/admin/surveys/create">
                 <PlusCircle className="mr-2 h-4 w-4" />
                 新規作成
               </Link>

@@ -52,7 +52,7 @@ export default async function EditQuestionsPage(props: {
       <div>
         <div className="flex items-center gap-4 mb-4">
           <Button variant="ghost" size="icon" asChild>
-            <Link href={`/admin/${survey.id}`}>
+            <Link href={`/admin/surveys/${survey.id}`}>
               <ArrowLeft className="h-4 w-4" />
             </Link>
           </Button>
@@ -85,3 +85,4 @@ export default async function EditQuestionsPage(props: {
     </div>
   );
 }
+

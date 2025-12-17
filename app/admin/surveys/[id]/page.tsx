@@ -55,7 +55,7 @@ export default async function SurveyDetailPage(props: {
     <div className="space-y-6">
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="icon" asChild>
-          <Link href="/admin">
+          <Link href="/admin/surveys">
             <ArrowLeft className="h-4 w-4" />
           </Link>
         </Button>
@@ -90,7 +90,7 @@ export default async function SurveyDetailPage(props: {
             <div className="flex items-center justify-between">
               <CardTitle>基本情報</CardTitle>
               <Button variant="default" size="sm" asChild>
-                <Link href={`/admin/${survey.id}/edit`}>
+                <Link href={`/admin/surveys/${survey.id}/details`}>
                   <Edit className="mr-2 h-4 w-4" />
                   基本情報を編集
                 </Link>
@@ -241,7 +241,7 @@ export default async function SurveyDetailPage(props: {
             <div className="flex items-center justify-between">
               <CardTitle>質問項目</CardTitle>
               <Button variant="secondary" size="sm" asChild>
-                <Link href={`/admin/${survey.id}/questions`}>
+                <Link href={`/admin/surveys/${survey.id}/questions`}>
                   <Edit className="mr-2 h-4 w-4" />
                   質問項目を編集
                 </Link>
