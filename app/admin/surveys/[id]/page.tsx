@@ -3,13 +3,14 @@ import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { ExternalLink, Edit, ArrowLeft } from "lucide-react";
+import { ExternalLink, Edit } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { format } from "date-fns";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { DeleteSurveyButton } from "./DeleteSurveyButton";
+import { PageHeader } from "@/components/admin/PageHeader";
 
 const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "アンケートアプリ";
 
@@ -55,36 +56,13 @@ export default async function SurveyDetailPage(props: {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon" asChild>
-          <Link href="/admin/surveys">
-            <ArrowLeft className="h-4 w-4" />
-          </Link>
-        </Button>
-        <div className="flex-1">
-          <h2 className="text-2xl font-bold tracking-tight">{survey.title}</h2>
-          <div className="flex items-center gap-2 mt-1 text-muted-foreground">
-            <span>URL:</span>
-            <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm">
-              /{survey.app.slug}/{survey.slug}/form
-            </code>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-6 w-6"
-              asChild
-              title="アンケートを開く"
-            >
-              <Link
-                href={`/${survey.app.slug}/${survey.slug}/form?auser_id=dummy`}
-                target="_blank"
-              >
-                <ExternalLink className="h-3 w-3" />
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </div>
+      <PageHeader
+        title={survey.title}
+        backHref="/admin/surveys"
+        url={`/${survey.app.slug}/${survey.slug}/form`}
+        externalLinkHref={`/${survey.app.slug}/${survey.slug}/form?auser_id=dummy`}
+        externalLinkTitle="アンケートを開く"
+      />
 
       <Separator />
 

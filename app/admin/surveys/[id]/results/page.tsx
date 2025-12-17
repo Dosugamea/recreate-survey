@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
 import type { Metadata } from "next";
+import { PageHeader } from "@/components/admin/PageHeader";
 
 export const dynamic = "force-dynamic";
 
@@ -52,17 +53,11 @@ export default async function SurveyResultsPage(props: {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h2 className="text-2xl font-bold tracking-tight">
-          アンケート結果: {survey.title}
-        </h2>
-        <p className="text-muted-foreground">
-          総回答数:{" "}
-          <span className="font-bold text-foreground">
-            {survey._count.responses}
-          </span>
-        </p>
-      </div>
+      <PageHeader
+        title={`アンケート結果: ${survey.title}`}
+        backHref={`/admin/surveys/${params.id}`}
+        description={`総回答数: ${survey._count.responses}`}
+      />
       <Separator />
 
       <div className="space-y-8">

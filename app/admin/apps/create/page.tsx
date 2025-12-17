@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Separator } from "@/components/ui/separator";
 import { CreateAppForm } from "@/components/admin/CreateAppForm";
+import { PageHeader } from "@/components/admin/PageHeader";
 
 const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "アンケートアプリ";
 
@@ -12,12 +13,11 @@ export const metadata: Metadata = {
 export default function CreateAppPage() {
   return (
     <div className="space-y-6">
-      <div>
-        <h3 className="text-lg font-medium">新しいアプリを作成</h3>
-        <p className="text-sm text-muted-foreground">
-          アプリの基本情報を入力して新しいアプリを作成してください。
-        </p>
-      </div>
+      <PageHeader
+        title="新しいアプリを作成"
+        backHref="/admin/apps"
+        description="アプリの基本情報を入力して新しいアプリを作成してください。"
+      />
       <Separator />
       <CreateAppForm />
     </div>

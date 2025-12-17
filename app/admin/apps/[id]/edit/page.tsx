@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
 import { EditAppForm } from "@/components/admin/EditAppForm";
+import { PageHeader } from "@/components/admin/PageHeader";
 
 const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "アンケートアプリ";
 
@@ -42,12 +43,11 @@ export default async function EditAppPage(props: {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h3 className="text-lg font-medium">アプリ情報を編集</h3>
-        <p className="text-sm text-muted-foreground">
-          「{app.name}」の基本情報を編集できます。
-        </p>
-      </div>
+      <PageHeader
+        title="アプリ情報を編集"
+        backHref="/admin/apps"
+        description={`「${app.name}」の基本情報を編集できます。`}
+      />
       <Separator />
       <EditAppForm app={app} />
     </div>
