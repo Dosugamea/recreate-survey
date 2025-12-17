@@ -13,6 +13,31 @@ export function SurveyHeader({ survey }: SurveyHeaderProps) {
   const accentBg = hexToRgba(themeColor, 0.5);
   const lightAccentBg = hexToRgba(themeColor, 0.2);
 
+  // 現在時刻を取得して期間の状態を判定
+  const now = new Date();
+  const isNotStarted = startAt ? now < startAt : false;
+  const isExpired = endAt ? now > endAt : false;
+
+  // キャンペーン期間のメッセージを生成
+  const getCampaignPeriodMessage = (): string | null => {
+    if (!startAt || !endAt) return null;
+
+    if (isNotStarted) {
+      return `キャンペーンは ${format(
+        startAt,
+        "yyyy年MM月dd日 HH:mm"
+      )} 開始です`;
+    }
+
+    if (isExpired) {
+      return "キャンペーンは終了しました";
+    }
+
+    return `実施期間: ${format(endAt, "yyyy年MM月dd日 HH:mmまで")}`;
+  };
+
+  const periodMessage = getCampaignPeriodMessage();
+
   return (
     <article>
       <div id="ttl" className="text-center">
@@ -36,12 +61,12 @@ export function SurveyHeader({ survey }: SurveyHeaderProps) {
           style={{ backgroundColor: accentBg }}
         >
           <span className="flex-1 py-5 px-6 text-2xl">キャンペーン情報</span>
-          {startAt && endAt && (
+          {periodMessage && (
             <span
               className="flex-1 text-center text-sm rounded my-auto py-3 h-full mx-6"
               style={{ backgroundColor: lightAccentBg }}
             >
-              実施期間: {format(endAt, "yyyy年MM月dd日 HH:mmまで")}
+              {periodMessage}
             </span>
           )}
         </h3>

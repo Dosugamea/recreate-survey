@@ -118,24 +118,13 @@ export default async function SurveyPublicPage(props: {
   }
 
   // Check activity/dates
-  const now = new Date();
   if (!survey.isActive) {
     notFound();
   }
-  if (survey.startAt && now < survey.startAt) {
-    return (
-      <div className="min-h-screen flex items-center justify-center p-4">
-        このアンケートはまだ開始されていません。
-      </div>
-    );
-  }
-  if (survey.endAt && now > survey.endAt) {
-    return (
-      <div className="min-h-screen flex items-center justify-center p-4">
-        このアンケートは終了しました。
-      </div>
-    );
-  }
+
+  // 期間外かどうかを判定（期間外の場合はフォームを表示しない）
+  const now = new Date();
+  const isExpired = survey.endAt ? now > survey.endAt : false;
 
   if (!userId) {
     return (
@@ -173,12 +162,14 @@ export default async function SurveyPublicPage(props: {
       <SurveyContainer survey={survey}>
         <SurveyHeader survey={survey} />
         <SurveyIntroduction themeColor={survey.themeColor} />
-        <SurveyForm
-          surveyId={survey.id}
-          questions={survey.questions}
-          userId={userId}
-          themeColor={survey.themeColor}
-        />
+        {!isExpired && (
+          <SurveyForm
+            surveyId={survey.id}
+            questions={survey.questions}
+            userId={userId}
+            themeColor={survey.themeColor}
+          />
+        )}
         <SurveyNotes survey={survey} />
       </SurveyContainer>
       <SurveyFooter
