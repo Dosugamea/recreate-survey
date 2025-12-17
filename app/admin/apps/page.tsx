@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PlusCircle, Edit } from "lucide-react";
@@ -55,7 +56,19 @@ export default async function AppsPage() {
             <Card key={app.id} className="flex flex-col">
               <CardHeader>
                 <div className="flex items-start justify-between">
-                  <CardTitle className="text-lg">{app.name}</CardTitle>
+                  <div className="flex items-center gap-2">
+                    {app.faviconImageUrl && (
+                      <Image
+                        src={app.faviconImageUrl}
+                        alt={`${app.name}のアイコン`}
+                        width={24}
+                        height={24}
+                        className="h-6 w-6 object-contain"
+                        unoptimized
+                      />
+                    )}
+                    <CardTitle className="text-lg">{app.name}</CardTitle>
+                  </div>
                   <Button variant="ghost" size="icon" asChild>
                     <Link href={`/admin/apps/${app.id}/edit`}>
                       <Edit className="h-4 w-4" />

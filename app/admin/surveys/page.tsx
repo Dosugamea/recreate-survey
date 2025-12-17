@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { prisma } from "@/lib/prisma";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -58,7 +59,19 @@ export default async function AdminSurveysPage() {
           surveys.map((survey) => (
             <Card key={survey.id}>
               <CardHeader>
-                <CardTitle className="truncate">{survey.title}</CardTitle>
+                <div className="flex items-center gap-2">
+                  {survey.app.faviconImageUrl && (
+                    <Image
+                      src={survey.app.faviconImageUrl}
+                      alt={`${survey.app.name}のアイコン`}
+                      width={24}
+                      height={24}
+                      className="h-6 w-6 object-contain"
+                      unoptimized
+                    />
+                  )}
+                  <CardTitle className="truncate">{survey.title}</CardTitle>
+                </div>
                 <CardDescription>
                   <Link
                     href={`/${survey.app.slug}/${survey.slug}/form?auser_id=dummy`}
