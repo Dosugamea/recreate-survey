@@ -37,6 +37,21 @@ import { format } from "date-fns";
 import { getAllApps } from "@/app/actions/apps";
 import type { App } from "@prisma/client";
 
+function generateRandomSlug(): string {
+  // ランダム4桁の数字を生成（0000-9999）
+  const randomNumbers = Math.floor(Math.random() * 10000)
+    .toString()
+    .padStart(4, "0");
+
+  // ランダムな大文字小文字3桁の英字を生成
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+  const randomChars = Array.from({ length: 3 }, () =>
+    chars.charAt(Math.floor(Math.random() * chars.length))
+  ).join("");
+
+  return `enq-${randomNumbers}-${randomChars}`;
+}
+
 export function CreateSurveyForm() {
   const [isPending, startTransition] = useTransition();
   const [serverError, setServerError] = useState<string | null>(null);
@@ -51,7 +66,7 @@ export function CreateSurveyForm() {
     defaultValues: {
       appId: "",
       title: "",
-      slug: "",
+      slug: generateRandomSlug(),
       description: "",
       notes: "",
       themeColor: "#6c4034",

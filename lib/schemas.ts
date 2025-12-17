@@ -5,7 +5,7 @@ export const appSchema = z.object({
   slug: z
     .string()
     .min(1, "スラッグは必須です")
-    .regex(/^[a-z0-9-]+$/, "スラッグは小文字英数字とハイフンのみ使用できます"),
+    .regex(/^[a-zA-Z0-9-]+$/, "スラッグは英数字とハイフンのみ使用できます"),
   privacyPolicyUrl: z
     .string()
     .url("有効なURLを入力してください")
@@ -32,7 +32,7 @@ export const surveySchema = z.object({
   slug: z
     .string()
     .min(1, "スラッグは必須です")
-    .regex(/^[a-z0-9-]+$/, "スラッグは小文字英数字とハイフンのみ使用できます"),
+    .regex(/^[a-zA-Z0-9-]+$/, "スラッグは英数字とハイフンのみ使用できます"),
   description: z.string().optional(),
   notes: z.string().optional(),
   startAt: z.date().optional(),
