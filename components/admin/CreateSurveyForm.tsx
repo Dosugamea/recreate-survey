@@ -89,7 +89,7 @@ export function CreateSurveyForm() {
                 <FormLabel>アプリ</FormLabel>
                 <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger className="w-full">
                       <SelectValue placeholder="アプリを選択してください" />
                     </SelectTrigger>
                   </FormControl>
