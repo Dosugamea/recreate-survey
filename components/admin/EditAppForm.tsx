@@ -32,8 +32,8 @@ export function EditAppForm({ app }: EditAppFormProps) {
   const form = useForm<AppSchema>({
     resolver: zodResolver(appSchema),
     defaultValues: {
-      name: app.name,
-      slug: app.slug,
+      name: app.name || "",
+      slug: app.slug || "",
       privacyPolicyUrl: app.privacyPolicyUrl || "",
       faviconImageUrl: app.faviconImageUrl || "",
       copyrightNotice: app.copyrightNotice || "",
@@ -79,7 +79,11 @@ export function EditAppForm({ app }: EditAppFormProps) {
             <FormItem>
               <FormLabel>アプリ名</FormLabel>
               <FormControl>
-                <Input placeholder="アンケートアプリ" {...field} />
+                <Input
+                  placeholder="アンケートアプリ"
+                  {...field}
+                  value={field.value ?? ""}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -93,7 +97,11 @@ export function EditAppForm({ app }: EditAppFormProps) {
             <FormItem>
               <FormLabel>スラッグ</FormLabel>
               <FormControl>
-                <Input placeholder="my-app" {...field} />
+                <Input
+                  placeholder="my-app"
+                  {...field}
+                  value={field.value ?? ""}
+                />
               </FormControl>
               <FormDescription>
                 URLの一部として使用されます。小文字英数字とハイフンのみ使用できます。
@@ -110,7 +118,11 @@ export function EditAppForm({ app }: EditAppFormProps) {
             <FormItem>
               <FormLabel>プライバシーポリシーURL</FormLabel>
               <FormControl>
-                <Input placeholder="https://example.com/privacy" {...field} />
+                <Input
+                  placeholder="https://example.com/privacy"
+                  {...field}
+                  value={field.value ?? ""}
+                />
               </FormControl>
               <FormDescription>
                 プライバシーポリシーのページURLを入力してください。
@@ -130,6 +142,7 @@ export function EditAppForm({ app }: EditAppFormProps) {
                 <Input
                   placeholder="https://example.com/favicon.ico"
                   {...field}
+                  value={field.value ?? ""}
                 />
               </FormControl>
               <FormDescription>
@@ -166,6 +179,7 @@ export function EditAppForm({ app }: EditAppFormProps) {
                   type="email"
                   placeholder="contact@example.com"
                   {...field}
+                  value={field.value ?? ""}
                 />
               </FormControl>
               <FormDescription>
