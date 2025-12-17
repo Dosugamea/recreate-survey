@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { ExternalLink, Edit, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -193,12 +194,15 @@ export default async function SurveyDetailPage(props: {
                       href={survey.headerImage}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="mt-1 block"
+                      className="mt-1 block relative w-full h-40 bg-muted rounded-md border overflow-hidden cursor-pointer hover:opacity-80 transition-opacity"
                     >
-                      <img
+                      <Image
                         src={survey.headerImage}
                         alt="ヘッダー画像"
-                        className="w-full h-32 object-contain bg-muted rounded-md border cursor-pointer hover:opacity-80 transition-opacity"
+                        fill
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                        className="object-contain"
+                        priority
                       />
                     </a>
                   </div>
@@ -213,12 +217,15 @@ export default async function SurveyDetailPage(props: {
                       href={survey.bgImage}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="mt-1 block"
+                      className="mt-1 block relative w-full h-40 bg-muted rounded-md border overflow-hidden cursor-pointer hover:opacity-80 transition-opacity"
                     >
-                      <img
+                      <Image
                         src={survey.bgImage}
                         alt="背景画像"
-                        className="w-full h-32 object-contain bg-muted rounded-md border cursor-pointer hover:opacity-80 transition-opacity"
+                        fill
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                        className="object-contain"
+                        priority
                       />
                     </a>
                   </div>
