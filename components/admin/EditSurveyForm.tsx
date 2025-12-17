@@ -338,19 +338,17 @@ export function EditSurveyForm({ survey }: EditSurveyFormProps) {
               control={form.control}
               name="isActive"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                  <div className="space-y-0.5">
-                    <FormLabel className="text-base">公開ステータス</FormLabel>
-                    <FormDescription>
-                      アンケートを公開するかどうかを設定します。
-                    </FormDescription>
-                  </div>
+                <FormItem>
+                  <FormLabel>公開ステータス</FormLabel>
                   <FormControl>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
+                    <div className="**:data-[slot=switch]:h-7 **:data-[slot=switch]:w-12 **:data-[slot=switch-thumb]:size-6">
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </div>
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
