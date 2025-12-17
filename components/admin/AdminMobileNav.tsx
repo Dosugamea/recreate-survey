@@ -1,6 +1,11 @@
 "use client";
 
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import { Sidebar } from "@/components/admin/Sidebar";
@@ -25,6 +30,7 @@ export function AdminMobileNav() {
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="p-0 w-64">
+        <SheetTitle className="sr-only">ナビゲーションメニュー</SheetTitle>
         <Sidebar className="h-full border-none" />
       </SheetContent>
     </Sheet>
