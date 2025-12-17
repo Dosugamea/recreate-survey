@@ -105,3 +105,16 @@ export async function updateSurvey(surveyId: string, data: SurveySchema) {
 
   return { success: true };
 }
+
+export async function deleteSurvey(surveyId: string) {
+  try {
+    await prisma.survey.delete({
+      where: { id: surveyId },
+    });
+  } catch (e: any) {
+    console.error(e);
+    return { error: "削除に失敗しました。" };
+  }
+
+  redirect("/admin/surveys");
+}

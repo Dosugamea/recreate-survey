@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { format } from "date-fns";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import { DeleteSurveyButton } from "./DeleteSurveyButton";
 
 const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "アンケートアプリ";
 
@@ -74,7 +75,10 @@ export default async function SurveyDetailPage(props: {
               asChild
               title="アンケートを開く"
             >
-              <Link href={`/${survey.app.slug}/${survey.slug}/form?auser_id=dummy`} target="_blank">
+              <Link
+                href={`/${survey.app.slug}/${survey.slug}/form?auser_id=dummy`}
+                target="_blank"
+              >
                 <ExternalLink className="h-3 w-3" />
               </Link>
             </Button>
@@ -302,6 +306,11 @@ export default async function SurveyDetailPage(props: {
             </div>
           </CardContent>
         </Card>
+      </div>
+
+      {/* 削除ボタン */}
+      <div className="pt-4 flex justify-center">
+        <DeleteSurveyButton surveyId={survey.id} surveyTitle={survey.title} />
       </div>
     </div>
   );
