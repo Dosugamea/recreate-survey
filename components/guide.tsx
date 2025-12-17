@@ -7,7 +7,7 @@ interface GuideProps {
 
 export function Guide({ children }: GuideProps) {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-zinc-50 font-sans dark:bg-black p-4">
+    <div className="flex min-h-screen flex-col items-center justify-center font-sans dark:bg-black p-4">
       <main className="flex flex-col items-center text-center space-y-8 max-w-2xl">
         <div className="rounded-full bg-primary/10 p-6">
           <FileText className="h-16 w-16 text-primary" />
