@@ -66,6 +66,9 @@ export function CreateAppForm() {
               <FormControl>
                 <Input placeholder="アンケートアプリ" {...field} />
               </FormControl>
+              <FormDescription>
+                アンケートアプリの名前を入力してください。
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -81,7 +84,7 @@ export function CreateAppForm() {
                 <Input placeholder="my-app" {...field} />
               </FormControl>
               <FormDescription>
-                URLの一部として使用されます。小文字英数字とハイフンのみ使用できます。
+                URLに使用される識別子です。小文字英数字とハイフンのみ使用できます。
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -98,7 +101,24 @@ export function CreateAppForm() {
                 <Input placeholder="https://example.com/privacy" {...field} />
               </FormControl>
               <FormDescription>
-                プライバシーポリシーのページURLを入力してください。
+                プライバシーポリシーのページURLを入力してください（任意）。
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="contactUrl"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>お問い合わせ先URL</FormLabel>
+              <FormControl>
+                <Input placeholder="https://example.com/contact" {...field} />
+              </FormControl>
+              <FormDescription>
+                お問い合わせページのURLを入力してください（任意）。
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -118,7 +138,7 @@ export function CreateAppForm() {
                 />
               </FormControl>
               <FormDescription>
-                ファビコン画像のURLを入力してください。
+                ブラウザのタブに表示されるアイコンのURLを入力してください（任意）。
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -134,23 +154,8 @@ export function CreateAppForm() {
               <FormControl>
                 <Textarea placeholder="© 2025 株式会社サンプル" {...field} />
               </FormControl>
-              <FormDescription>権利者表記を入力してください。</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="contactUrl"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>お問い合わせ先</FormLabel>
-              <FormControl>
-                <Input placeholder="https://example.com/contact" {...field} />
-              </FormControl>
               <FormDescription>
-                お問い合わせ先のURLを入力してください。
+                フッターに表示される権利者表記を入力してください（任意）。
               </FormDescription>
               <FormMessage />
             </FormItem>
