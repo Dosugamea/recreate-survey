@@ -77,10 +77,7 @@ export function CreateAppForm() {
             <FormItem>
               <FormLabel>プライバシーポリシーURL</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="https://example.com/privacy"
-                  {...field}
-                />
+                <Input placeholder="https://example.com/privacy" {...field} />
               </FormControl>
               <FormDescription>
                 プライバシーポリシーのページURLを入力してください。
@@ -117,14 +114,9 @@ export function CreateAppForm() {
             <FormItem>
               <FormLabel>権利者表記</FormLabel>
               <FormControl>
-                <Textarea
-                  placeholder="© 2025 株式会社サンプル"
-                  {...field}
-                />
+                <Textarea placeholder="© 2025 株式会社サンプル" {...field} />
               </FormControl>
-              <FormDescription>
-                権利者表記を入力してください。
-              </FormDescription>
+              <FormDescription>権利者表記を入力してください。</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -159,4 +151,3 @@ export function CreateAppForm() {
     </Form>
   );
 }
-

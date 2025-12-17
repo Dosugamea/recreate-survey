@@ -21,4 +21,3 @@ export function SubmitButton({ isPending, themeColor }: SubmitButtonProps) {
     </Button>
   );
 }
-

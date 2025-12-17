@@ -70,7 +70,9 @@ export default async function AppsPage() {
                 </div>
                 {app.privacyPolicyUrl && (
                   <div className="text-sm">
-                    <span className="text-muted-foreground">プライバシーポリシー: </span>
+                    <span className="text-muted-foreground">
+                      プライバシーポリシー:{" "}
+                    </span>
                     <a
                       href={app.privacyPolicyUrl}
                       target="_blank"
@@ -83,7 +85,9 @@ export default async function AppsPage() {
                 )}
                 {app.contactEmail && (
                   <div className="text-sm">
-                    <span className="text-muted-foreground">お問い合わせ: </span>
+                    <span className="text-muted-foreground">
+                      お問い合わせ:{" "}
+                    </span>
                     <a
                       href={`mailto:${app.contactEmail}`}
                       className="text-primary hover:underline"
@@ -100,4 +104,3 @@ export default async function AppsPage() {
     </div>
   );
 }
-
