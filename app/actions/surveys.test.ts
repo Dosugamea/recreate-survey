@@ -166,7 +166,9 @@ describe("surveys actions", () => {
         themeColor: "#ffffff",
       };
 
-      const error = new Error("Unique constraint failed") as Error & { code: string };
+      const error = new Error("Unique constraint failed") as Error & {
+        code: string;
+      };
       error.code = "P2002";
 
       vi.mocked(prisma.survey.create).mockRejectedValue(error);
@@ -207,7 +209,9 @@ describe("surveys actions", () => {
         id: "survey-1",
         slug: "test-survey",
       };
-      vi.mocked(prisma.survey.create).mockResolvedValue(partialSurvey as Survey);
+      vi.mocked(prisma.survey.create).mockResolvedValue(
+        partialSurvey as Survey
+      );
       vi.mocked(prisma.survey.findUnique).mockResolvedValue(null);
 
       await createSurvey(validData);
@@ -322,7 +326,9 @@ describe("surveys actions", () => {
       const deletedSurvey: Partial<Survey> = {
         id: surveyId,
       };
-      vi.mocked(prisma.survey.delete).mockResolvedValue(deletedSurvey as Survey);
+      vi.mocked(prisma.survey.delete).mockResolvedValue(
+        deletedSurvey as Survey
+      );
 
       await deleteSurvey(surveyId);
 
@@ -417,7 +423,9 @@ describe("surveys actions", () => {
               createMany: vi.fn().mockResolvedValue({ count: 2 }),
             },
           };
-          return await callback(tx as unknown as Parameters<typeof callback>[0]);
+          return await callback(
+            tx as unknown as Parameters<typeof callback>[0]
+          );
         }
         return newSurvey;
       });
@@ -517,7 +525,9 @@ describe("surveys actions", () => {
               createMany: vi.fn().mockResolvedValue({ count: 0 }),
             },
           };
-          return await callback(tx as unknown as Parameters<typeof callback>[0]);
+          return await callback(
+            tx as unknown as Parameters<typeof callback>[0]
+          );
         }
         return newSurvey;
       });

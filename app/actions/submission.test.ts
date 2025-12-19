@@ -41,8 +41,26 @@ describe("submission actions", () => {
         createdAt: new Date(),
         updatedAt: new Date(),
         questions: [
-          { id: "question-1", surveyId, type: "TEXT", label: "Q1", order: 1, required: false, maxLength: null, options: null },
-          { id: "question-2", surveyId, type: "RADIO", label: "Q2", order: 2, required: false, maxLength: null, options: null },
+          {
+            id: "question-1",
+            surveyId,
+            type: "TEXT",
+            label: "Q1",
+            order: 1,
+            required: false,
+            maxLength: null,
+            options: null,
+          },
+          {
+            id: "question-2",
+            surveyId,
+            type: "RADIO",
+            label: "Q2",
+            order: 2,
+            required: false,
+            maxLength: null,
+            options: null,
+          },
         ],
       };
 
@@ -101,7 +119,18 @@ describe("submission actions", () => {
         isActive: true,
         createdAt: new Date(),
         updatedAt: new Date(),
-        questions: [{ id: "question-1", surveyId, type: "CHECKBOX", label: "Q1", order: 1, required: false, maxLength: null, options: null }],
+        questions: [
+          {
+            id: "question-1",
+            surveyId,
+            type: "CHECKBOX",
+            label: "Q1",
+            order: 1,
+            required: false,
+            maxLength: null,
+            options: null,
+          },
+        ],
       };
 
       const rawAnswers = {
@@ -246,7 +275,18 @@ describe("submission actions", () => {
         isActive: true,
         createdAt: new Date(),
         updatedAt: new Date(),
-        questions: [{ id: "question-1", surveyId, type: "TEXT", label: "Q1", order: 1, required: false, maxLength: null, options: null }],
+        questions: [
+          {
+            id: "question-1",
+            surveyId,
+            type: "TEXT",
+            label: "Q1",
+            order: 1,
+            required: false,
+            maxLength: null,
+            options: null,
+          },
+        ],
       };
 
       const rawAnswers = {
@@ -279,9 +319,36 @@ describe("submission actions", () => {
         createdAt: new Date(),
         updatedAt: new Date(),
         questions: [
-          { id: "question-1", surveyId, type: "TEXT", label: "Q1", order: 1, required: false, maxLength: null, options: null },
-          { id: "question-2", surveyId, type: "TEXT", label: "Q2", order: 2, required: false, maxLength: null, options: null },
-          { id: "question-3", surveyId, type: "TEXT", label: "Q3", order: 3, required: false, maxLength: null, options: null },
+          {
+            id: "question-1",
+            surveyId,
+            type: "TEXT",
+            label: "Q1",
+            order: 1,
+            required: false,
+            maxLength: null,
+            options: null,
+          },
+          {
+            id: "question-2",
+            surveyId,
+            type: "TEXT",
+            label: "Q2",
+            order: 2,
+            required: false,
+            maxLength: null,
+            options: null,
+          },
+          {
+            id: "question-3",
+            surveyId,
+            type: "TEXT",
+            label: "Q3",
+            order: 3,
+            required: false,
+            maxLength: null,
+            options: null,
+          },
         ],
       };
 
@@ -330,7 +397,18 @@ describe("submission actions", () => {
         isActive: true,
         createdAt: new Date(),
         updatedAt: new Date(),
-        questions: [{ id: "question-1", surveyId, type: "TEXT", label: "Q1", order: 1, required: false, maxLength: null, options: null }],
+        questions: [
+          {
+            id: "question-1",
+            surveyId,
+            type: "TEXT",
+            label: "Q1",
+            order: 1,
+            required: false,
+            maxLength: null,
+            options: null,
+          },
+        ],
       };
 
       const rawAnswers = {
@@ -361,7 +439,18 @@ describe("submission actions", () => {
         isActive: true,
         createdAt: new Date(),
         updatedAt: new Date(),
-        questions: [{ id: "question-1", surveyId, type: "TEXT", label: "Q1", order: 1, required: false, maxLength: null, options: null }],
+        questions: [
+          {
+            id: "question-1",
+            surveyId,
+            type: "TEXT",
+            label: "Q1",
+            order: 1,
+            required: false,
+            maxLength: null,
+            options: null,
+          },
+        ],
       };
 
       const rawAnswers = {
@@ -396,7 +485,18 @@ describe("submission actions", () => {
         isActive: true,
         createdAt: new Date(),
         updatedAt: new Date(),
-        questions: [{ id: "question-1", surveyId, type: "TEXT", label: "Q1", order: 1, required: false, maxLength: null, options: null }],
+        questions: [
+          {
+            id: "question-1",
+            surveyId,
+            type: "TEXT",
+            label: "Q1",
+            order: 1,
+            required: false,
+            maxLength: null,
+            options: null,
+          },
+        ],
       };
 
       const rawAnswers = {

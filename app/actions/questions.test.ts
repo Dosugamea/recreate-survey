@@ -302,7 +302,9 @@ describe("questions actions", () => {
 
       vi.mocked(prisma.$transaction).mockImplementation(async (callback) => {
         if (typeof callback === "function") {
-          return await callback(prisma as unknown as Parameters<typeof callback>[0]);
+          return await callback(
+            prisma as unknown as Parameters<typeof callback>[0]
+          );
         }
         return [];
       });
