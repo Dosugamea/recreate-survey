@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { submitSurvey } from "./submission";
+import { submitSurvey } from "@/app/actions/submission";
 import { prisma } from "@/lib/prisma";
 
 // Mock dependencies

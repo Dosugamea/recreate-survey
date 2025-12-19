@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { SurveyPreview } from "./SurveyPreview";
+import { SurveyPreview } from "@/components/admin/survey/SurveyPreview";
 import type { SurveySchema } from "@/lib/schemas";
 
 const meta: Meta<typeof SurveyPreview> = {

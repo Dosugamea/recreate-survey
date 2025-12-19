@@ -2,8 +2,8 @@ import { useState, useTransition } from "react";
 import { useForm, FieldValues } from "react-hook-form";
 import { Question } from "@prisma/client";
 import { submitSurvey } from "@/app/actions/submission";
-import { useRequiredFieldsValidation } from "./useRequiredFieldsValidation";
-import { useScrollToElement } from "./useScrollToElement";
+import { useRequiredFieldsValidation } from "@/hooks/useRequiredFieldsValidation";
+import { useScrollToElement } from "@/hooks/useScrollToElement";
 
 type Step = "input" | "confirmation";
 

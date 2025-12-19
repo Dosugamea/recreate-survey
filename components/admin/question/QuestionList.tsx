@@ -1,7 +1,10 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { QuestionForm, Question } from "./QuestionForm";
+import {
+  QuestionForm,
+  Question,
+} from "@/components/admin/question/QuestionForm";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

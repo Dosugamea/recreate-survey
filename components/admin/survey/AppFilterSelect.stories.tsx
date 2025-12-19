@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { AppFilterSelect } from "./AppFilterSelect";
+import { AppFilterSelect } from "@/components/admin/survey/AppFilterSelect";
 
 const meta: Meta<typeof AppFilterSelect> = {
   title: "Admin/Survey/AppFilterSelect",

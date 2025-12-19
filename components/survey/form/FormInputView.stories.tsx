@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { FormInputView } from "./FormInputView";
+import { FormInputView } from "@/components/survey/form/FormInputView";
 import { fn } from "@storybook/test";
 
 const meta: Meta<typeof FormInputView> = {

@@ -8,9 +8,9 @@ import {
   FormControl,
   FormDescription,
   FormMessage,
-} from "./form";
-import { Input } from "./input";
-import { Button } from "./button";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 const meta: Meta<typeof Form> = {
   title: "UI/Form",

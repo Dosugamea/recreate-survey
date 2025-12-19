@@ -4,7 +4,7 @@ import {
   updateSurvey,
   deleteSurvey,
   duplicateSurvey,
-} from "./surveys";
+} from "@/app/actions/surveys";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 

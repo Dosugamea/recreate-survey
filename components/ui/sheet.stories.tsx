@@ -8,10 +8,10 @@ import {
   SheetDescription,
   SheetFooter,
   SheetClose,
-} from "./sheet";
-import { Button } from "./button";
-import { Input } from "./input";
-import { Label } from "./label";
+} from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const meta: Meta<typeof Sheet> = {
   title: "UI/Sheet",

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { createApp, updateApp, getApp, getAllApps } from "./apps";
+import { createApp, updateApp, getApp, getAllApps } from "@/app/actions/apps";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 

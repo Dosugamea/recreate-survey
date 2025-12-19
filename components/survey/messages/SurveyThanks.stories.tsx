@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { SurveyThanks } from "./SurveyThanks";
+import { SurveyThanks } from "@/components/survey/messages/SurveyThanks";
 
 const meta: Meta<typeof SurveyThanks> = {
   title: "Survey/SurveyThanks",

@@ -10,7 +10,7 @@ import { SurveyFooter } from "@/components/survey/footer/SurveyFooter";
 import { SurveyBackToTop } from "@/components/survey/footer/SurveyBackToTop";
 import { isSurveyExpired } from "@/lib/survey-utils";
 import type { Metadata } from "next";
-import { metadata as notFoundMetadata } from "../../../not-found";
+import { metadata as notFoundMetadata } from "@/app/not-found";
 
 export const dynamic = "force-dynamic";
 

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { SurveyBackToTop } from "./SurveyBackToTop";
+import { SurveyBackToTop } from "@/components/survey/footer/SurveyBackToTop";
 
 const meta: Meta<typeof SurveyBackToTop> = {
   title: "Survey/SurveyBackToTop",

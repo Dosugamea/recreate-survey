@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { CreateAppForm } from "./CreateAppForm";
+import { CreateAppForm } from "@/components/admin/app/CreateAppForm";
 
 const meta: Meta<typeof CreateAppForm> = {
   title: "Admin/App/CreateAppForm",

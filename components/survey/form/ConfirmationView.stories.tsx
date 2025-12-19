@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { ConfirmationView } from "./ConfirmationView";
+import { ConfirmationView } from "@/components/survey/form/ConfirmationView";
 import { fn } from "storybook/test";
 
 const meta: Meta<typeof ConfirmationView> = {

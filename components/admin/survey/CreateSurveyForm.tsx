@@ -6,7 +6,7 @@ import { surveySchema, SurveySchema } from "@/lib/schemas";
 import { createSurvey } from "@/app/actions/surveys";
 import { useState, useTransition, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { SurveyPreview } from "./SurveyPreview";
+import { SurveyPreview } from "@/components/admin/survey/SurveyPreview";
 import {
   Form,
   FormControl,

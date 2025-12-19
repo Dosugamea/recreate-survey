@@ -8,8 +8,8 @@ import {
   DialogDescription,
   DialogFooter,
   DialogClose,
-} from "./dialog";
-import { Button } from "./button";
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 const meta: Meta<typeof Dialog> = {
   title: "UI/Dialog",

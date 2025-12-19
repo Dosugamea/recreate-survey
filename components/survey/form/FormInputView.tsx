@@ -2,8 +2,8 @@
 
 import { Question } from "@prisma/client";
 import { UseFormRegister, FieldValues, FieldErrors } from "react-hook-form";
-import { QuestionItem } from "./QuestionItem";
-import { ConfirmationButton } from "./ConfirmationButton";
+import { QuestionItem } from "@/components/survey/form/QuestionItem";
+import { ConfirmationButton } from "@/components/survey/form/ConfirmationButton";
 
 interface FormInputViewProps {
   /** アンケートの質問リスト。order順に表示される */

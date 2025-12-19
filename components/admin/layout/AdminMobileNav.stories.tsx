@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { AdminMobileNav } from "./AdminMobileNav";
+import { AdminMobileNav } from "@/components/admin/layout/AdminMobileNav";
 
 const meta: Meta<typeof AdminMobileNav> = {
   title: "Admin/Layout/AdminMobileNav",

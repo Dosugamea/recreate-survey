@@ -4,7 +4,7 @@ import {
   updateQuestion,
   deleteQuestion,
   reorderQuestions,
-} from "./questions";
+} from "@/app/actions/questions";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 

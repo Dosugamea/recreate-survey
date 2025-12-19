@@ -2,13 +2,13 @@
 
 import { Survey, Question } from "@prisma/client";
 import { useSurveyForm } from "@/hooks/useSurveyForm";
-import { SurveyTitle } from "../header/SurveyTitle";
-import { SurveyWarn } from "../messages/SurveyWarn";
-import { SurveyThanks } from "../messages/SurveyThanks";
-import { SurveyDescription } from "../header/SurveyDescription";
-import { SurveyIntroduction } from "../header/SurveryIntroduction";
-import { FormInputView } from "../form/FormInputView";
-import { ConfirmationView } from "../form/ConfirmationView";
+import { SurveyTitle } from "@/components/survey/header/SurveyTitle";
+import { SurveyWarn } from "@/components/survey/messages/SurveyWarn";
+import { SurveyThanks } from "@/components/survey/messages/SurveyThanks";
+import { SurveyDescription } from "@/components/survey/header/SurveyDescription";
+import { SurveyIntroduction } from "@/components/survey/header/SurveryIntroduction";
+import { FormInputView } from "@/components/survey/form/FormInputView";
+import { ConfirmationView } from "@/components/survey/form/ConfirmationView";
 
 interface SurveyContentProps {
   /** アンケートのデータ。タイトル、説明、テーマカラーなどの情報を含む */

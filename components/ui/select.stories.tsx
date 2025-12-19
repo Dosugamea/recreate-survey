@@ -8,8 +8,8 @@ import {
   SelectGroup,
   SelectLabel,
   SelectSeparator,
-} from "./select";
-import { Label } from "./label";
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 
 const meta: Meta<typeof Select> = {
   title: "UI/Select",
