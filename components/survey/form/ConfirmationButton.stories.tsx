@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { ConfirmationButton } from "@/components/survey/form/ConfirmationButton";
-import { fn } from "@storybook/test";
+import { fn } from "storybook/test";
 
 const meta: Meta<typeof ConfirmationButton> = {
   title: "Survey/ConfirmationButton",

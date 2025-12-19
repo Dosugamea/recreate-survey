@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { FormInputView } from "@/components/survey/form/FormInputView";
-import { fn } from "@storybook/test";
+import { fn } from "storybook/test";
+import type { FieldError } from "react-hook-form";
 
 const meta: Meta<typeof FormInputView> = {
   title: "Survey/FormInputView",
@@ -86,8 +87,8 @@ export const WithErrors: Story = {
     register: mockRegister as any,
     themeColor: "#6c4034",
     errors: {
-      "q-1": { message: "Required" },
-      "q-2": { message: "Required" },
+      "q-1": { message: "Required", type: "required" } as FieldError,
+      "q-2": { message: "Required", type: "required" } as FieldError,
     },
     isAllRequiredFieldsFilled: false,
     onGoToConfirmation: fn(),

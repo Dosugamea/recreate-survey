@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { QuestionForm } from "@/components/admin/question/QuestionForm";
-import { fn } from "@storybook/test";
+import { fn } from "storybook/test";
 
 const meta: Meta<typeof QuestionForm> = {
   title: "Admin/Question/QuestionForm",

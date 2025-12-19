@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { QuestionItem } from "@/components/survey/form/QuestionItem";
-import { fn } from "@storybook/test";
+import { fn } from "storybook/test";
 import type { UseFormRegister } from "react-hook-form";
 import type { FieldValues } from "react-hook-form";
 

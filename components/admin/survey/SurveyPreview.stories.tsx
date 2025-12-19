@@ -24,7 +24,7 @@ const mockFormData: SurveySchema = {
   endAt: new Date("2024-03-31"),
   themeColor: "#6c4034",
   headerImage: "https://placehold.co/800x200/6c4034/ffffff?text=Header+Image",
-  bgImage: null,
+  bgImage: undefined,
 };
 
 export const Default: Story = {
