@@ -19,3 +19,5 @@ ALTER TABLE "new_App" RENAME TO "App";
 CREATE UNIQUE INDEX "App_slug_key" ON "App"("slug");
 PRAGMA foreign_keys=ON;
 
+
+
