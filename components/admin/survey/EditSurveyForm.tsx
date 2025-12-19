@@ -3,10 +3,10 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { surveySchema, SurveySchema } from "@/lib/schemas";
-import { createSurvey } from "@/app/actions/surveys";
+import { updateSurvey } from "@/app/actions/surveys";
 import { useState, useTransition, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { SurveyPreview } from "@/components/admin/SurveyPreview";
+import { SurveyPreview } from "./SurveyPreview";
 import {
   Form,
   FormControl,
@@ -31,30 +31,27 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { CalendarIcon, Loader2 } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { CalendarIcon, Loader2, HelpCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
+import { Switch } from "@/components/ui/switch";
 import { getAllApps } from "@/app/actions/apps";
+import type { Survey } from "@prisma/client";
 import type { App } from "@prisma/client";
 
-function generateRandomSlug(): string {
-  // ランダム4桁の数字を生成（0000-9999）
-  const randomNumbers = Math.floor(Math.random() * 10000)
-    .toString()
-    .padStart(4, "0");
-
-  // ランダムな大文字小文字3桁の英字を生成
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-  const randomChars = Array.from({ length: 3 }, () =>
-    chars.charAt(Math.floor(Math.random() * chars.length))
-  ).join("");
-
-  return `enq-${randomNumbers}-${randomChars}`;
+interface EditSurveyFormProps {
+  survey: Survey;
 }
 
-export function CreateSurveyForm() {
+export function EditSurveyForm({ survey }: EditSurveyFormProps) {
   const [isPending, startTransition] = useTransition();
   const [serverError, setServerError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [apps, setApps] = useState<App[]>([]);
 
   useEffect(() => {
@@ -64,23 +61,29 @@ export function CreateSurveyForm() {
   const form = useForm<SurveySchema>({
     resolver: zodResolver(surveySchema),
     defaultValues: {
-      appId: "",
-      title: "",
-      slug: generateRandomSlug(),
-      description: "",
-      notes: "",
-      themeColor: "#6c4034",
-      headerImage: "",
-      bgImage: "",
+      appId: survey.appId,
+      title: survey.title,
+      slug: survey.slug,
+      description: survey.description || "",
+      notes: survey.notes || "",
+      startAt: survey.startAt ? new Date(survey.startAt) : undefined,
+      endAt: survey.endAt ? new Date(survey.endAt) : undefined,
+      themeColor: survey.themeColor,
+      headerImage: survey.headerImage || "",
+      bgImage: survey.bgImage || "",
+      isActive: survey.isActive,
     },
   });
 
   function onSubmit(data: SurveySchema) {
     setServerError(null);
+    setSuccessMessage(null);
     startTransition(async () => {
-      const response = await createSurvey(data);
+      const response = await updateSurvey(survey.id, data);
       if (response?.error) {
         setServerError(response.error);
+      } else {
+        setSuccessMessage("アンケート情報を更新しました！");
       }
     });
   }
@@ -95,6 +98,12 @@ export function CreateSurveyForm() {
           {serverError && (
             <div className="bg-destructive/15 text-destructive text-sm p-3 rounded-md">
               {serverError}
+            </div>
+          )}
+
+          {successMessage && (
+            <div className="bg-green-500/15 text-green-600 text-sm p-3 rounded-md">
+              {successMessage}
             </div>
           )}
 
@@ -149,13 +158,26 @@ export function CreateSurveyForm() {
               name="slug"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>スラッグ (URLパス)</FormLabel>
+                  <div className="flex items-center gap-2">
+                    <FormLabel>スラッグ (URLパス)</FormLabel>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button
+                          type="button"
+                          className="inline-flex items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                          aria-label="スラッグについての説明"
+                        >
+                          <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>アンケートのURLとして使用される一意のIDです。</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
                   <FormControl>
                     <Input placeholder="autumn-campaign-2025" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    アンケートのURLとして使用される一意のIDです。
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -311,6 +333,25 @@ export function CreateSurveyForm() {
                 </FormItem>
               )}
             />
+
+            <FormField
+              control={form.control}
+              name="isActive"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>公開ステータス</FormLabel>
+                  <FormControl>
+                    <div className="**:data-[slot=switch]:h-7 **:data-[slot=switch]:w-12 **:data-[slot=switch-thumb]:size-6">
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -350,7 +391,7 @@ export function CreateSurveyForm() {
 
           <Button type="submit" disabled={isPending}>
             {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            アンケートを作成
+            アンケート情報を更新
           </Button>
         </form>
       </Form>

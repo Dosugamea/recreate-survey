@@ -10,7 +10,7 @@ import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { DeleteSurveyButton } from "./DeleteSurveyButton";
 import { DuplicateSurveyButton } from "./DuplicateSurveyButton";
-import { PageHeader } from "@/components/admin/PageHeader";
+import { PageHeader } from "@/components/admin/layout/PageHeader";
 
 const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "アンケートアプリ";
 

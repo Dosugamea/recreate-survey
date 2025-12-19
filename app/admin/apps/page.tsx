@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PlusCircle, Edit } from "lucide-react";
 import { format } from "date-fns";
-import { PageHeader } from "@/components/admin/PageHeader";
+import { PageHeader } from "@/components/admin/layout/PageHeader";
 
 const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "アンケートアプリ";
 

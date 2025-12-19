@@ -1,5 +1,5 @@
-import { Sidebar } from "@/components/admin/Sidebar";
-import { AdminMobileNav } from "@/components/admin/AdminMobileNav";
+import { Sidebar } from "@/components/admin/layout/Sidebar";
+import { AdminMobileNav } from "@/components/admin/layout/AdminMobileNav";
 import { Footer } from "@/components/ui/footer";
 
 export default async function AdminLayout({

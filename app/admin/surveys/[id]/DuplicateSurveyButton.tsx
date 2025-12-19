@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,13 +23,22 @@ export function DuplicateSurveyButton({
   surveyId,
   surveyTitle,
 }: DuplicateSurveyButtonProps) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [isDuplicating, setIsDuplicating] = useState(false);
 
   const handleDuplicate = async () => {
     setIsDuplicating(true);
     try {
-      await duplicateSurvey(surveyId);
+      const result = await duplicateSurvey(surveyId);
+      if (result?.error) {
+        console.error("複製エラー:", result.error);
+        setIsDuplicating(false);
+        setOpen(false);
+      } else if (result?.success && result.surveyId) {
+        // 複製成功時、新しいアンケートの詳細ページにリダイレクト
+        router.push(`/admin/surveys/${result.surveyId}`);
+      }
     } catch (error) {
       console.error("複製エラー:", error);
       setIsDuplicating(false);

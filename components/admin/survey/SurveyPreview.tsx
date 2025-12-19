@@ -1,8 +1,8 @@
 "use client";
 
-import { SurveyTitle } from "@/components/survey/SurveyTitle";
-import { SurveyDescription } from "@/components/survey/SurveyDescription";
-import { SurveyNotes } from "@/components/survey/SurveyNotes";
+import { SurveyTitle } from "@/components/survey/header/SurveyTitle";
+import { SurveyDescription } from "@/components/survey/header/SurveyDescription";
+import { SurveyNotes } from "@/components/survey/messages/SurveyNotes";
 import type { SurveySchema } from "@/lib/schemas";
 
 interface SurveyPreviewProps {

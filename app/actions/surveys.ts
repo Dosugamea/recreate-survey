@@ -210,8 +210,8 @@ export async function duplicateSurvey(surveyId: string) {
       return newSurvey;
     });
 
-    // 複製したアンケートの詳細ページにリダイレクト
-    redirect(`/admin/surveys/${duplicatedSurvey.id}`);
+    // 複製したアンケートのIDを返す（クライアント側でリダイレクト）
+    return { success: true, surveyId: duplicatedSurvey.id };
   } catch (e) {
     console.error(e);
     return { error: "複製に失敗しました。" };

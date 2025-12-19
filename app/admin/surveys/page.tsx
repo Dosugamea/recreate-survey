@@ -14,8 +14,8 @@ import {
 import { format } from "date-fns";
 import { PlusCircle, Eye, ExternalLink } from "lucide-react";
 import Link from "next/link";
-import { AppFilterSelect } from "@/components/admin/AppFilterSelect";
-import { PageHeader } from "@/components/admin/PageHeader";
+import { AppFilterSelect } from "@/components/admin/survey/AppFilterSelect";
+import { PageHeader } from "@/components/admin/layout/PageHeader";
 
 const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "アンケートアプリ";
 

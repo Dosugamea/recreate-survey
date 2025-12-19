@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
-import { EditAppForm } from "@/components/admin/EditAppForm";
-import { PageHeader } from "@/components/admin/PageHeader";
+import { EditAppForm } from "@/components/admin/app/EditAppForm";
+import { PageHeader } from "@/components/admin/layout/PageHeader";
 
 const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "アンケートアプリ";
 

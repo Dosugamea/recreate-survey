@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { PageHeader } from "@/components/admin/PageHeader";
+import { PageHeader } from "@/components/admin/layout/PageHeader";
 
 export const dynamic = "force-dynamic";
 

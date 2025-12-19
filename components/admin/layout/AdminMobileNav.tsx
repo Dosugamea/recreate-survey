@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
-import { Sidebar } from "@/components/admin/Sidebar";
+import { Sidebar } from "./Sidebar";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 

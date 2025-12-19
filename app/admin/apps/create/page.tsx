@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { CreateAppForm } from "@/components/admin/CreateAppForm";
-import { PageHeader } from "@/components/admin/PageHeader";
+import { CreateAppForm } from "@/components/admin/app/CreateAppForm";
+import { PageHeader } from "@/components/admin/layout/PageHeader";
 
 const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "アンケートアプリ";
 
