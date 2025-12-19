@@ -22,8 +22,8 @@ export default defineConfig({
     environment: "node",
     projects: [
       {
-        name: "unit",
         test: {
+          name: "unit",
           include: ["**/*.test.ts", "**/*.test.tsx"],
           exclude: ["**/node_modules/**", "**/.storybook/**"],
         },
