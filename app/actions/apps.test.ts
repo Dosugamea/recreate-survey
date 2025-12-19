@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { createApp, updateApp, getApp, getAllApps } from "@/app/actions/apps";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
+import type { AppSchema } from "@/lib/schemas";
 
 // Mock dependencies
 vi.mock("@/lib/prisma", () => ({
@@ -94,12 +95,12 @@ describe("apps actions", () => {
     });
 
     it("should return error for invalid data", async () => {
-      const invalidData = {
+      const invalidData: Partial<AppSchema> = {
         name: "",
         slug: "invalid slug with spaces",
-      } as any;
+      };
 
-      const result = await createApp(invalidData);
+      const result = await createApp(invalidData as AppSchema);
 
       expect(result).toEqual({ error: "Invalid data" });
       expect(prisma.app.create).not.toHaveBeenCalled();
@@ -160,12 +161,12 @@ describe("apps actions", () => {
 
     it("should return error for invalid data", async () => {
       const appId = "app-1";
-      const invalidData = {
+      const invalidData: Partial<AppSchema> = {
         name: "",
         slug: "invalid",
-      } as any;
+      };
 
-      const result = await updateApp(appId, invalidData);
+      const result = await updateApp(appId, invalidData as AppSchema);
 
       expect(result).toEqual({ error: "Invalid data" });
       expect(prisma.app.update).not.toHaveBeenCalled();
@@ -243,6 +244,10 @@ describe("apps actions", () => {
           id: "app-1",
           name: "App 1",
           slug: "app-1",
+          privacyPolicyUrl: null,
+          faviconImageUrl: null,
+          copyrightNotice: null,
+          contactUrl: null,
           createdAt: new Date("2024-01-02"),
           updatedAt: new Date("2024-01-02"),
         },
@@ -250,6 +255,10 @@ describe("apps actions", () => {
           id: "app-2",
           name: "App 2",
           slug: "app-2",
+          privacyPolicyUrl: null,
+          faviconImageUrl: null,
+          copyrightNotice: null,
+          contactUrl: null,
           createdAt: new Date("2024-01-01"),
           updatedAt: new Date("2024-01-01"),
         },

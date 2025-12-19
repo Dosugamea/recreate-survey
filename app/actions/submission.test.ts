@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { submitSurvey } from "@/app/actions/submission";
 import { prisma } from "@/lib/prisma";
+import type { Survey, Question, Response } from "@prisma/client";
 
 // Mock dependencies
 vi.mock("@/lib/prisma", () => ({
@@ -24,14 +25,24 @@ describe("submission actions", () => {
 
   describe("submitSurvey", () => {
     it("should submit survey successfully with valid answers", async () => {
-      const mockSurvey = {
+      const mockSurvey: Survey & { questions: Question[] } = {
         id: surveyId,
-        isActive: true,
+        appId: "app-1",
+        slug: "test-survey",
+        title: "Test Survey",
+        description: null,
+        notes: null,
         startAt: null,
         endAt: null,
+        themeColor: "#6c4034",
+        headerImage: null,
+        bgImage: null,
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
         questions: [
-          { id: "question-1", type: "TEXT" },
-          { id: "question-2", type: "RADIO" },
+          { id: "question-1", surveyId, type: "TEXT", label: "Q1", order: 1, required: false, maxLength: null, options: null },
+          { id: "question-2", surveyId, type: "RADIO", label: "Q2", order: 2, required: false, maxLength: null, options: null },
         ],
       };
 
@@ -40,13 +51,15 @@ describe("submission actions", () => {
         "question-2": "Answer 2",
       };
 
-      vi.mocked(prisma.survey.findUnique).mockResolvedValue(mockSurvey as any);
-      vi.mocked(prisma.response.create).mockResolvedValue({
+      const mockResponse: Response = {
         id: "response-1",
         surveyId,
         userId,
         submittedAt: new Date(),
-      } as any);
+      };
+
+      vi.mocked(prisma.survey.findUnique).mockResolvedValue(mockSurvey);
+      vi.mocked(prisma.response.create).mockResolvedValue(mockResponse);
 
       const result = await submitSurvey(surveyId, userId, rawAnswers);
 
@@ -73,25 +86,37 @@ describe("submission actions", () => {
     });
 
     it("should handle array answers correctly", async () => {
-      const mockSurvey = {
+      const mockSurvey: Survey & { questions: Question[] } = {
         id: surveyId,
-        isActive: true,
+        appId: "app-1",
+        slug: "test-survey",
+        title: "Test Survey",
+        description: null,
+        notes: null,
         startAt: null,
         endAt: null,
-        questions: [{ id: "question-1", type: "CHECKBOX" }],
+        themeColor: "#6c4034",
+        headerImage: null,
+        bgImage: null,
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        questions: [{ id: "question-1", surveyId, type: "CHECKBOX", label: "Q1", order: 1, required: false, maxLength: null, options: null }],
       };
 
       const rawAnswers = {
         "question-1": ["Option A", "Option B"],
       };
 
-      vi.mocked(prisma.survey.findUnique).mockResolvedValue(mockSurvey as any);
-      vi.mocked(prisma.response.create).mockResolvedValue({
+      const mockResponse: Response = {
         id: "response-1",
         surveyId,
         userId,
         submittedAt: new Date(),
-      } as any);
+      };
+
+      vi.mocked(prisma.survey.findUnique).mockResolvedValue(mockSurvey);
+      vi.mocked(prisma.response.create).mockResolvedValue(mockResponse);
 
       await submitSurvey(surveyId, userId, rawAnswers);
 
@@ -116,15 +141,25 @@ describe("submission actions", () => {
     });
 
     it("should return error when survey is not active", async () => {
-      const mockSurvey = {
+      const mockSurvey: Survey & { questions: Question[] } = {
         id: surveyId,
-        isActive: false,
+        appId: "app-1",
+        slug: "test-survey",
+        title: "Test Survey",
+        description: null,
+        notes: null,
         startAt: null,
         endAt: null,
+        themeColor: "#6c4034",
+        headerImage: null,
+        bgImage: null,
+        isActive: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
         questions: [],
       };
 
-      vi.mocked(prisma.survey.findUnique).mockResolvedValue(mockSurvey as any);
+      vi.mocked(prisma.survey.findUnique).mockResolvedValue(mockSurvey);
 
       const result = await submitSurvey(surveyId, userId, {});
 
@@ -137,15 +172,25 @@ describe("submission actions", () => {
       const futureDate = new Date();
       futureDate.setDate(futureDate.getDate() + 1);
 
-      const mockSurvey = {
+      const mockSurvey: Survey & { questions: Question[] } = {
         id: surveyId,
-        isActive: true,
+        appId: "app-1",
+        slug: "test-survey",
+        title: "Test Survey",
+        description: null,
+        notes: null,
         startAt: futureDate,
         endAt: null,
+        themeColor: "#6c4034",
+        headerImage: null,
+        bgImage: null,
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
         questions: [],
       };
 
-      vi.mocked(prisma.survey.findUnique).mockResolvedValue(mockSurvey as any);
+      vi.mocked(prisma.survey.findUnique).mockResolvedValue(mockSurvey);
 
       const result = await submitSurvey(surveyId, userId, {});
 
@@ -158,15 +203,25 @@ describe("submission actions", () => {
       const pastDate = new Date();
       pastDate.setDate(pastDate.getDate() - 1);
 
-      const mockSurvey = {
+      const mockSurvey: Survey & { questions: Question[] } = {
         id: surveyId,
-        isActive: true,
+        appId: "app-1",
+        slug: "test-survey",
+        title: "Test Survey",
+        description: null,
+        notes: null,
         startAt: null,
         endAt: pastDate,
+        themeColor: "#6c4034",
+        headerImage: null,
+        bgImage: null,
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
         questions: [],
       };
 
-      vi.mocked(prisma.survey.findUnique).mockResolvedValue(mockSurvey as any);
+      vi.mocked(prisma.survey.findUnique).mockResolvedValue(mockSurvey);
 
       const result = await submitSurvey(surveyId, userId, {});
 
@@ -176,19 +231,29 @@ describe("submission actions", () => {
     });
 
     it("should return error for invalid question IDs", async () => {
-      const mockSurvey = {
+      const mockSurvey: Survey & { questions: Question[] } = {
         id: surveyId,
-        isActive: true,
+        appId: "app-1",
+        slug: "test-survey",
+        title: "Test Survey",
+        description: null,
+        notes: null,
         startAt: null,
         endAt: null,
-        questions: [{ id: "question-1" }],
+        themeColor: "#6c4034",
+        headerImage: null,
+        bgImage: null,
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        questions: [{ id: "question-1", surveyId, type: "TEXT", label: "Q1", order: 1, required: false, maxLength: null, options: null }],
       };
 
       const rawAnswers = {
         "invalid-question-id": "Answer",
       };
 
-      vi.mocked(prisma.survey.findUnique).mockResolvedValue(mockSurvey as any);
+      vi.mocked(prisma.survey.findUnique).mockResolvedValue(mockSurvey);
 
       const result = await submitSurvey(surveyId, userId, rawAnswers);
 
@@ -198,15 +263,25 @@ describe("submission actions", () => {
     });
 
     it("should filter out empty answers", async () => {
-      const mockSurvey = {
+      const mockSurvey: Survey & { questions: Question[] } = {
         id: surveyId,
-        isActive: true,
+        appId: "app-1",
+        slug: "test-survey",
+        title: "Test Survey",
+        description: null,
+        notes: null,
         startAt: null,
         endAt: null,
+        themeColor: "#6c4034",
+        headerImage: null,
+        bgImage: null,
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
         questions: [
-          { id: "question-1" },
-          { id: "question-2" },
-          { id: "question-3" },
+          { id: "question-1", surveyId, type: "TEXT", label: "Q1", order: 1, required: false, maxLength: null, options: null },
+          { id: "question-2", surveyId, type: "TEXT", label: "Q2", order: 2, required: false, maxLength: null, options: null },
+          { id: "question-3", surveyId, type: "TEXT", label: "Q3", order: 3, required: false, maxLength: null, options: null },
         ],
       };
 
@@ -216,13 +291,15 @@ describe("submission actions", () => {
         "question-3": [],
       };
 
-      vi.mocked(prisma.survey.findUnique).mockResolvedValue(mockSurvey as any);
-      vi.mocked(prisma.response.create).mockResolvedValue({
+      const mockResponse: Response = {
         id: "response-1",
         surveyId,
         userId,
         submittedAt: new Date(),
-      } as any);
+      };
+
+      vi.mocked(prisma.survey.findUnique).mockResolvedValue(mockSurvey);
+      vi.mocked(prisma.response.create).mockResolvedValue(mockResponse);
 
       await submitSurvey(surveyId, userId, rawAnswers);
 
@@ -238,19 +315,29 @@ describe("submission actions", () => {
     });
 
     it("should return error when no valid answers provided", async () => {
-      const mockSurvey = {
+      const mockSurvey: Survey & { questions: Question[] } = {
         id: surveyId,
-        isActive: true,
+        appId: "app-1",
+        slug: "test-survey",
+        title: "Test Survey",
+        description: null,
+        notes: null,
         startAt: null,
         endAt: null,
-        questions: [{ id: "question-1" }],
+        themeColor: "#6c4034",
+        headerImage: null,
+        bgImage: null,
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        questions: [{ id: "question-1", surveyId, type: "TEXT", label: "Q1", order: 1, required: false, maxLength: null, options: null }],
       };
 
       const rawAnswers = {
         "question-1": "",
       };
 
-      vi.mocked(prisma.survey.findUnique).mockResolvedValue(mockSurvey as any);
+      vi.mocked(prisma.survey.findUnique).mockResolvedValue(mockSurvey);
 
       const result = await submitSurvey(surveyId, userId, rawAnswers);
 
@@ -259,19 +346,29 @@ describe("submission actions", () => {
     });
 
     it("should return error on database error", async () => {
-      const mockSurvey = {
+      const mockSurvey: Survey & { questions: Question[] } = {
         id: surveyId,
-        isActive: true,
+        appId: "app-1",
+        slug: "test-survey",
+        title: "Test Survey",
+        description: null,
+        notes: null,
         startAt: null,
         endAt: null,
-        questions: [{ id: "question-1" }],
+        themeColor: "#6c4034",
+        headerImage: null,
+        bgImage: null,
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        questions: [{ id: "question-1", surveyId, type: "TEXT", label: "Q1", order: 1, required: false, maxLength: null, options: null }],
       };
 
       const rawAnswers = {
         "question-1": "Answer",
       };
 
-      vi.mocked(prisma.survey.findUnique).mockResolvedValue(mockSurvey as any);
+      vi.mocked(prisma.survey.findUnique).mockResolvedValue(mockSurvey);
       vi.mocked(prisma.response.create).mockRejectedValue(
         new Error("Database error")
       );
@@ -284,19 +381,29 @@ describe("submission actions", () => {
     });
 
     it("should handle unknown error types", async () => {
-      const mockSurvey = {
+      const mockSurvey: Survey & { questions: Question[] } = {
         id: surveyId,
-        isActive: true,
+        appId: "app-1",
+        slug: "test-survey",
+        title: "Test Survey",
+        description: null,
+        notes: null,
         startAt: null,
         endAt: null,
-        questions: [{ id: "question-1" }],
+        themeColor: "#6c4034",
+        headerImage: null,
+        bgImage: null,
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        questions: [{ id: "question-1", surveyId, type: "TEXT", label: "Q1", order: 1, required: false, maxLength: null, options: null }],
       };
 
       const rawAnswers = {
         "question-1": "Answer",
       };
 
-      vi.mocked(prisma.survey.findUnique).mockResolvedValue(mockSurvey as any);
+      vi.mocked(prisma.survey.findUnique).mockResolvedValue(mockSurvey);
       vi.mocked(prisma.response.create).mockRejectedValue("Unknown error");
 
       const result = await submitSurvey(surveyId, userId, rawAnswers);

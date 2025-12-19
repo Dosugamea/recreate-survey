@@ -7,6 +7,8 @@ import {
 } from "@/app/actions/surveys";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
+import type { SurveySchema } from "@/lib/schemas";
+import type { Survey, Question, Prisma } from "@prisma/client";
 
 // Mock dependencies
 vi.mock("@/lib/prisma", () => ({
@@ -48,7 +50,7 @@ describe("surveys actions", () => {
         bgImage: "https://example.com/bg.jpg",
       };
 
-      const createdSurvey = {
+      const createdSurvey: Survey = {
         id: "survey-1",
         ...validData,
         isActive: true,
@@ -56,10 +58,8 @@ describe("surveys actions", () => {
         updatedAt: new Date(),
       };
 
-      vi.mocked(prisma.survey.create).mockResolvedValue(createdSurvey as any);
-      vi.mocked(prisma.survey.findUnique).mockResolvedValue(
-        createdSurvey as any
-      );
+      vi.mocked(prisma.survey.create).mockResolvedValue(createdSurvey);
+      vi.mocked(prisma.survey.findUnique).mockResolvedValue(createdSurvey);
 
       await createSurvey(validData);
 
@@ -92,7 +92,7 @@ describe("surveys actions", () => {
         bgImage: "",
       };
 
-      const createdSurvey = {
+      const createdSurvey: Survey = {
         id: "survey-1",
         ...validData,
         description: null,
@@ -106,10 +106,8 @@ describe("surveys actions", () => {
         updatedAt: new Date(),
       };
 
-      vi.mocked(prisma.survey.create).mockResolvedValue(createdSurvey as any);
-      vi.mocked(prisma.survey.findUnique).mockResolvedValue(
-        createdSurvey as any
-      );
+      vi.mocked(prisma.survey.create).mockResolvedValue(createdSurvey);
+      vi.mocked(prisma.survey.findUnique).mockResolvedValue(createdSurvey);
 
       await createSurvey(validData);
 
@@ -130,13 +128,13 @@ describe("surveys actions", () => {
     });
 
     it("should return error for invalid data", async () => {
-      const invalidData = {
+      const invalidData: Partial<SurveySchema> = {
         appId: "",
         title: "",
         slug: "invalid slug with spaces",
-      } as any;
+      };
 
-      const result = await createSurvey(invalidData);
+      const result = await createSurvey(invalidData as SurveySchema);
 
       expect(result).toEqual({ error: "Invalid data" });
       expect(prisma.survey.create).not.toHaveBeenCalled();
@@ -168,8 +166,8 @@ describe("surveys actions", () => {
         themeColor: "#ffffff",
       };
 
-      const error = new Error("Unique constraint failed");
-      (error as any).code = "P2002";
+      const error = new Error("Unique constraint failed") as Error & { code: string };
+      error.code = "P2002";
 
       vi.mocked(prisma.survey.create).mockRejectedValue(error);
 
@@ -205,10 +203,11 @@ describe("surveys actions", () => {
         themeColor: "#ffffff",
       };
 
-      vi.mocked(prisma.survey.create).mockResolvedValue({
+      const partialSurvey: Partial<Survey> = {
         id: "survey-1",
         slug: "test-survey",
-      } as any);
+      };
+      vi.mocked(prisma.survey.create).mockResolvedValue(partialSurvey as Survey);
       vi.mocked(prisma.survey.findUnique).mockResolvedValue(null);
 
       await createSurvey(validData);
@@ -234,12 +233,13 @@ describe("surveys actions", () => {
         isActive: true,
       };
 
-      vi.mocked(prisma.survey.update).mockResolvedValue({
+      const updatedSurvey: Survey = {
         id: surveyId,
         ...validData,
         createdAt: new Date(),
         updatedAt: new Date(),
-      } as any);
+      };
+      vi.mocked(prisma.survey.update).mockResolvedValue(updatedSurvey);
 
       const result = await updateSurvey(surveyId, validData);
 
@@ -264,13 +264,13 @@ describe("surveys actions", () => {
 
     it("should return error for invalid data", async () => {
       const surveyId = "survey-1";
-      const invalidData = {
+      const invalidData: Partial<SurveySchema> = {
         appId: "",
         title: "",
         slug: "invalid",
-      } as any;
+      };
 
-      const result = await updateSurvey(surveyId, invalidData);
+      const result = await updateSurvey(surveyId, invalidData as SurveySchema);
 
       expect(result).toEqual({ error: "Invalid data" });
       expect(prisma.survey.update).not.toHaveBeenCalled();
@@ -303,7 +303,7 @@ describe("surveys actions", () => {
         themeColor: "#ffffff",
       };
 
-      const error = { code: "P2002" };
+      const error = { code: "P2002" } as Prisma.PrismaClientKnownRequestError;
 
       vi.mocked(prisma.survey.update).mockRejectedValue(error);
 
@@ -319,9 +319,10 @@ describe("surveys actions", () => {
     it("should delete a survey and redirect", async () => {
       const surveyId = "survey-1";
 
-      vi.mocked(prisma.survey.delete).mockResolvedValue({
+      const deletedSurvey: Partial<Survey> = {
         id: surveyId,
-      } as any);
+      };
+      vi.mocked(prisma.survey.delete).mockResolvedValue(deletedSurvey as Survey);
 
       await deleteSurvey(surveyId);
 
@@ -348,7 +349,7 @@ describe("surveys actions", () => {
   describe("duplicateSurvey", () => {
     it("should duplicate a survey with questions", async () => {
       const surveyId = "survey-1";
-      const originalSurvey = {
+      const originalSurvey: Survey & { questions: Question[] } = {
         id: surveyId,
         appId: "app-1",
         title: "Original Survey",
@@ -361,9 +362,12 @@ describe("surveys actions", () => {
         headerImage: "https://example.com/header.jpg",
         bgImage: "https://example.com/bg.jpg",
         isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
         questions: [
           {
             id: "question-1",
+            surveyId,
             type: "TEXT",
             label: "Question 1",
             order: 1,
@@ -373,6 +377,7 @@ describe("surveys actions", () => {
           },
           {
             id: "question-2",
+            surveyId,
             type: "RADIO",
             label: "Question 2",
             order: 2,
@@ -383,7 +388,7 @@ describe("surveys actions", () => {
         ],
       };
 
-      const newSurvey = {
+      const newSurvey: Survey = {
         id: "survey-2",
         appId: "app-1",
         title: "Original Survey (コピー)",
@@ -396,23 +401,23 @@ describe("surveys actions", () => {
         headerImage: "https://example.com/header.jpg",
         bgImage: "https://example.com/bg.jpg",
         isActive: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       };
 
-      vi.mocked(prisma.survey.findUnique).mockResolvedValueOnce(
-        originalSurvey as any
-      );
+      vi.mocked(prisma.survey.findUnique).mockResolvedValueOnce(originalSurvey);
       vi.mocked(prisma.survey.findUnique).mockResolvedValueOnce(null); // For slug check
       vi.mocked(prisma.$transaction).mockImplementation(async (callback) => {
         if (typeof callback === "function") {
           const tx = {
             survey: {
-              create: vi.fn().mockResolvedValue(newSurvey as any),
+              create: vi.fn().mockResolvedValue(newSurvey),
             },
             question: {
               createMany: vi.fn().mockResolvedValue({ count: 2 }),
             },
           };
-          return await callback(tx as any);
+          return await callback(tx as unknown as Parameters<typeof callback>[0]);
         }
         return newSurvey;
       });
@@ -445,7 +450,7 @@ describe("surveys actions", () => {
 
     it("should handle duplicate slug generation", async () => {
       const surveyId = "survey-1";
-      const originalSurvey = {
+      const originalSurvey: Survey & { questions: Question[] } = {
         id: surveyId,
         appId: "app-1",
         title: "Original Survey",
@@ -458,30 +463,63 @@ describe("surveys actions", () => {
         headerImage: null,
         bgImage: null,
         isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
         questions: [],
       };
 
+      const existingSurvey: Survey = {
+        id: "existing",
+        appId: "app-1",
+        title: "Existing",
+        slug: "existing-slug",
+        description: null,
+        notes: null,
+        startAt: null,
+        endAt: null,
+        themeColor: "#ffffff",
+        headerImage: null,
+        bgImage: null,
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+
       vi.mocked(prisma.survey.findUnique)
-        .mockResolvedValueOnce(originalSurvey as any)
-        .mockResolvedValueOnce({ id: "existing" } as any) // First slug exists
+        .mockResolvedValueOnce(originalSurvey)
+        .mockResolvedValueOnce(existingSurvey) // First slug exists
         .mockResolvedValueOnce(null); // Second slug is available
+
+      const newSurvey: Survey = {
+        id: "survey-2",
+        appId: "app-1",
+        title: "Original Survey (コピー)",
+        slug: "enq-5678-Xyz",
+        description: null,
+        notes: null,
+        startAt: null,
+        endAt: null,
+        themeColor: "#ffffff",
+        headerImage: null,
+        bgImage: null,
+        isActive: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
 
       vi.mocked(prisma.$transaction).mockImplementation(async (callback) => {
         if (typeof callback === "function") {
           const tx = {
             survey: {
-              create: vi.fn().mockResolvedValue({
-                id: "survey-2",
-                slug: "enq-5678-Xyz",
-              } as any),
+              create: vi.fn().mockResolvedValue(newSurvey),
             },
             question: {
               createMany: vi.fn().mockResolvedValue({ count: 0 }),
             },
           };
-          return await callback(tx as any);
+          return await callback(tx as unknown as Parameters<typeof callback>[0]);
         }
-        return { id: "survey-2" };
+        return newSurvey;
       });
 
       const result = await duplicateSurvey(surveyId);
@@ -494,7 +532,7 @@ describe("surveys actions", () => {
 
     it("should return error on duplication failure", async () => {
       const surveyId = "survey-1";
-      const originalSurvey = {
+      const originalSurvey: Survey & { questions: Question[] } = {
         id: surveyId,
         appId: "app-1",
         title: "Original Survey",
@@ -507,12 +545,12 @@ describe("surveys actions", () => {
         headerImage: null,
         bgImage: null,
         isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
         questions: [],
       };
 
-      vi.mocked(prisma.survey.findUnique).mockResolvedValue(
-        originalSurvey as any
-      );
+      vi.mocked(prisma.survey.findUnique).mockResolvedValue(originalSurvey);
       vi.mocked(prisma.$transaction).mockRejectedValue(
         new Error("Transaction failed")
       );

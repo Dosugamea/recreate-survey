@@ -7,6 +7,7 @@ import {
 } from "@/app/actions/questions";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import type { Prisma } from "@prisma/client";
 
 // Mock dependencies
 vi.mock("@/lib/prisma", () => ({
@@ -301,7 +302,7 @@ describe("questions actions", () => {
 
       vi.mocked(prisma.$transaction).mockImplementation(async (callback) => {
         if (typeof callback === "function") {
-          return await callback(prisma as any);
+          return await callback(prisma as unknown as Parameters<typeof callback>[0]);
         }
         return [];
       });
