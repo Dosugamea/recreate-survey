@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { FormInputView } from "@/components/survey/form/FormInputView";
 import { fn } from "storybook/test";
-import type { FieldError } from "react-hook-form";
+import type { FieldError, UseFormRegister, FieldValues } from "react-hook-form";
 
 const meta: Meta<typeof FormInputView> = {
   title: "Survey/FormInputView",
@@ -19,12 +19,12 @@ export default meta;
 type Story = StoryObj<typeof FormInputView>;
 
 // Mock register function
-const mockRegister = fn(() => ({
+const mockRegister: UseFormRegister<FieldValues> = fn(() => ({
   name: "test",
   onChange: async () => {},
   onBlur: async () => {},
   ref: () => {},
-}));
+})) as UseFormRegister<FieldValues>;
 
 const baseQuestions = [
   {
@@ -62,7 +62,7 @@ const baseQuestions = [
 export const Default: Story = {
   args: {
     questions: baseQuestions,
-    register: mockRegister as any,
+    register: mockRegister,
     themeColor: "#6c4034",
     errors: {},
     isAllRequiredFieldsFilled: false,
@@ -73,7 +73,7 @@ export const Default: Story = {
 export const AllFieldsFilled: Story = {
   args: {
     questions: baseQuestions,
-    register: mockRegister as any,
+    register: mockRegister,
     themeColor: "#6c4034",
     errors: {},
     isAllRequiredFieldsFilled: true,
@@ -84,7 +84,7 @@ export const AllFieldsFilled: Story = {
 export const WithErrors: Story = {
   args: {
     questions: baseQuestions,
-    register: mockRegister as any,
+    register: mockRegister,
     themeColor: "#6c4034",
     errors: {
       "q-1": { message: "Required", type: "required" } as FieldError,
@@ -98,7 +98,7 @@ export const WithErrors: Story = {
 export const BlueTheme: Story = {
   args: {
     questions: baseQuestions,
-    register: mockRegister as any,
+    register: mockRegister,
     themeColor: "#2563eb",
     errors: {},
     isAllRequiredFieldsFilled: true,
