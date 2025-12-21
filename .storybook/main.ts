@@ -26,22 +26,35 @@ const config: StorybookConfig = {
         __dirname,
         "./mocks/adapter-better-sqlite3.ts"
       ),
+      "@prisma/client": path.resolve(__dirname, "./mocks/prisma-client.ts"),
+      ".prisma/client": path.resolve(__dirname, "./mocks/prisma-client.ts"),
     };
 
-    // Exclude better-sqlite3 from optimization to prevent bundling
+    // Exclude better-sqlite3 and Prisma from optimization to prevent bundling
     config.optimizeDeps = config.optimizeDeps || {};
     config.optimizeDeps.exclude = [
       ...(config.optimizeDeps.exclude || []),
       "better-sqlite3",
       "@prisma/adapter-better-sqlite3",
+      "@prisma/client",
+      ".prisma/client",
     ];
 
-    // Externalize better-sqlite3 for SSR to prevent loading in browser
+    // Externalize better-sqlite3 and Prisma for SSR to prevent loading in browser
     config.ssr = config.ssr || {};
     if (Array.isArray(config.ssr.external)) {
-      config.ssr.external = [...config.ssr.external, "better-sqlite3"];
+      config.ssr.external = [
+        ...config.ssr.external,
+        "better-sqlite3",
+        "@prisma/client",
+        ".prisma/client",
+      ];
     } else {
-      config.ssr.external = ["better-sqlite3"];
+      config.ssr.external = [
+        "better-sqlite3",
+        "@prisma/client",
+        ".prisma/client",
+      ];
     }
     // Remove better-sqlite3 from noExternal if present
     if (Array.isArray(config.ssr.noExternal)) {
