@@ -14,7 +14,7 @@ const config: StorybookConfig = {
     "@storybook/addon-onboarding",
   ],
   framework: "@storybook/nextjs-vite",
-  staticDirs: ["..\\public"],
+  staticDirs: ["../public"],
   async viteFinal(config) {
     // Replace lib/prisma.ts and adapter with mocks for browser environment
     // This prevents better-sqlite3 from being loaded in the browser
