@@ -22,6 +22,13 @@ export function cn(...inputs: ClassValue[]) {
 export function hexToRgba(hex: string, alpha: number) {
   // hexの長さに応じてRGB値をパース
   const { r, g, b } = (() => {
+    // 有効な16進数色コードかどうかをチェック
+    const isValidHex = /^#[0-9a-fA-F]{3}$|^#[0-9a-fA-F]{6}$/.test(hex);
+
+    if (!isValidHex) {
+      return { r: 0, g: 0, b: 0 };
+    }
+
     switch (hex.length) {
       case 4: // 3桁の短縮形（#RGB）→各桁を2回繰り返して6桁に展開
         return {
