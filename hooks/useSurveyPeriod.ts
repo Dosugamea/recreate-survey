@@ -30,19 +30,18 @@ export function getSurveyPeriodStatus(
   const isExpired = endAt ? now > endAt : false;
   const isActive = !isNotStarted && !isExpired;
 
-  let periodMessage: string | null = null;
-  if (startAt && endAt) {
-    if (isNotStarted) {
-      periodMessage = `キャンペーンは ${format(
-        startAt,
-        "yyyy年MM月dd日 HH:mm"
-      )} 開始です`;
-    } else if (isExpired) {
-      periodMessage = "キャンペーンは終了しました";
-    } else {
-      periodMessage = `実施期間: ${format(endAt, "yyyy年MM月dd日 HH:mmまで")}`;
+  const periodMessage = (() => {
+    if (!startAt || !endAt) {
+      return "";
     }
-  }
+    if (isNotStarted) {
+      return `キャンペーンは ${format(startAt, "yyyy年MM月dd日 HH:mm")} 開始です`;
+    }
+    if (isExpired) {
+      return "キャンペーンは終了しました";
+    }
+    return `実施期間: ${format(endAt, "yyyy年MM月dd日 HH:mmまで")}`;
+  })();
 
   return { isNotStarted, isExpired, isActive, periodMessage };
 }
