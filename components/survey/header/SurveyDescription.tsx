@@ -1,17 +1,12 @@
-"use client";
-
 import { hexToRgba } from "@/lib/utils";
-import { useSurveyPeriod } from "@/hooks/useSurveyPeriod";
 
 interface SurveyDescriptionProps {
   /** アンケートの説明文。改行はそのまま反映される */
   description?: string | null;
   /** テーマカラー（16進数形式、例: "#6c4034"）。セクションの背景色に使用 */
   themeColor: string;
-  /** アンケートの開始日時。nullの場合は開始日時の制限なし */
-  startAt: Date | null;
-  /** アンケートの終了日時。nullの場合は終了日時の制限なし */
-  endAt: Date | null;
+  /** 期間に関するメッセージ。開始前・実施中・終了後のいずれかの状態に応じたメッセージ。期間が設定されていない場合はnull */
+  periodMessage: string | null;
 }
 
 /**
@@ -20,16 +15,10 @@ interface SurveyDescriptionProps {
 export function SurveyDescription({
   description,
   themeColor,
-  startAt,
-  endAt,
+  periodMessage,
 }: SurveyDescriptionProps) {
   const accentBg = hexToRgba(themeColor, 0.5);
   const lightAccentBg = hexToRgba(themeColor, 0.2);
-
-  const { periodMessage } = useSurveyPeriod({
-    startAt,
-    endAt,
-  });
 
   return (
     <section id="information">

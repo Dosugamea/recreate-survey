@@ -8,7 +8,7 @@ import { SurveyContent } from "@/components/survey/layout/SurveyContent";
 import { SurveyNotes } from "@/components/survey/messages/SurveyNotes";
 import { SurveyFooter } from "@/components/survey/footer/SurveyFooter";
 import { SurveyBackToTop } from "@/components/survey/footer/SurveyBackToTop";
-import { isSurveyExpired } from "@/lib/survey-utils";
+import { getSurveyPeriodStatus } from "@/hooks/useSurveyPeriod";
 import type { Metadata } from "next";
 import { metadata as notFoundMetadata } from "@/app/not-found";
 
@@ -124,8 +124,11 @@ export default async function SurveyPublicPage(props: {
     notFound();
   }
 
-  // 期間外かどうかを判定（期間外の場合はフォームを表示しない）
-  const isExpired = isSurveyExpired(survey.endAt);
+  // 期間判定を行う
+  const { isExpired, periodMessage } = getSurveyPeriodStatus(
+    survey.startAt,
+    survey.endAt
+  );
 
   // フッター用のリンクを構築
   const footerLinks: Array<{ label: string; href: string }> = [];
@@ -164,8 +167,7 @@ export default async function SurveyPublicPage(props: {
             <SurveyDescription
               description={survey.description}
               themeColor={survey.themeColor}
-              startAt={survey.startAt}
-              endAt={survey.endAt}
+              periodMessage={periodMessage}
             />
           </article>
         )}
