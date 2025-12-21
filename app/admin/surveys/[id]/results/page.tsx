@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/admin/layout/PageHeader";
+import { ExportCSVButton } from "@/app/admin/surveys/[id]/results/ExportCSVButton";
 
 export const dynamic = "force-dynamic";
 
@@ -56,6 +57,7 @@ export default async function SurveyResultsPage(props: {
         title={`アンケート結果: ${survey.title}`}
         backHref={`/admin/surveys/${params.id}`}
         description={`総回答数: ${survey._count.responses}`}
+        action={<ExportCSVButton surveyId={params.id} />}
       />
 
       <div className="space-y-8">

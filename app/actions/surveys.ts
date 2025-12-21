@@ -217,3 +217,92 @@ export async function duplicateSurvey(surveyId: string) {
     return { error: "複製に失敗しました。" };
   }
 }
+
+/**
+ * CSV形式の値をエスケープする
+ */
+function escapeCsvValue(value: string): string {
+  // カンマ、改行、ダブルクォートを含む場合はダブルクォートで囲む
+  if (value.includes(",") || value.includes("\n") || value.includes('"')) {
+    // ダブルクォート自体は2つ重ねる
+    return `"${value.replace(/"/g, '""')}"`;
+  }
+  return value;
+}
+
+/**
+ * アンケート結果をCSV形式でエクスポート
+ */
+export async function exportSurveyResultsAsCSV(surveyId: string) {
+  try {
+    const survey = await prisma.survey.findUnique({
+      where: { id: surveyId },
+      include: {
+        questions: {
+          orderBy: { order: "asc" },
+        },
+        responses: {
+          include: {
+            answers: {
+              include: {
+                question: true,
+              },
+            },
+          },
+          orderBy: { submittedAt: "asc" },
+        },
+      },
+    });
+
+    if (!survey) {
+      return { error: "アンケートが見つかりませんでした。" };
+    }
+
+    // CSVヘッダー行を作成（質問のラベル）
+    const headers = [
+      "回答ID",
+      "ユーザーID",
+      "回答日時",
+      ...survey.questions.map((q) => q.label),
+    ];
+
+    // CSVデータ行を作成
+    const rows: string[][] = [];
+    for (const response of survey.responses) {
+      const row: string[] = [
+        response.id,
+        response.userId,
+        response.submittedAt.toISOString(),
+      ];
+
+      // 各質問に対する回答を取得
+      for (const question of survey.questions) {
+        const answer = response.answers.find(
+          (a) => a.questionId === question.id
+        );
+        row.push(answer?.value || "");
+      }
+
+      rows.push(row);
+    }
+
+    // CSV文字列を生成
+    const csvLines: string[] = [];
+    csvLines.push(headers.map(escapeCsvValue).join(","));
+
+    for (const row of rows) {
+      csvLines.push(row.map(escapeCsvValue).join(","));
+    }
+
+    const csvContent = csvLines.join("\n");
+
+    // BOMを追加してExcelで文字化けしないようにする（UTF-8）
+    const bom = "\uFEFF";
+    const csvWithBom = bom + csvContent;
+
+    return { success: true, csv: csvWithBom };
+  } catch (e) {
+    console.error(e);
+    return { error: "CSVエクスポートに失敗しました。" };
+  }
+}
