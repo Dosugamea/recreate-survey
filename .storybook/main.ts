@@ -28,6 +28,7 @@ const config: StorybookConfig = {
       ),
       "@prisma/client": path.resolve(__dirname, "./mocks/prisma-client.ts"),
       ".prisma/client": path.resolve(__dirname, "./mocks/prisma-client.ts"),
+      "next/navigation": path.resolve(__dirname, "./mocks/next-navigation.ts"),
     };
 
     // Exclude better-sqlite3 and Prisma from optimization to prevent bundling
