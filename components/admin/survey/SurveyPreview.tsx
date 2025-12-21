@@ -4,6 +4,7 @@ import { SurveyTitle } from "@/components/survey/header/SurveyTitle";
 import { SurveyDescription } from "@/components/survey/header/SurveyDescription";
 import { SurveyNotes } from "@/components/survey/messages/SurveyNotes";
 import type { SurveySchema } from "@/lib/schemas";
+import { useSurveyPeriod } from "@/hooks/useSurveyPeriod";
 
 interface SurveyPreviewProps {
   formData: SurveySchema;
@@ -30,6 +31,10 @@ export function SurveyPreview({ formData }: SurveyPreviewProps) {
 
   const { themeColor, bgImage } = previewSurvey;
   const bgImageUrl = bgImage && bgImage.trim() !== "" ? bgImage : undefined;
+  const { periodMessage } = useSurveyPeriod({
+    startAt: previewSurvey.startAt,
+    endAt: previewSurvey.endAt,
+  });
 
   return (
     <div className="sticky top-4">
@@ -66,8 +71,7 @@ export function SurveyPreview({ formData }: SurveyPreviewProps) {
               <SurveyDescription
                 description={previewSurvey.description}
                 themeColor={previewSurvey.themeColor}
-                startAt={previewSurvey.startAt}
-                endAt={previewSurvey.endAt}
+                periodMessage={periodMessage}
               />
             </article>
             <SurveyNotes survey={previewSurvey} />

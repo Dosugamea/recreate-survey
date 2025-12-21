@@ -18,8 +18,7 @@ export const Default: Story = {
     description:
       "いつもご利用ありがとうございます。\n今後のサービス向上のため、アンケートにご協力ください。",
     themeColor: "#6c4034",
-    startAt: new Date("2024-01-01"),
-    endAt: new Date("2024-12-31"),
+    periodMessage: "実施期間: 2024年12月31日 23:59まで",
   },
 };
 
@@ -27,8 +26,7 @@ export const WithoutDescription: Story = {
   args: {
     description: null,
     themeColor: "#6c4034",
-    startAt: new Date("2024-01-01"),
-    endAt: new Date("2024-12-31"),
+    periodMessage: "実施期間: 2024年12月31日 23:59まで",
   },
 };
 
@@ -37,8 +35,7 @@ export const WithoutPeriod: Story = {
     description:
       "いつもご利用ありがとうございます。\n今後のサービス向上のため、アンケートにご協力ください。",
     themeColor: "#6c4034",
-    startAt: null,
-    endAt: null,
+    periodMessage: null,
   },
 };
 
@@ -58,8 +55,7 @@ export const WithLongDescription: Story = {
 
 ご協力よろしくお願いいたします。`,
     themeColor: "#6c4034",
-    startAt: new Date("2024-01-01"),
-    endAt: new Date("2024-12-31"),
+    periodMessage: "実施期間: 2024年12月31日 23:59まで",
   },
 };
 
@@ -68,8 +64,7 @@ export const BlueTheme: Story = {
     description:
       "いつもご利用ありがとうございます。\n今後のサービス向上のため、アンケートにご協力ください。",
     themeColor: "#2563eb",
-    startAt: new Date("2024-01-01"),
-    endAt: new Date("2024-12-31"),
+    periodMessage: "実施期間: 2024年12月31日 23:59まで",
   },
 };
 
@@ -78,7 +73,6 @@ export const GreenTheme: Story = {
     description:
       "いつもご利用ありがとうございます。\n今後のサービス向上のため、アンケートにご協力ください。",
     themeColor: "#10b981",
-    startAt: new Date("2024-01-01"),
-    endAt: new Date("2024-12-31"),
+    periodMessage: "実施期間: 2024年12月31日 23:59まで",
   },
 };

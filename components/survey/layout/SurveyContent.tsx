@@ -9,6 +9,7 @@ import { SurveyDescription } from "@/components/survey/header/SurveyDescription"
 import { SurveyIntroduction } from "@/components/survey/header/SurveryIntroduction";
 import { FormInputView } from "@/components/survey/form/FormInputView";
 import { ConfirmationView } from "@/components/survey/form/ConfirmationView";
+import { useSurveyPeriod } from "@/hooks/useSurveyPeriod";
 
 interface SurveyContentProps {
   /** アンケートのデータ。タイトル、説明、テーマカラーなどの情報を含む */
@@ -54,6 +55,8 @@ export function SurveyContent({
   const { title, description, themeColor, headerImage, startAt, endAt } =
     survey;
 
+  const { periodMessage } = useSurveyPeriod({ startAt, endAt });
+
   return (
     <article>
       <SurveyTitle title={title} headerImage={headerImage} />
@@ -64,10 +67,9 @@ export function SurveyContent({
         appName={appName}
       />
       <SurveyDescription
+        periodMessage={periodMessage}
         description={description}
         themeColor={themeColor}
-        startAt={startAt}
-        endAt={endAt}
       />
       {!isSubmitted && (
         <>
