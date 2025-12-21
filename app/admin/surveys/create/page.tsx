@@ -2,12 +2,14 @@ import { CreateSurveyForm } from "@/components/admin/survey/CreateSurveyForm";
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/admin/layout/PageHeader";
 
-const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "アンケートアプリ";
+export async function generateMetadata(): Promise<Metadata> {
+  const appName = process.env.NEXT_PUBLIC_APP_NAME;
 
-export const metadata: Metadata = {
-  title: `アンケート作成 | ${appName}`,
-  description: "新しいアンケートを作成",
-};
+  return {
+    title: `アンケート作成 | ${appName}`,
+    description: "新しいアンケートを作成",
+  };
+}
 
 export default function CreateSurveyPage() {
   return (

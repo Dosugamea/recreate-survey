@@ -7,7 +7,7 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "アンケートアプリ";
+  const appName = process.env.NEXT_PUBLIC_APP_NAME;
 
   return (
     <div className="flex min-h-screen flex-col lg:flex-row">

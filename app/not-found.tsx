@@ -2,12 +2,14 @@ import { ErrorLayout } from "@/components/error/ErrorLayout";
 import { FileQuestion } from "lucide-react";
 import type { Metadata } from "next";
 
-const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "アンケートアプリ";
+export async function generateMetadata(): Promise<Metadata> {
+  const appName = process.env.NEXT_PUBLIC_APP_NAME;
 
-export const metadata: Metadata = {
-  title: `404エラー | ${appName}`,
-  description: "お探しのページは見つかりませんでした",
-};
+  return {
+    title: `404エラー | ${appName}`,
+    description: "お探しのページは見つかりませんでした",
+  };
+}
 
 export default function NotFound() {
   return (

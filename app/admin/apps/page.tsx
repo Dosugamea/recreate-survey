@@ -8,14 +8,16 @@ import { PlusCircle, Edit } from "lucide-react";
 import { format } from "date-fns";
 import { PageHeader } from "@/components/admin/layout/PageHeader";
 
-const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "アンケートアプリ";
-
-export const metadata: Metadata = {
-  title: `アプリ管理 | ${appName}`,
-  description: "アプリの管理",
-};
-
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const appName = process.env.NEXT_PUBLIC_APP_NAME;
+
+  return {
+    title: `アプリ管理 | ${appName}`,
+    description: "アプリの管理",
+  };
+}
 
 export default async function AppsPage() {
   const apps = await prisma.app.findMany({

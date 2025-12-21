@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 
 type SidebarProps = React.HTMLAttributes<HTMLDivElement>;
 
-const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "アンケートアプリ";
+const appName = process.env.NEXT_PUBLIC_APP_NAME;
 
 export function Sidebar({ className }: SidebarProps) {
   const pathname = usePathname();

@@ -8,12 +8,14 @@ import {
 } from "@/components/ui/card";
 import { HelpCircle } from "lucide-react";
 
-const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "アンケートアプリ";
+export async function generateMetadata(): Promise<Metadata> {
+  const appName = process.env.NEXT_PUBLIC_APP_NAME;
 
-export const metadata: Metadata = {
-  title: `ヘルプ | ${appName}`,
-  description: "アプリの設定方法と使い方",
-};
+  return {
+    title: `ヘルプ | ${appName}`,
+    description: "アプリの設定方法と使い方",
+  };
+}
 
 export default function HelpPage() {
   return (

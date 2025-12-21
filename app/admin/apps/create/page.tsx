@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import { CreateAppForm } from "@/components/admin/app/CreateAppForm";
 import { PageHeader } from "@/components/admin/layout/PageHeader";
 
-const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "アンケートアプリ";
+export async function generateMetadata(): Promise<Metadata> {
+  const appName = process.env.NEXT_PUBLIC_APP_NAME;
 
-export const metadata: Metadata = {
-  title: `アプリ作成 | ${appName}`,
-  description: "新しいアプリを作成",
-};
+  return {
+    title: `アプリ作成 | ${appName}`,
+    description: "新しいアプリを作成",
+  };
+}
 
 export default function CreateAppPage() {
   return (

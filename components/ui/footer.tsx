@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 
 export function Footer() {
-  const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "アンケートアプリ";
+  const appName = process.env.NEXT_PUBLIC_APP_NAME;
   const { setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 

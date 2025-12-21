@@ -19,7 +19,7 @@ export function SurveyFooter({
   copyright,
   themeColor = "#5C4033",
 }: SurveyFooterProps) {
-  const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "アンケートアプリ";
+  const appName = process.env.NEXT_PUBLIC_APP_NAME;
   const displayCopyright = copyright;
   const footerBg = hexToRgba(themeColor, 0.1);
 
