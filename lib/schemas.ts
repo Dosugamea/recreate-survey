@@ -7,21 +7,15 @@ export const appSchema = z.object({
     .min(1, "スラッグは必須です")
     .regex(/^[a-zA-Z0-9-]+$/, "スラッグは英数字とハイフンのみ使用できます"),
   privacyPolicyUrl: z
-    .string()
     .url("有効なURLを入力してください")
     .optional()
     .or(z.literal("")),
   faviconImageUrl: z
-    .string()
     .url("有効なURLを入力してください")
     .optional()
     .or(z.literal("")),
   copyrightNotice: z.string().optional(),
-  contactUrl: z
-    .string()
-    .url("有効なURLを入力してください")
-    .optional()
-    .or(z.literal("")),
+  contactUrl: z.url("有効なURLを入力してください").optional().or(z.literal("")),
 });
 
 export type AppSchema = z.infer<typeof appSchema>;
@@ -39,15 +33,10 @@ export const surveySchema = z.object({
   endAt: z.date().optional(),
   themeColor: z.string().min(4, "無効なカラーコードです"), // e.g., #fff or #ffffff
   headerImage: z
-    .string()
     .url("有効なURLを入力してください")
     .optional()
     .or(z.literal("")),
-  bgImage: z
-    .string()
-    .url("有効なURLを入力してください")
-    .optional()
-    .or(z.literal("")),
+  bgImage: z.url("有効なURLを入力してください").optional().or(z.literal("")),
   isActive: z.boolean().optional(),
 });
 
