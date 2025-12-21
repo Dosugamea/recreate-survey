@@ -7,7 +7,6 @@ import {
 } from "@/app/actions/questions";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
-import type { Prisma } from "@prisma/client";
 
 // Mock dependencies
 vi.mock("@/lib/prisma", () => ({

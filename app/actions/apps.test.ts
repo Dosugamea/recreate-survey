@@ -43,7 +43,7 @@ describe("apps actions", () => {
         updatedAt: new Date(),
       });
 
-      const result = await createApp(validData);
+      await createApp(validData);
 
       expect(prisma.app.create).toHaveBeenCalledWith({
         data: {
