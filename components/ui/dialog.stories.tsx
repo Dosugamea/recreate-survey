@@ -58,7 +58,8 @@ export const WithoutCloseButton: Story = {
         <DialogHeader>
           <DialogTitle>Dialog Without Close Button</DialogTitle>
           <DialogDescription>
-            This dialog doesn't have a close button in the top right corner.
+            This dialog doesn&apos;t have a close button in the top right
+            corner.
           </DialogDescription>
         </DialogHeader>
         <div className="py-4">
