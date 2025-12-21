@@ -25,7 +25,16 @@ export default defineConfig({
         test: {
           name: "unit",
           include: ["**/*.test.ts", "**/*.test.tsx"],
-          exclude: ["**/node_modules/**", "**/.storybook/**"],
+          exclude: [
+            "**/node_modules/**",
+            "**/.storybook/**",
+            "**/*.stories.tsx",
+          ],
+        },
+        resolve: {
+          alias: {
+            "@": path.resolve(dirname, "."),
+          },
         },
       },
       {
@@ -44,6 +53,11 @@ export default defineConfig({
             instances: [{ browser: "chromium" }],
           },
           setupFiles: [".storybook/vitest.setup.ts"],
+        },
+        resolve: {
+          alias: {
+            "@": path.resolve(dirname, "."),
+          },
         },
       },
     ],
