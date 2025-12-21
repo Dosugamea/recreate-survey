@@ -17,23 +17,24 @@ export interface SurveyPeriodStatus {
 
 /**
  * アンケートの期間判定を行う
- * @param startAt アンケートの開始日時。nullの場合は開始日時の制限なし
- * @param endAt アンケートの終了日時。nullの場合は終了日時の制限なし
+ * @param startAt アンケートの開始日時。必須
+ * @param endAt アンケートの終了日時。必須
  * @returns 期間判定結果
  */
 export function getSurveyPeriodStatus(
   startAt: Date | null,
   endAt: Date | null
 ): SurveyPeriodStatus {
+  if (!startAt || !endAt) {
+    throw new Error("開始日時と終了日時は両方必須です");
+  }
+
   const now = new Date();
-  const isNotStarted = startAt ? now < startAt : false;
-  const isExpired = endAt ? now > endAt : false;
+  const isNotStarted = now < startAt;
+  const isExpired = now > endAt;
   const isActive = !isNotStarted && !isExpired;
 
   const periodMessage = (() => {
-    if (!startAt || !endAt) {
-      return "";
-    }
     if (isNotStarted) {
       return `キャンペーンは ${format(startAt, "yyyy年MM月dd日 HH:mm")} 開始です`;
     }
