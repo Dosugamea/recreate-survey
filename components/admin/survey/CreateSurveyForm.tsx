@@ -69,6 +69,8 @@ export function CreateSurveyForm() {
       slug: generateRandomSlug(),
       description: "",
       notes: "",
+      startAt: new Date(),
+      endAt: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000), // 今日から2週間後
       themeColor: "#6c4034",
       headerImage: "",
       bgImage: "",

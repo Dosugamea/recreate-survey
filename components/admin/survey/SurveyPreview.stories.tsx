@@ -41,6 +41,8 @@ export const WithMinimalData: Story = {
       slug: "",
       description: "",
       notes: "",
+      startAt: new Date("2024-01-01"),
+      endAt: new Date("2024-03-31"),
       themeColor: "#6c4034",
     },
   },
@@ -72,16 +74,6 @@ export const WithLongDescription: Story = {
         "このアンケートは、2024年度第1四半期における顧客満足度を調査することを目的としています。ご回答いただいた内容は、今後のサービス改善に活用させていただきます。",
       notes:
         "回答は匿名で処理されます。個人情報の取り扱いについては、プライバシーポリシーをご確認ください。",
-    },
-  },
-};
-
-export const WithoutDates: Story = {
-  args: {
-    formData: {
-      ...mockFormData,
-      startAt: undefined,
-      endAt: undefined,
     },
   },
 };

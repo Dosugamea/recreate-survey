@@ -66,8 +66,10 @@ export function EditSurveyForm({ survey }: EditSurveyFormProps) {
       slug: survey.slug,
       description: survey.description || "",
       notes: survey.notes || "",
-      startAt: survey.startAt ? new Date(survey.startAt) : undefined,
-      endAt: survey.endAt ? new Date(survey.endAt) : undefined,
+      startAt: survey.startAt ? new Date(survey.startAt) : new Date(),
+      endAt: survey.endAt
+        ? new Date(survey.endAt)
+        : new Date(Date.now() + 14 * 24 * 60 * 60 * 1000), // 今日から2週間後
       themeColor: survey.themeColor,
       headerImage: survey.headerImage || "",
       bgImage: survey.bgImage || "",

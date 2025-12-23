@@ -19,12 +19,21 @@ describe("submission actions", () => {
   const surveyId = "survey-1";
   const userId = "user-1";
 
+  // テスト用の日付ヘルパー
+  const getValidDateRange = () => {
+    const now = new Date();
+    const startAt = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000); // 1週間前
+    const endAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000); // 1週間後
+    return { startAt, endAt };
+  };
+
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   describe("submitSurvey", () => {
     it("should submit survey successfully with valid answers", async () => {
+      const { startAt, endAt } = getValidDateRange();
       const mockSurvey: Survey & { questions: Question[] } = {
         id: surveyId,
         appId: "app-1",
@@ -32,8 +41,8 @@ describe("submission actions", () => {
         title: "Test Survey",
         description: null,
         notes: null,
-        startAt: null,
-        endAt: null,
+        startAt,
+        endAt,
         themeColor: "#6c4034",
         headerImage: null,
         bgImage: null,
@@ -104,6 +113,7 @@ describe("submission actions", () => {
     });
 
     it("should handle array answers correctly", async () => {
+      const { startAt, endAt } = getValidDateRange();
       const mockSurvey: Survey & { questions: Question[] } = {
         id: surveyId,
         appId: "app-1",
@@ -111,8 +121,8 @@ describe("submission actions", () => {
         title: "Test Survey",
         description: null,
         notes: null,
-        startAt: null,
-        endAt: null,
+        startAt,
+        endAt,
         themeColor: "#6c4034",
         headerImage: null,
         bgImage: null,
@@ -170,6 +180,7 @@ describe("submission actions", () => {
     });
 
     it("should return error when survey is not active", async () => {
+      const { startAt, endAt } = getValidDateRange();
       const mockSurvey: Survey & { questions: Question[] } = {
         id: surveyId,
         appId: "app-1",
@@ -177,8 +188,8 @@ describe("submission actions", () => {
         title: "Test Survey",
         description: null,
         notes: null,
-        startAt: null,
-        endAt: null,
+        startAt,
+        endAt,
         themeColor: "#6c4034",
         headerImage: null,
         bgImage: null,
@@ -200,6 +211,8 @@ describe("submission actions", () => {
     it("should return error when survey has not started", async () => {
       const futureDate = new Date();
       futureDate.setDate(futureDate.getDate() + 1);
+      const endDate = new Date();
+      endDate.setDate(endDate.getDate() + 30);
 
       const mockSurvey: Survey & { questions: Question[] } = {
         id: surveyId,
@@ -209,7 +222,7 @@ describe("submission actions", () => {
         description: null,
         notes: null,
         startAt: futureDate,
-        endAt: null,
+        endAt: endDate,
         themeColor: "#6c4034",
         headerImage: null,
         bgImage: null,
@@ -229,6 +242,8 @@ describe("submission actions", () => {
     });
 
     it("should return error when survey has ended", async () => {
+      const startDate = new Date();
+      startDate.setDate(startDate.getDate() - 30);
       const pastDate = new Date();
       pastDate.setDate(pastDate.getDate() - 1);
 
@@ -239,7 +254,7 @@ describe("submission actions", () => {
         title: "Test Survey",
         description: null,
         notes: null,
-        startAt: null,
+        startAt: startDate,
         endAt: pastDate,
         themeColor: "#6c4034",
         headerImage: null,
@@ -260,6 +275,7 @@ describe("submission actions", () => {
     });
 
     it("should return error for invalid question IDs", async () => {
+      const { startAt, endAt } = getValidDateRange();
       const mockSurvey: Survey & { questions: Question[] } = {
         id: surveyId,
         appId: "app-1",
@@ -267,8 +283,8 @@ describe("submission actions", () => {
         title: "Test Survey",
         description: null,
         notes: null,
-        startAt: null,
-        endAt: null,
+        startAt,
+        endAt,
         themeColor: "#6c4034",
         headerImage: null,
         bgImage: null,
@@ -303,6 +319,7 @@ describe("submission actions", () => {
     });
 
     it("should filter out empty answers", async () => {
+      const { startAt, endAt } = getValidDateRange();
       const mockSurvey: Survey & { questions: Question[] } = {
         id: surveyId,
         appId: "app-1",
@@ -310,8 +327,8 @@ describe("submission actions", () => {
         title: "Test Survey",
         description: null,
         notes: null,
-        startAt: null,
-        endAt: null,
+        startAt,
+        endAt,
         themeColor: "#6c4034",
         headerImage: null,
         bgImage: null,
@@ -382,6 +399,7 @@ describe("submission actions", () => {
     });
 
     it("should return error when no valid answers provided", async () => {
+      const { startAt, endAt } = getValidDateRange();
       const mockSurvey: Survey & { questions: Question[] } = {
         id: surveyId,
         appId: "app-1",
@@ -389,8 +407,8 @@ describe("submission actions", () => {
         title: "Test Survey",
         description: null,
         notes: null,
-        startAt: null,
-        endAt: null,
+        startAt,
+        endAt,
         themeColor: "#6c4034",
         headerImage: null,
         bgImage: null,
@@ -424,6 +442,7 @@ describe("submission actions", () => {
     });
 
     it("should return error on database error", async () => {
+      const { startAt, endAt } = getValidDateRange();
       const mockSurvey: Survey & { questions: Question[] } = {
         id: surveyId,
         appId: "app-1",
@@ -431,8 +450,8 @@ describe("submission actions", () => {
         title: "Test Survey",
         description: null,
         notes: null,
-        startAt: null,
-        endAt: null,
+        startAt,
+        endAt,
         themeColor: "#6c4034",
         headerImage: null,
         bgImage: null,
@@ -470,6 +489,7 @@ describe("submission actions", () => {
     });
 
     it("should handle unknown error types", async () => {
+      const { startAt, endAt } = getValidDateRange();
       const mockSurvey: Survey & { questions: Question[] } = {
         id: surveyId,
         appId: "app-1",
@@ -477,8 +497,8 @@ describe("submission actions", () => {
         title: "Test Survey",
         description: null,
         notes: null,
-        startAt: null,
-        endAt: null,
+        startAt,
+        endAt,
         themeColor: "#6c4034",
         headerImage: null,
         bgImage: null,

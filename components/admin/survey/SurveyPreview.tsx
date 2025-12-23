@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { SurveyTitle } from "@/components/survey/header/SurveyTitle";
 import { SurveyDescription } from "@/components/survey/header/SurveyDescription";
 import { SurveyNotes } from "@/components/survey/messages/SurveyNotes";
@@ -31,9 +32,21 @@ export function SurveyPreview({ formData }: SurveyPreviewProps) {
 
   const { themeColor, bgImage } = previewSurvey;
   const bgImageUrl = bgImage && bgImage.trim() !== "" ? bgImage : undefined;
+
+  // startAtとendAtが必須なので、デフォルト値を設定
+  const { startAt, endAt } = useMemo(() => {
+    const now = new Date();
+    return {
+      startAt: previewSurvey.startAt || now,
+      endAt:
+        previewSurvey.endAt ||
+        new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000),
+    };
+  }, [previewSurvey.startAt, previewSurvey.endAt]);
+
   const { periodMessage } = useSurveyPeriod({
-    startAt: previewSurvey.startAt,
-    endAt: previewSurvey.endAt,
+    startAt,
+    endAt,
   });
 
   return (
