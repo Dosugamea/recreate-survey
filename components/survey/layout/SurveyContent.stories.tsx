@@ -94,6 +94,7 @@ export const Default: Story = {
     questions: baseQuestions,
     userId: "user-123",
     appName: "テストアプリ",
+    isAlreadySubmitted: false,
   },
 };
 
@@ -106,6 +107,7 @@ export const BlueTheme: Story = {
     questions: baseQuestions,
     userId: "user-123",
     appName: "テストアプリ",
+    isAlreadySubmitted: false,
   },
 };
 
@@ -118,6 +120,7 @@ export const GreenTheme: Story = {
     questions: baseQuestions,
     userId: "user-123",
     appName: "テストアプリ",
+    isAlreadySubmitted: false,
   },
 };
 
@@ -131,5 +134,16 @@ export const WithHeaderImage: Story = {
     questions: baseQuestions,
     userId: "user-123",
     appName: "テストアプリ",
+    isAlreadySubmitted: false,
+  },
+};
+
+export const AlreadySubmitted: Story = {
+  args: {
+    survey: baseSurvey,
+    questions: baseQuestions,
+    userId: "user-123",
+    appName: "テストアプリ",
+    isAlreadySubmitted: true,
   },
 };

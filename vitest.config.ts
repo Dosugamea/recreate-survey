@@ -30,6 +30,7 @@ export default defineConfig({
             "**/.storybook/**",
             "**/*.stories.tsx",
           ],
+          environment: "jsdom",
         },
         resolve: {
           alias: {

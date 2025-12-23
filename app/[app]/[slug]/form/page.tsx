@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
+import { cookies } from "next/headers";
 import { SurveyContainer } from "@/components/survey/layout/SurveyContainer";
 import { SurveyTitle } from "@/components/survey/header/SurveyTitle";
 import { SurveyWarn } from "@/components/survey/messages/SurveyWarn";
@@ -130,6 +131,13 @@ export default async function SurveyPublicPage(props: {
     survey.endAt
   );
 
+  // クッキーをチェックして、既に送信済みかどうかを確認
+  const cookieStore = await cookies();
+  const cookieName = `survey_${survey.id}_${userId}`;
+  const isAlreadySubmitted = userId
+    ? cookieStore.get(cookieName)?.value === "submitted"
+    : false;
+
   // フッター用のリンクを構築
   const footerLinks: Array<{ label: string; href: string }> = [];
 
@@ -156,6 +164,7 @@ export default async function SurveyPublicPage(props: {
             questions={survey.questions}
             userId={userId}
             appName={app.name}
+            isAlreadySubmitted={isAlreadySubmitted}
           />
         ) : (
           <article>

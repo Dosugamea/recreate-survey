@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { submitSurvey } from "@/app/actions/submission";
 import { prisma } from "@/lib/prisma";
 import type { Survey, Question, Response } from "@prisma/client";
+import { verifyTurnstile } from "@/lib/turnstile";
 
 // Mock dependencies
 vi.mock("@/lib/prisma", () => ({
@@ -10,9 +11,14 @@ vi.mock("@/lib/prisma", () => ({
       findUnique: vi.fn(),
     },
     response: {
+      findUnique: vi.fn(),
       create: vi.fn(),
     },
   },
+}));
+
+vi.mock("@/lib/turnstile", () => ({
+  verifyTurnstile: vi.fn(),
 }));
 
 describe("submission actions", () => {
@@ -29,6 +35,8 @@ describe("submission actions", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    // Turnstile検証をデフォルトで成功とする
+    vi.mocked(verifyTurnstile).mockResolvedValue(true);
   });
 
   describe("submitSurvey", () => {
@@ -86,9 +94,10 @@ describe("submission actions", () => {
       };
 
       vi.mocked(prisma.survey.findUnique).mockResolvedValue(mockSurvey);
+      vi.mocked(prisma.response.findUnique).mockResolvedValue(null);
       vi.mocked(prisma.response.create).mockResolvedValue(mockResponse);
 
-      const result = await submitSurvey(surveyId, userId, rawAnswers);
+      const result = await submitSurvey(surveyId, userId, rawAnswers, null);
 
       expect(prisma.survey.findUnique).toHaveBeenCalledWith({
         where: { id: surveyId },
@@ -155,9 +164,10 @@ describe("submission actions", () => {
       };
 
       vi.mocked(prisma.survey.findUnique).mockResolvedValue(mockSurvey);
+      vi.mocked(prisma.response.findUnique).mockResolvedValue(null);
       vi.mocked(prisma.response.create).mockResolvedValue(mockResponse);
 
-      await submitSurvey(surveyId, userId, rawAnswers);
+      await submitSurvey(surveyId, userId, rawAnswers, null);
 
       expect(prisma.response.create).toHaveBeenCalledWith({
         data: {
@@ -173,7 +183,7 @@ describe("submission actions", () => {
     it("should return error when survey not found", async () => {
       vi.mocked(prisma.survey.findUnique).mockResolvedValue(null);
 
-      const result = await submitSurvey(surveyId, userId, {});
+      const result = await submitSurvey(surveyId, userId, {}, null);
 
       expect(result).toEqual({ error: "Survey not found." });
       expect(prisma.response.create).not.toHaveBeenCalled();
@@ -201,7 +211,7 @@ describe("submission actions", () => {
 
       vi.mocked(prisma.survey.findUnique).mockResolvedValue(mockSurvey);
 
-      const result = await submitSurvey(surveyId, userId, {});
+      const result = await submitSurvey(surveyId, userId, {}, null);
 
       expect(result).toEqual({
         error: "このアンケートは現在利用できません。",
@@ -234,7 +244,7 @@ describe("submission actions", () => {
 
       vi.mocked(prisma.survey.findUnique).mockResolvedValue(mockSurvey);
 
-      const result = await submitSurvey(surveyId, userId, {});
+      const result = await submitSurvey(surveyId, userId, {}, null);
 
       expect(result).toEqual({
         error: "このアンケートはまだ開始されていません。",
@@ -267,7 +277,7 @@ describe("submission actions", () => {
 
       vi.mocked(prisma.survey.findUnique).mockResolvedValue(mockSurvey);
 
-      const result = await submitSurvey(surveyId, userId, {});
+      const result = await submitSurvey(surveyId, userId, {}, null);
 
       expect(result).toEqual({
         error: "このアンケートは終了しました。",
@@ -311,7 +321,7 @@ describe("submission actions", () => {
 
       vi.mocked(prisma.survey.findUnique).mockResolvedValue(mockSurvey);
 
-      const result = await submitSurvey(surveyId, userId, rawAnswers);
+      const result = await submitSurvey(surveyId, userId, rawAnswers, null);
 
       expect(result).toEqual({
         error: "Invalid question IDs: invalid-question-id",
@@ -383,9 +393,10 @@ describe("submission actions", () => {
       };
 
       vi.mocked(prisma.survey.findUnique).mockResolvedValue(mockSurvey);
+      vi.mocked(prisma.response.findUnique).mockResolvedValue(null);
       vi.mocked(prisma.response.create).mockResolvedValue(mockResponse);
 
-      await submitSurvey(surveyId, userId, rawAnswers);
+      await submitSurvey(surveyId, userId, rawAnswers, null);
 
       expect(prisma.response.create).toHaveBeenCalledWith({
         data: {
@@ -435,7 +446,7 @@ describe("submission actions", () => {
 
       vi.mocked(prisma.survey.findUnique).mockResolvedValue(mockSurvey);
 
-      const result = await submitSurvey(surveyId, userId, rawAnswers);
+      const result = await submitSurvey(surveyId, userId, rawAnswers, null);
 
       expect(result).toEqual({ error: "No valid answers provided." });
       expect(prisma.response.create).not.toHaveBeenCalled();
@@ -477,11 +488,12 @@ describe("submission actions", () => {
       };
 
       vi.mocked(prisma.survey.findUnique).mockResolvedValue(mockSurvey);
+      vi.mocked(prisma.response.findUnique).mockResolvedValue(null);
       vi.mocked(prisma.response.create).mockRejectedValue(
         new Error("Database error")
       );
 
-      const result = await submitSurvey(surveyId, userId, rawAnswers);
+      const result = await submitSurvey(surveyId, userId, rawAnswers, null);
 
       expect(result).toEqual({
         error: "Failed to submit survey: Database error",
@@ -524,11 +536,73 @@ describe("submission actions", () => {
       };
 
       vi.mocked(prisma.survey.findUnique).mockResolvedValue(mockSurvey);
+      vi.mocked(prisma.response.findUnique).mockResolvedValue(null);
       vi.mocked(prisma.response.create).mockRejectedValue("Unknown error");
 
-      const result = await submitSurvey(surveyId, userId, rawAnswers);
+      const result = await submitSurvey(surveyId, userId, rawAnswers, null);
 
       expect(result).toEqual({ error: "Failed to submit survey." });
+    });
+
+    it("should return error when user has already submitted", async () => {
+      const { startAt, endAt } = getValidDateRange();
+      const mockSurvey: Survey & { questions: Question[] } = {
+        id: surveyId,
+        appId: "app-1",
+        slug: "test-survey",
+        title: "Test Survey",
+        description: null,
+        notes: null,
+        startAt,
+        endAt,
+        themeColor: "#6c4034",
+        headerImage: null,
+        bgImage: null,
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        questions: [
+          {
+            id: "question-1",
+            surveyId,
+            type: "TEXT",
+            label: "Q1",
+            order: 1,
+            required: false,
+            maxLength: null,
+            options: null,
+          },
+        ],
+      };
+
+      const rawAnswers = {
+        "question-1": "Answer",
+      };
+
+      const existingResponse: Response = {
+        id: "existing-response-1",
+        surveyId,
+        userId,
+        submittedAt: new Date(),
+      };
+
+      vi.mocked(prisma.survey.findUnique).mockResolvedValue(mockSurvey);
+      vi.mocked(prisma.response.findUnique).mockResolvedValue(existingResponse);
+
+      const result = await submitSurvey(surveyId, userId, rawAnswers, null);
+
+      expect(result).toEqual({
+        error: "このアンケートは既に回答済みです。",
+      });
+      expect(prisma.response.findUnique).toHaveBeenCalledWith({
+        where: {
+          surveyId_userId: {
+            surveyId,
+            userId,
+          },
+        },
+      });
+      expect(prisma.response.create).not.toHaveBeenCalled();
     });
   });
 });

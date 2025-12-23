@@ -15,6 +15,8 @@ interface UseSurveyFormProps {
   questions: Question[];
   /** 回答者のユーザーID。アンケート送信時に使用 */
   userId: string;
+  /** 既に送信済みかどうか。サーバー側でクッキーをチェックした結果 */
+  isAlreadySubmitted?: boolean;
   /** アンケート送信が成功したときに呼ばれるコールバック関数 */
   onSubmitted?: () => void;
 }
@@ -54,14 +56,33 @@ interface UseSurveyFormReturn {
 /**
  * アンケートフォームの管理ロジックを提供するフック
  */
+/**
+ * クッキー名を生成する
+ */
+function getCookieName(surveyId: string, userId: string): string {
+  return `survey_${surveyId}_${userId}`;
+}
+
+/**
+ * クッキーを設定する
+ */
+function setCookie(name: string, value: string, days: number = 365): void {
+  if (typeof document === "undefined") return;
+  const expires = new Date();
+  expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+  document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+}
+
 export function useSurveyForm({
   surveyId,
   questions,
   userId,
+  isAlreadySubmitted = false,
   onSubmitted,
 }: UseSurveyFormProps): UseSurveyFormReturn {
   const [step, setStep] = useState<Step>("input");
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  // サーバー側でチェックした結果を初期値として使用
+  const [isSubmitted, setIsSubmitted] = useState(isAlreadySubmitted);
   const [isPending, startTransition] = useTransition();
 
   const { register, formState, getValues, trigger, watch } =
@@ -101,6 +122,9 @@ export function useSurveyForm({
       const result = await submitSurvey(surveyId, userId, data, turnstileToken);
       if (result.success) {
         setIsSubmitted(true);
+        // 送信成功時にクッキーを設定
+        const cookieName = getCookieName(surveyId, userId);
+        setCookie(cookieName, "submitted", 365);
         onSubmitted?.();
       } else {
         const errorMessage = result.error || "送信に失敗しました";

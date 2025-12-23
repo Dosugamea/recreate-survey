@@ -44,6 +44,20 @@ export async function submitSurvey(
       return { error: "このアンケートは終了しました。" };
     }
 
+    // 同一ユーザーIDでの重複登録チェック
+    const existingResponse = await prisma.response.findUnique({
+      where: {
+        surveyId_userId: {
+          surveyId,
+          userId,
+        },
+      },
+    });
+
+    if (existingResponse) {
+      return { error: "このアンケートは既に回答済みです。" };
+    }
+
     // questionIdが全て存在するか確認
     const questionIds = survey.questions.map((q) => q.id);
     const submittedQuestionIds = Object.keys(rawAnswers);

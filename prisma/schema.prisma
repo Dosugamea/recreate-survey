@@ -25,10 +25,10 @@ model App {
 
 // アンケート自体の設定
 model Survey {
-  id          String    @id @default(cuid())
+  id          String   @id @default(cuid())
   appId       String // アプリID
-  app         App       @relation(fields: [appId], references: [id], onDelete: Cascade)
-  slug        String    @unique // URLの一部になるよ (例: /campaign-2025)
+  app         App      @relation(fields: [appId], references: [id], onDelete: Cascade)
+  slug        String   @unique // URLの一部になるよ (例: /campaign-2025)
   title       String // アンケートのタイトル
   description String? // 説明文 (HTMLタグ含めてもいいかも)
   notes       String? // 注意事項 (フォームの下に表示)
@@ -76,6 +76,8 @@ model Response {
   submittedAt DateTime @default(now())
 
   answers Answer[]
+
+  @@unique([surveyId, userId])
 }
 
 // 個別の質問への答え

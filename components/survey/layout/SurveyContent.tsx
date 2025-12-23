@@ -20,6 +20,8 @@ interface SurveyContentProps {
   userId: string;
   /** アプリ名。送信完了メッセージで使用 */
   appName: string;
+  /** 既に送信済みかどうか。サーバー側でクッキーをチェックした結果 */
+  isAlreadySubmitted?: boolean;
 }
 
 /**
@@ -31,6 +33,7 @@ export function SurveyContent({
   questions,
   userId,
   appName,
+  isAlreadySubmitted = false,
 }: SurveyContentProps) {
   const {
     register,
@@ -47,6 +50,7 @@ export function SurveyContent({
     surveyId: survey.id,
     questions,
     userId,
+    isAlreadySubmitted,
     onSubmitted: () => {
       // 送信完了時の処理（必要に応じて拡張可能）
     },
