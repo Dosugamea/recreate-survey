@@ -11,8 +11,8 @@ export interface SurveyPeriodStatus {
   isExpired: boolean;
   /** アンケートが実施中かどうか。isNotStartedとisExpiredの両方がfalseの場合にtrue */
   isActive: boolean;
-  /** 期間に関するメッセージ。開始前・実施中・終了後のいずれかの状態に応じたメッセージを返す。期間が設定されていない場合はnull */
-  periodMessage: string | null;
+  /** 期間に関するメッセージ。開始前・実施中・終了後のいずれかの状態に応じたメッセージを返す */
+  periodMessage: string;
 }
 
 /**
@@ -22,13 +22,9 @@ export interface SurveyPeriodStatus {
  * @returns 期間判定結果
  */
 export function getSurveyPeriodStatus(
-  startAt: Date | null,
-  endAt: Date | null
+  startAt: Date,
+  endAt: Date
 ): SurveyPeriodStatus {
-  if (!startAt || !endAt) {
-    throw new Error("開始日時と終了日時は両方必須です");
-  }
-
   const now = new Date();
   const isNotStarted = now < startAt;
   const isExpired = now > endAt;
@@ -48,10 +44,10 @@ export function getSurveyPeriodStatus(
 }
 
 interface UseSurveyPeriodProps {
-  /** アンケートの開始日時。nullの場合は開始日時の制限なし */
-  startAt: Date | null;
-  /** アンケートの終了日時。nullの場合は終了日時の制限なし */
-  endAt: Date | null;
+  /** アンケートの開始日時。必須 */
+  startAt: Date;
+  /** アンケートの終了日時。必須 */
+  endAt: Date;
 }
 
 interface UseSurveyPeriodReturn {
@@ -61,8 +57,8 @@ interface UseSurveyPeriodReturn {
   isExpired: boolean;
   /** アンケートが実施中かどうか。isNotStartedとisExpiredの両方がfalseの場合にtrue */
   isActive: boolean;
-  /** 期間に関するメッセージ。開始前・実施中・終了後のいずれかの状態に応じたメッセージを返す。期間が設定されていない場合はnull */
-  periodMessage: string | null;
+  /** 期間に関するメッセージ。開始前・実施中・終了後のいずれかの状態に応じたメッセージを返す */
+  periodMessage: string;
 }
 
 /**

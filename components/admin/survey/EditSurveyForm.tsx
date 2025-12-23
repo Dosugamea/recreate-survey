@@ -227,7 +227,9 @@ export function EditSurveyForm({ survey }: EditSurveyFormProps) {
               name="startAt"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>開始日</FormLabel>
+                  <FormLabel>
+                    開始日 <span className="text-destructive">*</span>
+                  </FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -267,7 +269,9 @@ export function EditSurveyForm({ survey }: EditSurveyFormProps) {
               name="endAt"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>終了日</FormLabel>
+                  <FormLabel>
+                    終了日 <span className="text-destructive">*</span>
+                  </FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>

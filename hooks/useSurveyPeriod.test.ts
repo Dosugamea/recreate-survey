@@ -74,24 +74,4 @@ describe("getSurveyPeriodStatus", () => {
       });
     });
   });
-
-  describe("エラーケース", () => {
-    it("開始日時がnullの場合、エラーを投げる", () => {
-      expect(() => getSurveyPeriodStatus(null, futureEnd)).toThrow(
-        "開始日時と終了日時は両方必須です"
-      );
-    });
-
-    it("終了日時がnullの場合、エラーを投げる", () => {
-      expect(() => getSurveyPeriodStatus(beforeStart, null)).toThrow(
-        "開始日時と終了日時は両方必須です"
-      );
-    });
-
-    it("開始日時と終了日時が両方nullの場合、エラーを投げる", () => {
-      expect(() => getSurveyPeriodStatus(null, null)).toThrow(
-        "開始日時と終了日時は両方必須です"
-      );
-    });
-  });
 });

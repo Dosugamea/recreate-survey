@@ -25,7 +25,7 @@ export async function createSurvey(data: SurveySchema) {
   } = result.data;
 
   // 期間の整合性チェック
-  if (startAt && endAt && startAt >= endAt) {
+  if (startAt >= endAt) {
     return { error: "開始日時は終了日時より前である必要があります。" };
   }
 
@@ -37,8 +37,8 @@ export async function createSurvey(data: SurveySchema) {
         slug,
         description,
         notes: notes || null,
-        startAt,
-        endAt,
+        startAt: startAt!,
+        endAt: endAt!,
         themeColor,
         headerImage: headerImage || null,
         bgImage: bgImage || null,
@@ -88,7 +88,7 @@ export async function updateSurvey(surveyId: string, data: SurveySchema) {
   } = result.data;
 
   // 期間の整合性チェック
-  if (startAt && endAt && startAt >= endAt) {
+  if (startAt >= endAt) {
     return { error: "開始日時は終了日時より前である必要があります。" };
   }
 
@@ -101,8 +101,8 @@ export async function updateSurvey(surveyId: string, data: SurveySchema) {
         slug,
         description,
         notes: notes || null,
-        startAt,
-        endAt,
+        startAt: startAt,
+        endAt: endAt,
         themeColor,
         headerImage: headerImage || null,
         bgImage: bgImage || null,

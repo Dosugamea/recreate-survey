@@ -29,8 +29,8 @@ export const surveySchema = z.object({
     .regex(/^[a-zA-Z0-9-]+$/, "スラッグは英数字とハイフンのみ使用できます"),
   description: z.string().optional(),
   notes: z.string().optional(),
-  startAt: z.date().optional(),
-  endAt: z.date().optional(),
+  startAt: z.date({ message: "開始日時は必須です" }),
+  endAt: z.date({ message: "終了日時は必須です" }),
   themeColor: z.string().min(4, "無効なカラーコードです"), // e.g., #fff or #ffffff
   headerImage: z
     .url("有効なURLを入力してください")

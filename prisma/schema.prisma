@@ -32,8 +32,8 @@ model Survey {
   title       String // アンケートのタイトル
   description String? // 説明文 (HTMLタグ含めてもいいかも)
   notes       String? // 注意事項 (フォームの下に表示)
-  startAt     DateTime? // 開始日時
-  endAt       DateTime? // 終了日時
+  startAt     DateTime // 開始日時
+  endAt       DateTime // 終了日時
 
   // 見た目のカスタマイズ
   themeColor  String  @default("#6c4034") // テーマカラー (CSS変数 `--accent-color` とかにする)

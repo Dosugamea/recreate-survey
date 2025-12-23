@@ -26,10 +26,10 @@ export async function submitSurvey(
 
     // 期間のバリデーション
     const now = new Date();
-    if (survey.startAt && now < survey.startAt) {
+    if (now < survey.startAt) {
       return { error: "このアンケートはまだ開始されていません。" };
     }
-    if (survey.endAt && now > survey.endAt) {
+    if (now > survey.endAt) {
       return { error: "このアンケートは終了しました。" };
     }
 
