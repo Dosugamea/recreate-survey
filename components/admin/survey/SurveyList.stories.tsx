@@ -38,6 +38,9 @@ const mockSurveys = [
       slug: "sample-app",
       faviconImageUrl: "https://via.placeholder.com/24",
     },
+    _count: {
+      responses: 152,
+    },
   },
   {
     id: "survey-2",
@@ -50,6 +53,9 @@ const mockSurveys = [
       name: "顧客満足度調査アプリ",
       slug: "customer-app",
       faviconImageUrl: "https://via.placeholder.com/24",
+    },
+    _count: {
+      responses: 89,
     },
   },
   {
@@ -64,6 +70,9 @@ const mockSurveys = [
       slug: "sample-app",
       faviconImageUrl: null,
     },
+    _count: {
+      responses: 0,
+    },
   },
   {
     id: "survey-4",
@@ -77,6 +86,9 @@ const mockSurveys = [
       slug: "product-app",
       faviconImageUrl: "https://via.placeholder.com/24",
     },
+    _count: {
+      responses: 234,
+    },
   },
   {
     id: "survey-5",
@@ -89,6 +101,9 @@ const mockSurveys = [
       name: "顧客満足度調査アプリ",
       slug: "customer-app",
       faviconImageUrl: "https://via.placeholder.com/24",
+    },
+    _count: {
+      responses: 67,
     },
   },
   {
@@ -167,6 +182,9 @@ export const ManySurveys: Story = {
           slug: "sample-app",
           faviconImageUrl: "https://via.placeholder.com/24",
         },
+        _count: {
+          responses: 45,
+        },
       },
       {
         id: "survey-8",
@@ -179,6 +197,9 @@ export const ManySurveys: Story = {
           name: "顧客満足度調査アプリ",
           slug: "customer-app",
           faviconImageUrl: "https://via.placeholder.com/24",
+        },
+        _count: {
+          responses: 0,
         },
       },
       {
@@ -193,7 +214,26 @@ export const ManySurveys: Story = {
           slug: "product-app",
           faviconImageUrl: null,
         },
+        _count: {
+          responses: 123,
+        },
       },
     ],
+  },
+};
+
+export const WithResponseCount: Story = {
+  args: {
+    apps: mockApps,
+    surveys: mockSurveys,
+    showResponseCount: true,
+  },
+};
+
+export const WithResponseCountAndResults: Story = {
+  args: {
+    apps: mockApps,
+    surveys: mockSurveys.filter((s) => s._count && s._count.responses > 0),
+    showResponseCount: true,
   },
 };

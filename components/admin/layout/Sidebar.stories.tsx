@@ -40,11 +40,21 @@ export const OnSurveysCreatePage: Story = {
   },
 };
 
+export const OnAnswersPage: Story = {
+  parameters: {
+    nextjs: {
+      navigation: {
+        pathname: "/admin/answers",
+      },
+    },
+  },
+};
+
 export const OnAppsPage: Story = {
   parameters: {
     nextjs: {
       navigation: {
-        pathname: "/admin/apps/123",
+        pathname: "/admin/apps",
       },
     },
   },

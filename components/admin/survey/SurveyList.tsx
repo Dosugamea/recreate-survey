@@ -31,26 +31,43 @@ interface Survey {
     slug: string;
     faviconImageUrl: string | null;
   };
+  _count?: {
+    responses: number;
+  };
 }
 
 interface SurveyListProps {
   apps: App[];
   surveys: Survey[];
   currentAppId?: string;
+  showResponseCount?: boolean;
+  headerTitle?: string;
+  headerDescription?: string;
+  showCreateButton?: boolean;
 }
 
-export function SurveyList({ apps, surveys, currentAppId }: SurveyListProps) {
+export function SurveyList({
+  apps,
+  surveys,
+  currentAppId,
+  showResponseCount = false,
+  headerTitle = "アンケート一覧",
+  headerDescription = "作成したアンケートの一覧を表示しています。詳細の確認や編集ができます。",
+  showCreateButton = true,
+}: SurveyListProps) {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="アンケート一覧"
-        description="作成したアンケートの一覧を表示しています。詳細の確認や編集ができます。"
+        title={headerTitle}
+        description={headerDescription}
         action={
-          <Button asChild className="w-full sm:w-auto">
-            <Link href="/admin/surveys/create">
-              <PlusCircle className="mr-2 h-4 w-4" /> アンケート作成
-            </Link>
-          </Button>
+          showCreateButton ? (
+            <Button asChild className="w-full sm:w-auto">
+              <Link href="/admin/surveys/create">
+                <PlusCircle className="mr-2 h-4 w-4" /> アンケート作成
+              </Link>
+            </Button>
+          ) : undefined
         }
       />
 
@@ -101,6 +118,11 @@ export function SurveyList({ apps, surveys, currentAppId }: SurveyListProps) {
                     作成日時: {format(survey.createdAt, "yyyy/MM/dd HH:mm")}
                   </p>
                   <p>ステータス: {survey.isActive ? "公開中" : "非公開"}</p>
+                  {showResponseCount && survey._count && (
+                    <p className="font-semibold text-foreground">
+                      回答数: {survey._count.responses}件
+                    </p>
+                  )}
                 </div>
               </CardContent>
               <CardFooter className="flex justify-end flex-wrap gap-2">
@@ -109,6 +131,15 @@ export function SurveyList({ apps, surveys, currentAppId }: SurveyListProps) {
                     <Eye className="mr-2 h-4 w-4" /> 詳細
                   </Link>
                 </Button>
+                {showResponseCount &&
+                  survey._count &&
+                  survey._count.responses > 0 && (
+                    <Button variant="default" size="sm" asChild>
+                      <Link href={`/admin/surveys/${survey.id}/results`}>
+                        結果を見る
+                      </Link>
+                    </Button>
+                  )}
               </CardFooter>
             </Card>
           ))

@@ -2,7 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ClipboardList, PlusCircle, Settings, HelpCircle } from "lucide-react";
+import {
+  ClipboardList,
+  PlusCircle,
+  Settings,
+  HelpCircle,
+  BarChart3,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -39,6 +45,16 @@ export function Sidebar({ className }: SidebarProps) {
               <Link href="/admin/surveys">
                 <ClipboardList className="mr-2 h-4 w-4" />
                 アンケート一覧
+              </Link>
+            </Button>
+            <Button
+              asChild
+              variant={pathname === "/admin/answers" ? "secondary" : "ghost"}
+              className="w-full justify-start"
+            >
+              <Link href="/admin/answers">
+                <BarChart3 className="mr-2 h-4 w-4" />
+                アンケート結果一覧
               </Link>
             </Button>
             <Button
