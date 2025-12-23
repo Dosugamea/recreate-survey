@@ -39,7 +39,26 @@ cd survey-app
 npm install
 ```
 
-### 2. データベースのセットアップ
+### 2. 環境変数の設定
+
+`.env.local`ファイルを作成し、以下の環境変数を設定してください。
+
+```bash
+# Cloudflare Turnstile（スパム対策）
+# Cloudflareダッシュボードでサイトを追加して取得してください
+# https://dash.cloudflare.com/?to=/:account/turnstile
+NEXT_PUBLIC_CF_TURNSTILE_SITE_KEY=your-site-key-here
+CF_TURNSTILE_SECRET_KEY=your-secret-key-here
+```
+
+**Cloudflare Turnstileの設定方法:**
+
+1. [Cloudflareダッシュボード](https://dash.cloudflare.com/?to=/:account/turnstile)にログイン
+2. 「サイトを追加」をクリック
+3. ドメインに`localhost`を追加（ローカル開発用）
+4. 表示されるサイトキーとシークレットキーをコピーして環境変数に設定
+
+### 3. データベースのセットアップ
 
 SQLite データベースを初期化します。
 
@@ -47,7 +66,7 @@ SQLite データベースを初期化します。
 npx prisma migrate dev --name init
 ```
 
-### 3. 開発サーバーの起動
+### 4. 開発サーバーの起動
 
 ```bash
 npm run dev

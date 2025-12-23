@@ -1,12 +1,23 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { verifyTurnstile } from "@/lib/turnstile";
 
 export async function submitSurvey(
   surveyId: string,
   userId: string,
-  rawAnswers: Record<string, string | string[]>
+  rawAnswers: Record<string, string | string[]>,
+  turnstileToken: string | null
 ) {
+  // Turnstile検証
+  const isTurnstileValid = await verifyTurnstile(turnstileToken);
+  if (!isTurnstileValid) {
+    return {
+      error:
+        "スパム対策の検証に失敗しました。ページを再読み込みして再度お試しください。",
+    };
+  }
+
   // Create Response
   try {
     // まず、surveyIdが存在するか確認

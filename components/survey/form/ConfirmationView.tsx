@@ -1,5 +1,7 @@
 "use client";
 
+import { useRef } from "react";
+import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
 import { Question } from "@prisma/client";
 import { FieldValues } from "react-hook-form";
 import { hexToRgba } from "@/lib/utils";
@@ -11,7 +13,9 @@ interface ConfirmationViewProps {
   themeColor: string;
   isPending: boolean;
   onBack: () => void;
-  onSubmit: () => void;
+  onSubmit: (
+    turnstileRef: React.RefObject<TurnstileInstance | undefined>
+  ) => void;
 }
 
 export function ConfirmationView({
@@ -22,6 +26,8 @@ export function ConfirmationView({
   onBack,
   onSubmit,
 }: ConfirmationViewProps) {
+  const turnstileRef = useRef<TurnstileInstance | undefined>(undefined);
+
   const getAnswerDisplay = (question: Question): string => {
     const value = formData[question.id];
     if (!value) return "未回答";
@@ -71,6 +77,17 @@ export function ConfirmationView({
       </div>
 
       <div className="text-center mt-8 space-y-4">
+        {/* Turnstileウィジェット */}
+        <div className="flex justify-center mb-4">
+          <Turnstile
+            ref={turnstileRef}
+            siteKey={process.env.NEXT_PUBLIC_CF_TURNSTILE_SITE_KEY!}
+            options={{
+              theme: "light",
+            }}
+          />
+        </div>
+
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Button
             type="button"
@@ -91,7 +108,7 @@ export function ConfirmationView({
             variant="auto"
             className="w-full sm:w-auto px-12 py-6 text-lg font-bold text-white shadow-md hover:opacity-90 transition-opacity rounded-lg"
             style={{ backgroundColor: themeColor }}
-            onClick={onSubmit}
+            onClick={() => onSubmit(turnstileRef)}
             disabled={isPending}
           >
             {isPending ? "送信中..." : "回答を送信する"}

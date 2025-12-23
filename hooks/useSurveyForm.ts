@@ -4,6 +4,7 @@ import { Question } from "@prisma/client";
 import { submitSurvey } from "@/app/actions/submission";
 import { useRequiredFieldsValidation } from "@/hooks/useRequiredFieldsValidation";
 import { useScrollToElement } from "@/hooks/useScrollToElement";
+import type { TurnstileInstance } from "@marsidev/react-turnstile";
 
 type Step = "input" | "confirmation";
 
@@ -44,8 +45,10 @@ interface UseSurveyFormReturn {
   handleGoToConfirmation: () => Promise<void>;
   /** 入力画面に戻る処理。確認画面から入力画面に戻り、スクロール位置を調整 */
   handleBackToInput: () => void;
-  /** アンケートを送信する処理。確認画面から実行される */
-  handleConfirmSubmit: () => void;
+  /** アンケートを送信する処理。確認画面から実行される。Turnstileのrefを受け取る */
+  handleConfirmSubmit: (
+    turnstileRef: React.RefObject<TurnstileInstance | undefined>
+  ) => void;
 }
 
 /**
@@ -93,9 +96,9 @@ export function useSurveyForm({
     }
   };
 
-  const onSubmit = (data: FieldValues) => {
+  const onSubmit = (data: FieldValues, turnstileToken: string | null) => {
     startTransition(async () => {
-      const result = await submitSurvey(surveyId, userId, data);
+      const result = await submitSurvey(surveyId, userId, data, turnstileToken);
       if (result.success) {
         setIsSubmitted(true);
         onSubmitted?.();
@@ -107,9 +110,21 @@ export function useSurveyForm({
     });
   };
 
-  const handleConfirmSubmit = () => {
+  const handleConfirmSubmit = (
+    turnstileRef: React.RefObject<TurnstileInstance | undefined>
+  ) => {
     const formData = getValues();
-    onSubmit(formData);
+    // Turnstileトークンをref経由で取得
+    const turnstileToken = turnstileRef.current?.getResponse() || null;
+
+    if (!turnstileToken) {
+      alert(
+        "スパム対策の検証が完了していません。しばらく待ってから再度お試しください。"
+      );
+      return;
+    }
+
+    onSubmit(formData, turnstileToken);
   };
 
   return {
