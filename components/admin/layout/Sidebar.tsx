@@ -8,9 +8,11 @@ import {
   Settings,
   HelpCircle,
   BarChart3,
+  LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { signOutAction } from "@/app/actions/auth";
 
 type SidebarProps = React.HTMLAttributes<HTMLDivElement>;
 
@@ -120,6 +122,16 @@ export function Sidebar({ className }: SidebarProps) {
                 ヘルプ
               </Link>
             </Button>
+            <form action={signOutAction} className="w-full">
+              <Button
+                variant="ghost"
+                className="w-full justify-start text-red-500 hover:text-red-700 hover:bg-red-50"
+                type="submit"
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                ログアウト
+              </Button>
+            </form>
           </div>
         </div>
       </div>
