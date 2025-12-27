@@ -20,13 +20,13 @@ export default function LoginPage() {
   );
 
   return (
-    <div className="flex h-screen items-center justify-center bg-gray-50">
+    <div className="flex min-h-screen items-center justify-center font-sans dark:bg-black p-4">
       <Card className="w-full max-w-md shadow-lg">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">
             Admin Login
           </CardTitle>
-          <p className="text-center text-sm text-gray-500">
+          <p className="text-center text-sm text-muted-foreground">
             Enter your email and password to access the dashboard
           </p>
         </CardHeader>
@@ -62,7 +62,9 @@ export default function LoginPage() {
           </form>
         </CardContent>
         <CardFooter className="justify-center">
-          <p className="text-xs text-gray-400">Restricted access only</p>
+          <p className="text-xs text-muted-foreground">
+            Restricted access only
+          </p>
         </CardFooter>
       </Card>
     </div>
