@@ -8,8 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
-import { DeleteSurveyButton } from "@/app/admin/surveys/[id]/DeleteSurveyButton";
-import { DuplicateSurveyButton } from "@/app/admin/surveys/[id]/DuplicateSurveyButton";
+import { DeleteSurveyButton } from "./DeleteSurveyButton";
+import { DuplicateSurveyButton } from "./DuplicateSurveyButton";
 import { PageHeader } from "@/components/admin/layout/PageHeader";
 
 export async function generateMetadata(props: {

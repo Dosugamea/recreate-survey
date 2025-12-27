@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/admin/layout/PageHeader";
-import { ExportCSVButton } from "@/app/admin/surveys/[id]/results/ExportCSVButton";
+import { ExportCSVButton } from "./ExportCSVButton";
 
 export const dynamic = "force-dynamic";
 
