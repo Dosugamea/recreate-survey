@@ -3,8 +3,10 @@
 import { redirect } from "next/navigation";
 import { appSchema, AppSchema } from "@/lib/schemas";
 import { prisma } from "@/lib/prisma";
+import { ensureUser } from "@/lib/auth-utils";
 
 export async function createApp(data: AppSchema) {
+  await ensureUser();
   const result = appSchema.safeParse(data);
 
   if (!result.success) {
@@ -40,6 +42,7 @@ export async function createApp(data: AppSchema) {
 }
 
 export async function updateApp(appId: string, data: AppSchema) {
+  await ensureUser();
   const result = appSchema.safeParse(data);
 
   if (!result.success) {
@@ -76,6 +79,7 @@ export async function updateApp(appId: string, data: AppSchema) {
 }
 
 export async function getApp(appId: string) {
+  await ensureUser();
   try {
     return await prisma.app.findUnique({
       where: { id: appId },
@@ -87,6 +91,7 @@ export async function getApp(appId: string) {
 }
 
 export async function getAllApps() {
+  await ensureUser();
   try {
     return await prisma.app.findMany({
       orderBy: { createdAt: "desc" },

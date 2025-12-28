@@ -3,8 +3,10 @@
 import { redirect } from "next/navigation";
 import { surveySchema, SurveySchema } from "@/lib/schemas";
 import { prisma } from "@/lib/prisma";
+import { ensureUser } from "@/lib/auth-utils";
 
 export async function createSurvey(data: SurveySchema) {
+  await ensureUser();
   const result = surveySchema.safeParse(data);
 
   if (!result.success) {
@@ -67,6 +69,7 @@ export async function createSurvey(data: SurveySchema) {
 }
 
 export async function updateSurvey(surveyId: string, data: SurveySchema) {
+  await ensureUser();
   const result = surveySchema.safeParse(data);
 
   if (!result.success) {
@@ -121,6 +124,7 @@ export async function updateSurvey(surveyId: string, data: SurveySchema) {
 }
 
 export async function deleteSurvey(surveyId: string) {
+  await ensureUser();
   try {
     await prisma.survey.delete({
       where: { id: surveyId },
@@ -149,6 +153,7 @@ function generateRandomSlug(): string {
 }
 
 export async function duplicateSurvey(surveyId: string) {
+  await ensureUser();
   try {
     // 元のアンケートと質問を取得
     const originalSurvey = await prisma.survey.findUnique({
@@ -234,6 +239,7 @@ function escapeCsvValue(value: string): string {
  * アンケート結果をCSV形式でエクスポート
  */
 export async function exportSurveyResultsAsCSV(surveyId: string) {
+  await ensureUser();
   try {
     const survey = await prisma.survey.findUnique({
       where: { id: surveyId },

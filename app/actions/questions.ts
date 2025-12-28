@@ -3,8 +3,10 @@
 import { prisma } from "@/lib/prisma";
 import { QuestionFormSchema } from "@/lib/schemas";
 import { revalidatePath } from "next/cache";
+import { ensureUser } from "@/lib/auth-utils";
 
 export async function addQuestion(surveyId: string, data: QuestionFormSchema) {
+  await ensureUser();
   try {
     // Determine the next order
     const lastQuestion = await prisma.question.findFirst({
@@ -44,6 +46,7 @@ export async function updateQuestion(
   surveyId: string,
   data: QuestionFormSchema
 ) {
+  await ensureUser();
   try {
     const optionsJson = data.options
       ? JSON.stringify(data.options.map((o) => o.value))
@@ -69,6 +72,7 @@ export async function updateQuestion(
 }
 
 export async function deleteQuestion(questionId: string, surveyId: string) {
+  await ensureUser();
   try {
     await prisma.question.delete({
       where: { id: questionId },
@@ -84,6 +88,7 @@ export async function reorderQuestions(
   items: { id: string; order: number }[],
   surveyId: string
 ) {
+  await ensureUser();
   try {
     // Use a transaction to ensure all updates happen or none
     await prisma.$transaction(

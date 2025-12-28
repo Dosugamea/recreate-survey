@@ -41,7 +41,7 @@ yarn-error.log*
 next-env.d.ts
 
 /app/generated/prisma
-dev.db
+*.db
 refs
 *storybook.log
 storybook-static

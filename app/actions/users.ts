@@ -4,14 +4,7 @@ import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { auth } from "@/auth";
-
-async function ensureAdmin() {
-  const session = await auth();
-  if (session?.user?.role !== "ADMIN") {
-    throw new Error("権限がありません。あーし、おこっちゃうよ！");
-  }
-}
+import { ensureAdmin } from "@/lib/auth-utils";
 
 const UserSchema = z.object({
   name: z.string().min(1, "名前を入力してね"),
