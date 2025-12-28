@@ -37,6 +37,7 @@ export const surveySchema = z.object({
     .optional()
     .or(z.literal("")),
   bgImage: z.url("有効なURLを入力してください").optional().or(z.literal("")),
+  webhookUrl: z.url("有効なURLを入力してください").optional().or(z.literal("")),
   isActive: z.boolean().optional(),
 });
 

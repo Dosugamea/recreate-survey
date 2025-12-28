@@ -95,7 +95,49 @@ export async function submitSurvey(
           })),
         },
       },
+      include: {
+        answers: {
+          include: {
+            question: true,
+          },
+        },
+      },
     });
+
+    // Webhook送信処理(非同期、失敗しても回答登録は成功)
+    if (survey.webhookUrl) {
+      console.log(
+        "[Webhook] webhookUrl が設定されています:",
+        survey.webhookUrl
+      );
+      // Webhook送信は非同期で実行し、エラーが発生しても無視
+      setImmediate(async () => {
+        try {
+          console.log("[Webhook] 送信処理を開始します");
+          const { sendWebhook } = await import("@/lib/webhook");
+          await sendWebhook(survey.webhookUrl!, {
+            event: "survey.response.created",
+            timestamp: new Date().toISOString(),
+            data: {
+              surveyId: survey.id,
+              surveyTitle: survey.title,
+              responseId: response.id,
+              userId: response.userId,
+              submittedAt: response.submittedAt.toISOString(),
+              answers: response.answers.map((answer) => ({
+                questionId: answer.questionId,
+                questionLabel: answer.question.label,
+                value: answer.value,
+              })),
+            },
+          });
+        } catch (error) {
+          console.error("[Webhook] 送信処理でエラーが発生しました:", error);
+        }
+      });
+    } else {
+      console.log("[Webhook] webhookUrl が設定されていません");
+    }
 
     return { success: true, responseId: response.id };
   } catch (e) {

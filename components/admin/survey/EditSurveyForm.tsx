@@ -73,6 +73,7 @@ export function EditSurveyForm({ survey }: EditSurveyFormProps) {
       themeColor: survey.themeColor,
       headerImage: survey.headerImage || "",
       bgImage: survey.bgImage || "",
+      webhookUrl: survey.webhookUrl || "",
       isActive: survey.isActive,
     },
   });
@@ -394,6 +395,24 @@ export function EditSurveyForm({ survey }: EditSurveyFormProps) {
               )}
             />
           </div>
+
+          <FormField
+            control={form.control}
+            name="webhookUrl"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Webhook URL</FormLabel>
+                <FormControl>
+                  <Input placeholder="https://example.com/webhook" {...field} />
+                </FormControl>
+                <FormDescription>
+                  回答登録時に通知を送信するWebhook
+                  URLを設定できます(オプション)
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           <Button type="submit" disabled={isPending}>
             {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

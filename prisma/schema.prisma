@@ -40,6 +40,9 @@ model Survey {
   headerImage String? // ヘッダー画像のURL (文字列のみ)
   bgImage     String? // 背景画像のURL (文字列のみ)
 
+  // Webhook設定
+  webhookUrl  String? // 回答登録時に通知を送信するWebhook URL
+
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

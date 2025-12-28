@@ -21,16 +21,46 @@ vi.mock("@/lib/turnstile", () => ({
   verifyTurnstile: vi.fn(),
 }));
 
+vi.mock("@/lib/webhook", () => ({
+  sendWebhook: vi.fn(),
+}));
+
 describe("submission actions", () => {
   const surveyId = "survey-1";
   const userId = "user-1";
 
-  // テスト用の日付ヘルパー
+  // テスト用の日付ヘルパ
   const getValidDateRange = () => {
     const now = new Date();
     const startAt = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000); // 1週間前
     const endAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000); // 1週間後
     return { startAt, endAt };
+  };
+
+  // テスト用のSurveyヘルパ
+  const createMockSurvey = (
+    overrides: Partial<Survey & { questions: Question[] }> = {}
+  ): Survey & { questions: Question[] } => {
+    const { startAt, endAt } = getValidDateRange();
+    return {
+      id: surveyId,
+      appId: "app-1",
+      slug: "test-survey",
+      title: "Test Survey",
+      description: null,
+      notes: null,
+      startAt,
+      endAt,
+      themeColor: "#6c4034",
+      headerImage: null,
+      bgImage: null,
+      webhookUrl: null,
+      isActive: true,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      questions: [],
+      ...overrides,
+    };
   };
 
   beforeEach(() => {
@@ -41,22 +71,7 @@ describe("submission actions", () => {
 
   describe("submitSurvey", () => {
     it("should submit survey successfully with valid answers", async () => {
-      const { startAt, endAt } = getValidDateRange();
-      const mockSurvey: Survey & { questions: Question[] } = {
-        id: surveyId,
-        appId: "app-1",
-        slug: "test-survey",
-        title: "Test Survey",
-        description: null,
-        notes: null,
-        startAt,
-        endAt,
-        themeColor: "#6c4034",
-        headerImage: null,
-        bgImage: null,
-        isActive: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+      const mockSurvey = createMockSurvey({
         questions: [
           {
             id: "question-1",
@@ -79,7 +94,7 @@ describe("submission actions", () => {
             options: null,
           },
         ],
-      };
+      });
 
       const rawAnswers = {
         "question-1": "Answer 1",
@@ -135,6 +150,7 @@ describe("submission actions", () => {
         themeColor: "#6c4034",
         headerImage: null,
         bgImage: null,
+        webhookUrl: null,
         isActive: true,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -203,6 +219,7 @@ describe("submission actions", () => {
         themeColor: "#6c4034",
         headerImage: null,
         bgImage: null,
+        webhookUrl: null,
         isActive: false,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -214,7 +231,7 @@ describe("submission actions", () => {
       const result = await submitSurvey(surveyId, userId, {}, null);
 
       expect(result).toEqual({
-        error: "このアンケートは現在利用できません。",
+        error: "アンケートは現在利用できません",
       });
     });
 
@@ -236,6 +253,7 @@ describe("submission actions", () => {
         themeColor: "#6c4034",
         headerImage: null,
         bgImage: null,
+        webhookUrl: null,
         isActive: true,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -247,7 +265,7 @@ describe("submission actions", () => {
       const result = await submitSurvey(surveyId, userId, {}, null);
 
       expect(result).toEqual({
-        error: "このアンケートはまだ開始されていません。",
+        error: "アンケートはまだ開始されていません",
       });
     });
 
@@ -269,6 +287,7 @@ describe("submission actions", () => {
         themeColor: "#6c4034",
         headerImage: null,
         bgImage: null,
+        webhookUrl: null,
         isActive: true,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -280,7 +299,7 @@ describe("submission actions", () => {
       const result = await submitSurvey(surveyId, userId, {}, null);
 
       expect(result).toEqual({
-        error: "このアンケートは終了しました。",
+        error: "アンケートは終了しました",
       });
     });
 
@@ -298,6 +317,7 @@ describe("submission actions", () => {
         themeColor: "#6c4034",
         headerImage: null,
         bgImage: null,
+        webhookUrl: null,
         isActive: true,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -342,6 +362,7 @@ describe("submission actions", () => {
         themeColor: "#6c4034",
         headerImage: null,
         bgImage: null,
+        webhookUrl: null,
         isActive: true,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -423,6 +444,7 @@ describe("submission actions", () => {
         themeColor: "#6c4034",
         headerImage: null,
         bgImage: null,
+        webhookUrl: null,
         isActive: true,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -466,6 +488,7 @@ describe("submission actions", () => {
         themeColor: "#6c4034",
         headerImage: null,
         bgImage: null,
+        webhookUrl: null,
         isActive: true,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -514,6 +537,7 @@ describe("submission actions", () => {
         themeColor: "#6c4034",
         headerImage: null,
         bgImage: null,
+        webhookUrl: null,
         isActive: true,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -558,6 +582,7 @@ describe("submission actions", () => {
         themeColor: "#6c4034",
         headerImage: null,
         bgImage: null,
+        webhookUrl: null,
         isActive: true,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -592,7 +617,7 @@ describe("submission actions", () => {
       const result = await submitSurvey(surveyId, userId, rawAnswers, null);
 
       expect(result).toEqual({
-        error: "このアンケートは既に回答済みです。",
+        error: "アンケートは既に回答済みです",
       });
       expect(prisma.response.findUnique).toHaveBeenCalledWith({
         where: {

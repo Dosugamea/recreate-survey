@@ -24,6 +24,7 @@ export async function createSurvey(data: SurveySchema) {
     themeColor,
     headerImage,
     bgImage,
+    webhookUrl,
   } = result.data;
 
   // 期間の整合性チェック
@@ -44,6 +45,7 @@ export async function createSurvey(data: SurveySchema) {
         themeColor,
         headerImage: headerImage || null,
         bgImage: bgImage || null,
+        webhookUrl: webhookUrl || null,
       },
     });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -87,6 +89,7 @@ export async function updateSurvey(surveyId: string, data: SurveySchema) {
     themeColor,
     headerImage,
     bgImage,
+    webhookUrl,
     isActive,
   } = result.data;
 
@@ -109,6 +112,7 @@ export async function updateSurvey(surveyId: string, data: SurveySchema) {
         themeColor,
         headerImage: headerImage || null,
         bgImage: bgImage || null,
+        webhookUrl: webhookUrl || null,
         isActive: isActive !== undefined ? isActive : undefined,
       },
     });
@@ -193,6 +197,7 @@ export async function duplicateSurvey(surveyId: string) {
           themeColor: originalSurvey.themeColor,
           headerImage: originalSurvey.headerImage,
           bgImage: originalSurvey.bgImage,
+          webhookUrl: originalSurvey.webhookUrl,
           isActive: false, // 非公開で複製
         },
       });
