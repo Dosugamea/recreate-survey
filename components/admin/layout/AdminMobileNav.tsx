@@ -12,7 +12,14 @@ import { Sidebar } from "@/components/admin/layout/Sidebar";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 
-export function AdminMobileNav() {
+interface AdminMobileNavProps {
+  user?: {
+    name?: string | null;
+    email?: string | null;
+  };
+}
+
+export function AdminMobileNav({ user }: AdminMobileNavProps) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
@@ -25,7 +32,7 @@ export function AdminMobileNav() {
       </SheetTrigger>
       <SheetContent side="left" className="p-0 w-64">
         <SheetTitle className="sr-only">ナビゲーションメニュー</SheetTitle>
-        <Sidebar className="h-full border-none" />
+        <Sidebar className="h-full border-none" user={user} />
       </SheetContent>
     </Sheet>
   );
