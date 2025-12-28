@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, Trash2, User as UserIcon } from "lucide-react";
+import { PlusCircle, Trash2, User as UserIcon, Edit } from "lucide-react";
 import Link from "next/link";
 import { deleteUser } from "@/app/actions/users";
 import { PageHeader } from "@/components/admin/layout/PageHeader";
@@ -50,23 +50,35 @@ export default async function UsersPage() {
                     </span>
                   </div>
                 </div>
-                <form
-                  action={async (formData: FormData) => {
-                    "use server";
-                    const userId = formData.get("userId") as string;
-                    await deleteUser(userId);
-                  }}
-                >
-                  <input type="hidden" name="userId" value={user.id} />
+                <div className="flex items-center space-x-1">
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="text-red-500 hover:text-red-700 hover:bg-red-50 h-8 w-8"
-                    type="submit"
+                    className="text-muted-foreground hover:text-primary h-8 w-8"
+                    asChild
                   >
-                    <Trash2 className="h-4 w-4" />
+                    <Link href={`/admin/users/${user.id}/edit`}>
+                      <Edit className="h-4 w-4" />
+                    </Link>
                   </Button>
-                </form>
+                  <form
+                    action={async (formData: FormData) => {
+                      "use server";
+                      const userId = formData.get("userId") as string;
+                      await deleteUser(userId);
+                    }}
+                  >
+                    <input type="hidden" name="userId" value={user.id} />
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-red-500 hover:text-red-700 hover:bg-red-50 h-8 w-8"
+                      type="submit"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </form>
+                </div>
               </div>
             </CardHeader>
             <CardContent>
