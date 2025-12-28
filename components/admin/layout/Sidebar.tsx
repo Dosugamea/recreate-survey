@@ -9,6 +9,7 @@ import {
   HelpCircle,
   BarChart3,
   LogOut,
+  User,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -103,6 +104,40 @@ export function Sidebar({ className }: SidebarProps) {
               <Link href="/admin/apps/create">
                 <PlusCircle className="mr-2 h-4 w-4" />
                 アプリ作成
+              </Link>
+            </Button>
+          </div>
+        </div>
+        <div className="px-3 py-2">
+          <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
+            ユーザー管理
+          </h2>
+          <div className="space-y-1">
+            <Button
+              asChild
+              variant={
+                pathname?.startsWith("/admin/users") &&
+                pathname !== "/admin/users/create"
+                  ? "secondary"
+                  : "ghost"
+              }
+              className="w-full justify-start"
+            >
+              <Link href="/admin/users">
+                <User className="mr-2 h-4 w-4" />
+                ユーザー一覧
+              </Link>
+            </Button>
+            <Button
+              asChild
+              variant={
+                pathname === "/admin/users/create" ? "secondary" : "ghost"
+              }
+              className="w-full justify-start"
+            >
+              <Link href="/admin/users/create">
+                <PlusCircle className="mr-2 h-4 w-4" />
+                ユーザー作成
               </Link>
             </Button>
           </div>
