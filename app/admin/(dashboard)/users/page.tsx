@@ -1,12 +1,16 @@
 import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, Trash2, User as UserIcon, Edit } from "lucide-react";
+import { PlusCircle, Trash2, User as UserIcon, Edit, Lock } from "lucide-react";
 import Link from "next/link";
 import { deleteUser } from "@/app/actions/users";
 import { PageHeader } from "@/components/admin/layout/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { auth } from "@/auth";
 
 export default async function UsersPage() {
+  const session = await auth();
+  const isAdmin = session?.user?.role === "ADMIN";
+
   const users = await prisma.user.findMany({
     orderBy: { createdAt: "desc" },
   });
@@ -17,12 +21,14 @@ export default async function UsersPage() {
         title="ユーザー管理"
         description="管理画面にログインできるユーザーを管理するよ！"
         action={
-          <Button asChild>
-            <Link href="/admin/users/create">
-              <PlusCircle className="mr-2 h-4 w-4" />
-              新規ユーザー追加
-            </Link>
-          </Button>
+          isAdmin ? (
+            <Button asChild>
+              <Link href="/admin/users/create">
+                <PlusCircle className="mr-2 h-4 w-4" />
+                新規ユーザー追加
+              </Link>
+            </Button>
+          ) : null
         }
       />
 
@@ -51,33 +57,44 @@ export default async function UsersPage() {
                   </div>
                 </div>
                 <div className="flex items-center space-x-1">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-muted-foreground hover:text-primary h-8 w-8"
-                    asChild
-                  >
-                    <Link href={`/admin/users/${user.id}/edit`}>
-                      <Edit className="h-4 w-4" />
-                    </Link>
-                  </Button>
-                  <form
-                    action={async (formData: FormData) => {
-                      "use server";
-                      const userId = formData.get("userId") as string;
-                      await deleteUser(userId);
-                    }}
-                  >
-                    <input type="hidden" name="userId" value={user.id} />
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="text-red-500 hover:text-red-700 hover:bg-red-50 h-8 w-8"
-                      type="submit"
+                  {isAdmin ? (
+                    <>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-muted-foreground hover:text-primary h-8 w-8"
+                        asChild
+                      >
+                        <Link href={`/admin/users/${user.id}/edit`}>
+                          <Edit className="h-4 w-4" />
+                        </Link>
+                      </Button>
+                      <form
+                        action={async (formData: FormData) => {
+                          "use server";
+                          const userId = formData.get("userId") as string;
+                          await deleteUser(userId);
+                        }}
+                      >
+                        <input type="hidden" name="userId" value={user.id} />
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-red-500 hover:text-red-700 hover:bg-red-50 h-8 w-8"
+                          type="submit"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </form>
+                    </>
+                  ) : (
+                    <div
+                      className="flex h-8 w-8 items-center justify-center text-muted-foreground/30"
+                      title="権限がないよ"
                     >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </form>
+                      <Lock className="h-4 w-4" />
+                    </div>
+                  )}
                 </div>
               </div>
             </CardHeader>

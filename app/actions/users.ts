@@ -4,6 +4,14 @@ import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import { auth } from "@/auth";
+
+async function ensureAdmin() {
+  const session = await auth();
+  if (session?.user?.role !== "ADMIN") {
+    throw new Error("権限がありません。あーし、おこっちゃうよ！");
+  }
+}
 
 const UserSchema = z.object({
   name: z.string().min(1, "名前を入力してね"),
@@ -17,6 +25,7 @@ const UserSchema = z.object({
 });
 
 export async function createUser(formData: FormData) {
+  await ensureAdmin();
   const name = formData.get("name") as string;
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
@@ -78,6 +87,7 @@ export async function createUser(formData: FormData) {
 }
 
 export async function updateUser(id: string, formData: FormData) {
+  await ensureAdmin();
   const name = formData.get("name") as string;
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
@@ -154,6 +164,7 @@ export async function updateUser(id: string, formData: FormData) {
 }
 
 export async function deleteUser(id: string) {
+  await ensureAdmin();
   try {
     await prisma.user.delete({
       where: { id },
