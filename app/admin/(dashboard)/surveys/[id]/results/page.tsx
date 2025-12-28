@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/admin/layout/PageHeader";
 import { ExportCSVButton } from "./ExportCSVButton";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export const dynamic = "force-dynamic";
 
@@ -57,7 +59,16 @@ export default async function SurveyResultsPage(props: {
         title={`アンケート結果: ${survey.title}`}
         backHref={`/admin/surveys/${params.id}`}
         description={`総回答数: ${survey._count.responses}`}
-        action={<ExportCSVButton surveyId={params.id} />}
+        action={
+          <div className="flex gap-2">
+            <Button asChild variant="outline">
+              <Link href={`/admin/surveys/${params.id}/results/responses`}>
+                個別回答一覧
+              </Link>
+            </Button>
+            <ExportCSVButton surveyId={params.id} />
+          </div>
+        }
       />
 
       <div className="space-y-8">

@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { surveySchema, SurveySchema } from "@/lib/schemas";
 import { prisma } from "@/lib/prisma";
 import { ensureUser } from "@/lib/auth-utils";
@@ -316,4 +317,18 @@ export async function exportSurveyResultsAsCSV(surveyId: string) {
     console.error(e);
     return { error: "CSVエクスポートに失敗しました。" };
   }
+}
+export async function deleteResponse(surveyId: string, responseId: string) {
+  await ensureUser();
+  try {
+    await prisma.response.delete({
+      where: { id: responseId },
+    });
+  } catch (e) {
+    console.error(e);
+    return { error: "回答の削除に失敗しました。" };
+  }
+
+  revalidatePath(`/admin/surveys/${surveyId}/results/responses`);
+  return { success: true };
 }
