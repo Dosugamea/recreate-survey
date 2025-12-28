@@ -56,6 +56,20 @@ vi.mock("next/navigation", () => ({
   redirect: vi.fn(),
 }));
 
+// Mock next/cache
+vi.mock("next/cache", () => ({
+  revalidatePath: vi.fn(),
+  revalidateTag: vi.fn(),
+}));
+
+// Mock @/auth
+vi.mock("@/auth", () => ({
+  auth: vi.fn(() => Promise.resolve(null)),
+  signIn: vi.fn(),
+  signOut: vi.fn(),
+  handlers: {},
+}));
+
 // Mock apps actions
 vi.mock("@/app/actions/apps", () => ({
   getAllApps: vi.fn(() =>
@@ -98,5 +112,24 @@ vi.mock("@/app/actions/apps", () => ({
       createdAt: new Date("2024-01-01"),
       updatedAt: new Date("2024-01-01"),
     })
+  ),
+}));
+
+// Mock questions actions
+vi.mock("@/app/actions/questions", () => ({
+  addQuestion: vi.fn(() => Promise.resolve({ success: true })),
+  updateQuestion: vi.fn(() => Promise.resolve({ success: true })),
+  deleteQuestion: vi.fn(() => Promise.resolve({ success: true })),
+  reorderQuestions: vi.fn(() => Promise.resolve({ success: true })),
+}));
+
+// Mock surveys actions
+vi.mock("@/app/actions/surveys", () => ({
+  createSurvey: vi.fn(() => Promise.resolve({ success: true })),
+  updateSurvey: vi.fn(() => Promise.resolve({ success: true })),
+  deleteSurvey: vi.fn(() => Promise.resolve({ success: true })),
+  duplicateSurvey: vi.fn(() => Promise.resolve({ success: true })),
+  exportSurveyResultsAsCSV: vi.fn(() =>
+    Promise.resolve({ success: true, csv: "" })
   ),
 }));
