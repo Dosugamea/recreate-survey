@@ -12,17 +12,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { ArrowLeft, UserPlus, Loader2 } from "lucide-react";
-import Link from "next/link";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Loader2 } from "lucide-react";
 import { createUser } from "@/app/actions/users";
+import { PageHeader } from "@/components/admin/layout/PageHeader";
 
 export default function CreateUserPage() {
   const router = useRouter();
@@ -45,24 +38,14 @@ export default function CreateUserPage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
-      <div className="flex items-center space-x-2 text-muted-foreground hover:text-foreground">
-        <ArrowLeft className="h-4 w-4" />
-        <Link href="/admin/users" className="text-sm font-medium">
-          ユーザー一覧に戻る
-        </Link>
-      </div>
+    <div className="space-y-6">
+      <PageHeader
+        title="新規ユーザー追加"
+        backHref="/admin/users"
+        description="管理画面にアクセスできる新しい仲間を追加するよ！"
+      />
 
       <Card className="border-2">
-        <CardHeader className="space-y-1">
-          <div className="flex items-center space-x-2">
-            <UserPlus className="h-6 w-6 text-primary" />
-            <CardTitle className="text-2xl">新規ユーザー追加</CardTitle>
-          </div>
-          <CardDescription>
-            管理画面にアクセスできる新しい仲間を追加するよ！
-          </CardDescription>
-        </CardHeader>
         <form action={handleSubmit}>
           <CardContent className="space-y-4">
             <div className="space-y-2">
