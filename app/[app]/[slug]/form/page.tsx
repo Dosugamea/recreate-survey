@@ -44,8 +44,32 @@ export async function generateMetadata(props: {
     return notFoundMetadata;
   }
 
+  const title = `${survey.title} | ${app.name}`;
+  const description = `「${app.name}」のキャンペーンに参加しよう！`;
   const metadata: Metadata = {
-    title: `${survey.title} | ${app.name}`,
+    title: title,
+    description: description,
+    keywords: `${app.name},アプリ,キャンペーン`,
+    formatDetection: {
+      telephone: false,
+      address: false,
+      email: false,
+      date: false,
+    },
+    openGraph: {
+      title: title,
+      description: description,
+      type: "website",
+      siteName: process.env.NEXT_PUBLIC_APP_NAME,
+      images: survey.headerImage ? [survey.headerImage] : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: title,
+      description: description,
+      site: process.env.NEXT_PUBLIC_TWITTER_ACCOUNT,
+      images: survey.headerImage ? [survey.headerImage] : undefined,
+    },
   };
 
   // ファビコンを設定
