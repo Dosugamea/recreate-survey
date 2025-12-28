@@ -65,7 +65,9 @@ export default async function SurveyResultsPage(props: {
           <div key={q.id} className="border p-4 rounded-lg bg-card">
             <h3 className="font-semibold mb-4">{q.label}</h3>
             <div className="space-y-2">
-              {q.type === "TEXT" || q.type === "EMAIL" ? (
+              {q.type === "TEXT" ||
+              q.type === "TEXTAREA" ||
+              q.type === "EMAIL" ? (
                 <div className="max-h-40 overflow-y-auto space-y-2 bg-muted/50 p-2 rounded">
                   {q.answers.map((a) => (
                     <div
