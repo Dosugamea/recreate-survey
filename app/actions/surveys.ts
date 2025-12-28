@@ -64,7 +64,7 @@ export async function createSurvey(data: SurveySchema) {
 
   const createdSurvey = await prisma.survey.findUnique({ where: { slug } });
   if (createdSurvey) {
-    redirect(`/admin/surveys/${createdSurvey.id}/details`);
+    redirect(`/admin/surveys/${createdSurvey.id}`);
   } else {
     redirect(`/admin/surveys`); // Fallback
   }
