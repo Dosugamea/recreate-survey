@@ -6,22 +6,23 @@ export const authConfig = {
   },
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
+      const { pathname } = nextUrl;
       const isLoggedIn = !!auth?.user;
-      const isOnAdmin = nextUrl.pathname.startsWith("/admin");
-      const isOnLogin = nextUrl.pathname.startsWith("/admin/login");
 
-      if (isOnAdmin) {
-        if (isOnLogin) {
-          if (isLoggedIn) {
-            return Response.redirect(new URL("/admin", nextUrl));
-          }
-          return true;
-        }
-
-        if (!isLoggedIn) return false;
-
-        return true;
+      // 1. ログイン済みでログインページに飛ぼうとしたら、管理画面トップに飛ばしてあげる！
+      const isOnLogin = pathname.startsWith("/admin/login");
+      if (isOnLogin && isLoggedIn) {
+        return Response.redirect(new URL("/admin", nextUrl));
       }
+
+      // 2. 管理画面配下（ログインページ以外）でログインしてないなら、アクセス拒否！
+      // (NextAuthが自動でログインページにリダイレクトしてくれるよ)
+      const isOnAdmin = pathname.startsWith("/admin");
+      if (isOnAdmin && !isOnLogin && !isLoggedIn) {
+        return false;
+      }
+
+      // それ以外（公開ページとか、ログイン済み管理画面とか）はOK！
       return true;
     },
     jwt({ token, user }) {
