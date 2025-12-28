@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 import { surveySchema, SurveySchema } from "@/lib/schemas";
 import { prisma } from "@/lib/prisma";
 import { ensureUser } from "@/lib/auth-utils";
@@ -321,14 +322,34 @@ export async function exportSurveyResultsAsCSV(surveyId: string) {
 export async function deleteResponse(surveyId: string, responseId: string) {
   await ensureUser();
   try {
-    await prisma.response.delete({
+    const deletedResponse = await prisma.response.delete({
       where: { id: responseId },
+      include: {
+        survey: {
+          include: {
+            app: true,
+          },
+        },
+      },
     });
+
+    // 管理画面のリバリデーション
+    revalidatePath(`/admin/surveys/${surveyId}/results/responses`);
+
+    // フォーム画面のリバリデーション
+    if (deletedResponse.survey?.app) {
+      const appSlug = deletedResponse.survey.app.slug;
+      const surveySlug = deletedResponse.survey.slug;
+      revalidatePath(`/${appSlug}/${surveySlug}/form`);
+    }
+
+    // 回答済みクッキーを削除（テスト回答を削除した場合などに即座に反映されるように）
+    const cookieStore = await cookies();
+    cookieStore.delete(`survey_${surveyId}_${deletedResponse.userId}`);
+
+    return { success: true };
   } catch (e) {
     console.error(e);
     return { error: "回答の削除に失敗しました。" };
   }
-
-  revalidatePath(`/admin/surveys/${surveyId}/results/responses`);
-  return { success: true };
 }
