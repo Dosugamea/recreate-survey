@@ -6,7 +6,7 @@ export default async function CreateUserPage() {
   const session = await auth();
 
   if (session?.user?.role !== "ADMIN") {
-    redirect("/admin");
+    redirect("/admin/users");
   }
 
   return <CreateUserForm />;

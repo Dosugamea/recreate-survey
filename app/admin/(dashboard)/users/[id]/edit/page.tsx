@@ -10,7 +10,7 @@ interface PageProps {
 export default async function EditUserPage({ params }: PageProps) {
   const session = await auth();
   if (session?.user?.role !== "ADMIN") {
-    redirect("/admin");
+    redirect("/admin/users");
   }
 
   const { id } = await params;
