@@ -30,7 +30,7 @@ export function SurveyFooter({
     >
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         {/* 左側: リンク */}
-        <div className="flex flex-wrap gap-4 text-sm">
+        <div className="flex flex-wrap gap-4 text-sm md:text-right mx-auto md:mx-0">
           {links.map((link, index) => (
             <a
               key={index}
@@ -44,7 +44,7 @@ export function SurveyFooter({
         </div>
 
         {/* 右側: 著作権情報とpowered by */}
-        <div className="flex flex-col items-end gap-1 text-sm">
+        <div className="flex flex-col items-center md:items-end mx-auto md:mx-0 gap-1 text-sm">
           {displayCopyright && (
             <p style={{ color: themeColor }}>{displayCopyright}</p>
           )}

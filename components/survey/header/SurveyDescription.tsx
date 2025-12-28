@@ -26,10 +26,12 @@ export function SurveyDescription({
         className="flex flex-col sm:flex-row text-white text-sm sm:text-base font-bold"
         style={{ backgroundColor: accentBg }}
       >
-        <span className="flex-1 py-5 px-6 text-2xl">キャンペーン情報</span>
+        <span className="flex-1 py-5 px-6 text-2xl text-center md:text-left">
+          キャンペーン情報
+        </span>
         {periodMessage && (
           <span
-            className="flex-1 text-center text-sm rounded my-auto py-3 h-full mx-6"
+            className="flex-1 text-center text-sm rounded my-auto py-3 h-full mx-6 mb-3"
             style={{ backgroundColor: lightAccentBg }}
           >
             {periodMessage}

@@ -10,7 +10,9 @@ export function SurveyIntroduction({ themeColor }: { themeColor: string }) {
         className="flex flex-col sm:flex-row text-white text-sm sm:text-base font-bold"
         style={{ backgroundColor: accentBg }}
       >
-        <span className="flex-1 py-5 px-6 text-2xl">アンケート回答</span>
+        <span className="flex-1 py-5 px-6 text-2xl text-center md:text-left">
+          アンケート回答
+        </span>
       </h3>
     </>
   );

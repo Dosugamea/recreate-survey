@@ -19,7 +19,9 @@ export function SurveyNotes({ survey }: SurveyNotesProps) {
         className="flex flex-col sm:flex-row text-white text-sm sm:text-base font-bold"
         style={{ backgroundColor: accentBg }}
       >
-        <span className="flex-1 py-5 px-6 text-2xl">注意事項</span>
+        <span className="flex-1 py-5 px-6 text-2xl text-center md:text-left">
+          注意事項
+        </span>
       </h3>
       <div className="p-5 text-sm leading-relaxed whitespace-pre-wrap">
         {notes}
