@@ -54,7 +54,7 @@ model Question {
   surveyId String
   survey   Survey @relation(fields: [surveyId], references: [id], onDelete: Cascade)
 
-  type      String // RADIO, SELECT, TEXT, CHECKBOX, EMAIL (バリデーション用)
+  type      String // RADIO, SELECT, TEXT, TEXTAREA, CHECKBOX, EMAIL (バリデーション用)
   label     String // 質問文
   order     Int // 並び順
   required  Boolean @default(false) // 必須項目かどうか

@@ -93,7 +93,8 @@ export function QuestionForm({
   const type = useWatch({ control: form.control, name: "type" });
   const showOptions =
     type === "RADIO" || type === "SELECT" || type === "CHECKBOX";
-  const showMaxLength = type === "TEXT" || type === "EMAIL";
+  const showMaxLength =
+    type === "TEXT" || type === "EMAIL" || type === "TEXTAREA";
 
   function onSubmit(data: QuestionFormSchema) {
     startTransition(async () => {
@@ -123,6 +124,7 @@ export function QuestionForm({
                 </FormControl>
                 <SelectContent>
                   <SelectItem value="TEXT">短文回答 (Text)</SelectItem>
+                  <SelectItem value="TEXTAREA">長文回答 (Textbox)</SelectItem>
                   <SelectItem value="EMAIL">メールアドレス (Email)</SelectItem>
                   <SelectItem value="RADIO">単一選択 (Radio)</SelectItem>
                   <SelectItem value="CHECKBOX">複数選択 (Checkbox)</SelectItem>

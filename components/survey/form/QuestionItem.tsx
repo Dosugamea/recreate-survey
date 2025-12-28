@@ -3,6 +3,7 @@ import { UseFormRegister, FieldValues } from "react-hook-form";
 import { cn, hexToRgba } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 interface QuestionItemProps {
   question: Question;
@@ -43,6 +44,14 @@ export function QuestionItem({
             {...register(question.id, { required: question.required })}
             placeholder="回答を入力してください"
             className={cn(error && "border-red-500")}
+          />
+        )}
+        {question.type === "TEXTAREA" && (
+          <Textarea
+            {...register(question.id, { required: question.required })}
+            placeholder="回答を入力してください"
+            className={cn(error && "border-red-500")}
+            rows={5}
           />
         )}
         {question.type === "EMAIL" && (

@@ -45,6 +45,18 @@ export const TextQuestion: Story = {
   },
 };
 
+export const TextareaQuestion: Story = {
+  args: {
+    question: {
+      ...baseQuestion,
+      type: "TEXTAREA",
+      label: "ご意見・ご要望があれば入力してください",
+    },
+    register: mockRegister,
+    themeColor: "#6c4034",
+  },
+};
+
 export const EmailQuestion: Story = {
   args: {
     question: {

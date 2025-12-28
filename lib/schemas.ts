@@ -43,7 +43,7 @@ export const surveySchema = z.object({
 export type SurveySchema = z.infer<typeof surveySchema>;
 
 export const questionFormSchema = z.object({
-  type: z.enum(["RADIO", "SELECT", "TEXT", "CHECKBOX", "EMAIL"]),
+  type: z.enum(["RADIO", "SELECT", "TEXT", "CHECKBOX", "EMAIL", "TEXTAREA"]),
   label: z.string().min(1, "質問文は必須です"),
   required: z.boolean(),
   maxLength: z.string().optional(), // Input type="number" gives string
