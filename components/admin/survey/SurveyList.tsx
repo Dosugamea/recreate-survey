@@ -44,6 +44,7 @@ interface SurveyListProps {
   headerTitle?: string;
   headerDescription?: string;
   showCreateButton?: boolean;
+  showDetailButton?: boolean;
 }
 
 export function SurveyList({
@@ -54,6 +55,7 @@ export function SurveyList({
   headerTitle = "アンケート一覧",
   headerDescription = "作成したアンケートの一覧を表示しています。詳細の確認や編集ができます。",
   showCreateButton = true,
+  showDetailButton = true,
 }: SurveyListProps) {
   return (
     <div className="space-y-6">
@@ -126,19 +128,30 @@ export function SurveyList({
                 </div>
               </CardContent>
               <CardFooter className="flex justify-end flex-wrap gap-2">
-                <Button variant="outline" size="sm" asChild>
-                  <Link href={`/admin/surveys/${survey.id}`}>
-                    <Eye className="mr-2 h-4 w-4" /> 詳細
-                  </Link>
-                </Button>
+                {showDetailButton && (
+                  <Button variant="outline" size="sm" asChild>
+                    <Link href={`/admin/surveys/${survey.id}`}>
+                      <Eye className="mr-2 h-4 w-4" /> 詳細
+                    </Link>
+                  </Button>
+                )}
                 {showResponseCount &&
                   survey._count &&
                   survey._count.responses > 0 && (
-                    <Button variant="default" size="sm" asChild>
-                      <Link href={`/admin/surveys/${survey.id}/results`}>
-                        結果を見る
-                      </Link>
-                    </Button>
+                    <>
+                      <Button variant="default" size="sm" asChild>
+                        <Link href={`/admin/surveys/${survey.id}/results`}>
+                          一覧で見る
+                        </Link>
+                      </Button>
+                      <Button variant="outline" size="sm" asChild>
+                        <Link
+                          href={`/admin/surveys/${survey.id}/results/responses`}
+                        >
+                          個別で見る
+                        </Link>
+                      </Button>
+                    </>
                   )}
               </CardFooter>
             </Card>

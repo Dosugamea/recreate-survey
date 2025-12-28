@@ -58,6 +58,7 @@ export default async function AdminSurveysResultsListPage({
       headerTitle="アンケート結果一覧"
       headerDescription="回答があるアンケートの一覧を表示しています。各アンケートの結果を確認できます。"
       showCreateButton={false}
+      showDetailButton={false}
     />
   );
 }
