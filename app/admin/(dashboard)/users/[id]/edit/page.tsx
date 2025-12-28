@@ -1,15 +1,15 @@
 import { prisma } from "@/lib/prisma";
 import { notFound, redirect } from "next/navigation";
 import EditUserForm from "./EditUserForm";
-import { auth } from "@/auth";
+import { getCurrentUser } from "@/lib/auth-utils";
 
 interface PageProps {
   params: Promise<{ id: string }>;
 }
 
 export default async function EditUserPage({ params }: PageProps) {
-  const session = await auth();
-  if (session?.user?.role !== "ADMIN") {
+  const { isAdmin } = await getCurrentUser();
+  if (!isAdmin) {
     redirect("/admin/users");
   }
 

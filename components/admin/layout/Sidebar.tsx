@@ -16,15 +16,13 @@ import { Button } from "@/components/ui/button";
 import { signOutAction } from "@/app/actions/auth";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
-  user?: {
-    name?: string | null;
-    email?: string | null;
-  };
+  userName: string;
+  isAdmin: boolean;
 }
 
 const appName = process.env.NEXT_PUBLIC_APP_NAME;
 
-export function Sidebar({ className, user }: SidebarProps) {
+export function Sidebar({ className, userName, isAdmin }: SidebarProps) {
   const pathname = usePathname();
 
   return (
@@ -125,12 +123,7 @@ export function Sidebar({ className, user }: SidebarProps) {
           <div className="space-y-1">
             <Button
               asChild
-              variant={
-                pathname?.startsWith("/admin/users") &&
-                pathname !== "/admin/users/create"
-                  ? "secondary"
-                  : "ghost"
-              }
+              variant={pathname === "/admin/users" ? "secondary" : "ghost"}
               className="w-full justify-start"
             >
               <Link href="/admin/users">
@@ -138,18 +131,20 @@ export function Sidebar({ className, user }: SidebarProps) {
                 ユーザー一覧
               </Link>
             </Button>
-            <Button
-              asChild
-              variant={
-                pathname === "/admin/users/create" ? "secondary" : "ghost"
-              }
-              className="w-full justify-start"
-            >
-              <Link href="/admin/users/create">
-                <PlusCircle className="mr-2 h-4 w-4" />
-                ユーザー作成
-              </Link>
-            </Button>
+            {isAdmin && (
+              <Button
+                asChild
+                variant={
+                  pathname === "/admin/users/create" ? "secondary" : "ghost"
+                }
+                className="w-full justify-start"
+              >
+                <Link href="/admin/users/create">
+                  <PlusCircle className="mr-2 h-4 w-4" />
+                  ユーザー作成
+                </Link>
+              </Button>
+            )}
           </div>
         </div>
         <div className="px-3">
@@ -172,15 +167,12 @@ export function Sidebar({ className, user }: SidebarProps) {
       </div>
       <div className="absolute bottom-0 left-0 right-0 border-t bg-surface p-2 shrink-0 z-10">
         <div className="flex items-center gap-2 px-2">
-          <div
-            className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0"
-            title={user?.email || ""}
-          >
+          <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
             <User className="h-4 w-4" />
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium truncate">
-              {user?.name || "管理者"}
+              {userName || "管理者"}
             </p>
           </div>
           <form action={signOutAction} className="shrink-0">

@@ -5,11 +5,10 @@ import Link from "next/link";
 import { deleteUser } from "@/app/actions/users";
 import { PageHeader } from "@/components/admin/layout/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { auth } from "@/auth";
+import { getCurrentUser } from "@/lib/auth-utils";
 
 export default async function UsersPage() {
-  const session = await auth();
-  const isAdmin = session?.user?.role === "ADMIN";
+  const { isAdmin } = await getCurrentUser();
 
   const users = await prisma.user.findMany({
     orderBy: { createdAt: "desc" },

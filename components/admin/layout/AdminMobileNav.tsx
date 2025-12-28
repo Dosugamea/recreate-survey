@@ -13,13 +13,11 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 
 interface AdminMobileNavProps {
-  user?: {
-    name?: string | null;
-    email?: string | null;
-  };
+  userName: string;
+  isAdmin: boolean;
 }
 
-export function AdminMobileNav({ user }: AdminMobileNavProps) {
+export function AdminMobileNav({ userName, isAdmin }: AdminMobileNavProps) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
@@ -32,7 +30,11 @@ export function AdminMobileNav({ user }: AdminMobileNavProps) {
       </SheetTrigger>
       <SheetContent side="left" className="p-0 w-64">
         <SheetTitle className="sr-only">ナビゲーションメニュー</SheetTitle>
-        <Sidebar className="h-full border-none" user={user} />
+        <Sidebar
+          className="h-full border-none"
+          userName={userName}
+          isAdmin={isAdmin}
+        />
       </SheetContent>
     </Sheet>
   );
