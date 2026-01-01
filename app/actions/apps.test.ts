@@ -20,6 +20,12 @@ vi.mock("next/navigation", () => ({
   redirect: vi.fn(),
 }));
 
+vi.mock("@/lib/auth-utils", () => ({
+  ensureUser: vi.fn(),
+  ensureAdmin: vi.fn(),
+  getCurrentUser: vi.fn(),
+}));
+
 describe("apps actions", () => {
   beforeEach(() => {
     vi.clearAllMocks();

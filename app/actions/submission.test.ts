@@ -3,6 +3,7 @@ import { submitSurvey } from "@/app/actions/submission";
 import { prisma } from "@/lib/prisma";
 import type { Survey, Question, Response } from "@prisma/client";
 import { verifyTurnstile } from "@/lib/turnstile";
+import { sendWebhook } from "@/lib/webhook";
 
 // Mock dependencies
 vi.mock("@/lib/prisma", () => ({
@@ -23,6 +24,12 @@ vi.mock("@/lib/turnstile", () => ({
 
 vi.mock("@/lib/webhook", () => ({
   sendWebhook: vi.fn(),
+}));
+
+vi.mock("@/lib/auth-utils", () => ({
+  ensureUser: vi.fn(),
+  ensureAdmin: vi.fn(),
+  getCurrentUser: vi.fn(),
 }));
 
 describe("submission actions", () => {
@@ -129,6 +136,13 @@ describe("submission actions", () => {
             ],
           },
         },
+        include: {
+          answers: {
+            include: {
+              question: true,
+            },
+          },
+        },
       });
       expect(result).toEqual({
         success: true,
@@ -193,6 +207,13 @@ describe("submission actions", () => {
             create: [{ questionId: "question-1", value: "Option A,Option B" }],
           },
         },
+        include: {
+          answers: {
+            include: {
+              question: true,
+            },
+          },
+        },
       });
     });
 
@@ -231,7 +252,7 @@ describe("submission actions", () => {
       const result = await submitSurvey(surveyId, userId, {}, null);
 
       expect(result).toEqual({
-        error: "アンケートは現在利用できません",
+        error: "このアンケートは現在利用できません。",
       });
     });
 
@@ -265,7 +286,7 @@ describe("submission actions", () => {
       const result = await submitSurvey(surveyId, userId, {}, null);
 
       expect(result).toEqual({
-        error: "アンケートはまだ開始されていません",
+        error: "このアンケートはまだ開始されていません。",
       });
     });
 
@@ -299,7 +320,7 @@ describe("submission actions", () => {
       const result = await submitSurvey(surveyId, userId, {}, null);
 
       expect(result).toEqual({
-        error: "アンケートは終了しました",
+        error: "このアンケートは終了しました。",
       });
     });
 
@@ -346,6 +367,35 @@ describe("submission actions", () => {
       expect(result).toEqual({
         error: "Invalid question IDs: invalid-question-id",
       });
+    });
+
+    it("should return error when required question is missing", async () => {
+      const mockSurvey = createMockSurvey({
+        questions: [
+          {
+            id: "question-1",
+            surveyId,
+            type: "TEXT",
+            label: "Required Q1",
+            order: 1,
+            required: true, // 必須
+            maxLength: null,
+            options: null,
+          },
+        ],
+      });
+
+      // 空文字を送信
+      const rawAnswers = {
+        "question-1": "",
+      };
+
+      vi.mocked(prisma.survey.findUnique).mockResolvedValue(mockSurvey);
+
+      const result = await submitSurvey(surveyId, userId, rawAnswers, null);
+
+      expect(result).toEqual({ error: "未入力の必須項目があります。" });
+      expect(prisma.response.create).not.toHaveBeenCalled();
     });
 
     it("should filter out empty answers", async () => {
@@ -425,6 +475,13 @@ describe("submission actions", () => {
           userId,
           answers: {
             create: [{ questionId: "question-1", value: "Valid answer" }],
+          },
+        },
+        include: {
+          answers: {
+            include: {
+              question: true,
+            },
           },
         },
       });
@@ -617,7 +674,7 @@ describe("submission actions", () => {
       const result = await submitSurvey(surveyId, userId, rawAnswers, null);
 
       expect(result).toEqual({
-        error: "アンケートは既に回答済みです",
+        error: "このアンケートは既に回答済みです。",
       });
       expect(prisma.response.findUnique).toHaveBeenCalledWith({
         where: {
@@ -628,6 +685,62 @@ describe("submission actions", () => {
         },
       });
       expect(prisma.response.create).not.toHaveBeenCalled();
+    });
+
+    it("should call sendWebhook when webhookUrl is configured", async () => {
+      const mockSurvey = createMockSurvey({
+        webhookUrl: "https://example.com/webhook",
+        questions: [
+          {
+            id: "question-1",
+            surveyId,
+            type: "TEXT",
+            label: "Q1",
+            order: 1,
+            required: false,
+            maxLength: null,
+            options: null,
+          },
+        ],
+      });
+
+      const rawAnswers = {
+        "question-1": "Answer 1",
+      };
+
+      const mockResponse = {
+        id: "response-1",
+        surveyId,
+        userId,
+        submittedAt: new Date(),
+        answers: [
+          {
+            questionId: "question-1",
+            value: "Answer 1",
+            question: { label: "Q1" },
+          },
+        ],
+      };
+
+      vi.mocked(prisma.survey.findUnique).mockResolvedValue(mockSurvey);
+      vi.mocked(prisma.response.findUnique).mockResolvedValue(null);
+      vi.mocked(prisma.response.create).mockResolvedValue(mockResponse as any);
+
+      await submitSurvey(surveyId, userId, rawAnswers, null);
+
+      // WebhookはsetImmediateで実行されるため、少し待機する
+      await new Promise((resolve) => setImmediate(resolve));
+
+      expect(sendWebhook).toHaveBeenCalledWith(
+        "https://example.com/webhook",
+        expect.objectContaining({
+          event: "survey.response.created",
+          data: expect.objectContaining({
+            surveyId: surveyId,
+            responseId: "response-1",
+          }),
+        })
+      );
     });
   });
 });

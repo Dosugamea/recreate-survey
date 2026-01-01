@@ -25,6 +25,12 @@ vi.mock("next/cache", () => ({
   revalidatePath: vi.fn(),
 }));
 
+vi.mock("@/lib/auth-utils", () => ({
+  ensureUser: vi.fn(),
+  ensureAdmin: vi.fn(),
+  getCurrentUser: vi.fn(),
+}));
+
 describe("questions actions", () => {
   const surveyId = "survey-1";
 

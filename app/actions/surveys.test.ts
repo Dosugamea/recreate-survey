@@ -30,6 +30,12 @@ vi.mock("next/navigation", () => ({
   redirect: vi.fn(),
 }));
 
+vi.mock("@/lib/auth-utils", () => ({
+  ensureUser: vi.fn(),
+  ensureAdmin: vi.fn(),
+  getCurrentUser: vi.fn(),
+}));
+
 describe("surveys actions", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -54,6 +60,7 @@ describe("surveys actions", () => {
         themeColor: "#ffffff",
         headerImage: "https://example.com/header.jpg",
         bgImage: "https://example.com/bg.jpg",
+        webhookUrl: "https://example.com/webhook",
       };
 
       const createdSurvey: Survey = {
@@ -81,9 +88,10 @@ describe("surveys actions", () => {
           themeColor: validData.themeColor,
           headerImage: validData.headerImage,
           bgImage: validData.bgImage,
+          webhookUrl: validData.webhookUrl,
         },
       });
-      expect(redirect).toHaveBeenCalledWith("/admin/surveys/survey-1/details");
+      expect(redirect).toHaveBeenCalledWith("/admin/surveys/survey-1");
     });
 
     it("should create survey with null optional fields", async () => {
@@ -100,6 +108,7 @@ describe("surveys actions", () => {
         themeColor: "#000000",
         headerImage: "",
         bgImage: "",
+        webhookUrl: "",
       };
 
       const createdSurvey: Survey = {
@@ -131,6 +140,7 @@ describe("surveys actions", () => {
           themeColor: validData.themeColor,
           headerImage: null,
           bgImage: null,
+          webhookUrl: null,
         },
       });
     });
@@ -252,6 +262,7 @@ describe("surveys actions", () => {
         headerImage: "https://example.com/new-header.jpg",
         bgImage: "https://example.com/new-bg.jpg",
         isActive: true,
+        webhookUrl: "",
       };
 
       const updatedSurvey: Survey = {
@@ -277,6 +288,7 @@ describe("surveys actions", () => {
           themeColor: validData.themeColor,
           headerImage: validData.headerImage,
           bgImage: validData.bgImage,
+          webhookUrl: null,
           isActive: validData.isActive,
         },
       });
@@ -386,6 +398,7 @@ describe("surveys actions", () => {
         themeColor: "#ffffff",
         headerImage: "https://example.com/header.jpg",
         bgImage: "https://example.com/bg.jpg",
+        webhookUrl: "https://example.com/webhook",
         isActive: true,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -425,6 +438,7 @@ describe("surveys actions", () => {
         themeColor: "#ffffff",
         headerImage: "https://example.com/header.jpg",
         bgImage: "https://example.com/bg.jpg",
+        webhookUrl: "https://example.com/webhook",
         isActive: false,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -495,6 +509,7 @@ describe("surveys actions", () => {
         themeColor: "#ffffff",
         headerImage: null,
         bgImage: null,
+        webhookUrl: null,
         isActive: true,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -528,6 +543,7 @@ describe("surveys actions", () => {
         themeColor: "#ffffff",
         headerImage: null,
         bgImage: null,
+        webhookUrl: null,
         isActive: false,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -574,6 +590,7 @@ describe("surveys actions", () => {
         themeColor: "#ffffff",
         headerImage: null,
         bgImage: null,
+        webhookUrl: null,
         isActive: true,
         createdAt: new Date(),
         updatedAt: new Date(),
