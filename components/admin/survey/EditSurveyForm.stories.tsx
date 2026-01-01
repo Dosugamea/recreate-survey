@@ -28,6 +28,7 @@ const mockSurvey = {
   isActive: true,
   createdAt: new Date("2024-01-01"),
   updatedAt: new Date("2024-01-01"),
+  webhookUrl: "https://example.com/webhook",
 };
 
 export const Default: Story = {

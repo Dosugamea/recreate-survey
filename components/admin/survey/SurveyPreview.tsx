@@ -28,6 +28,7 @@ export function SurveyPreview({ formData }: SurveyPreviewProps) {
     isActive: formData.isActive ?? true,
     createdAt: new Date(),
     updatedAt: new Date(),
+    webhookUrl: formData.webhookUrl || null,
   };
 
   const { themeColor, bgImage } = previewSurvey;

@@ -38,6 +38,7 @@ const baseSurvey = {
   createdAt: new Date(),
   updatedAt: new Date(),
   appId: "app-1",
+  webhookUrl: null,
 };
 
 const baseQuestions = [
