@@ -19,8 +19,8 @@ const config: StorybookConfig = {
     // Replace lib/prisma.ts and adapter with mocks for browser environment
     // This prevents better-sqlite3 from being loaded in the browser
     config.resolve = config.resolve || {};
-    config.resolve.alias = {
-      ...config.resolve.alias,
+
+    const myAliases = {
       "@/lib/prisma": path.resolve(__dirname, "./mocks/prisma.ts"),
       "@prisma/adapter-better-sqlite3": path.resolve(
         __dirname,
@@ -31,7 +31,29 @@ const config: StorybookConfig = {
       "next/navigation": path.resolve(__dirname, "./mocks/next-navigation.ts"),
       "next/cache": path.resolve(__dirname, "./mocks/next-cache.ts"),
       "@/auth": path.resolve(__dirname, "./mocks/auth.ts"),
+      // Add mocks for libraries that cause issues in browser
+      bcryptjs: path.resolve(__dirname, "./mocks/bcryptjs.ts"),
+      "next-auth": path.resolve(__dirname, "./mocks/next-auth.ts"),
+      "next-auth/providers/credentials": path.resolve(
+        __dirname,
+        "./mocks/next-auth-providers-credentials.ts"
+      ),
     };
+
+    if (Array.isArray(config.resolve.alias)) {
+      config.resolve.alias = [
+        ...config.resolve.alias,
+        ...Object.entries(myAliases).map(([find, replacement]) => ({
+          find,
+          replacement,
+        })),
+      ];
+    } else {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        ...myAliases,
+      };
+    }
 
     // Exclude better-sqlite3 and Prisma from optimization to prevent bundling
     config.optimizeDeps = config.optimizeDeps || {};
