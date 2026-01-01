@@ -29,20 +29,29 @@ export default function HelpPage() {
         <CardHeader>
           <CardTitle>アプリの概要</CardTitle>
           <CardDescription>
-            このアプリケーションは、カスタマイズ可能なアンケートシステムです。
+            本アプリケーションは、用途に合わせたアンケートを簡単に作成・公開できるシステムです。
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
-            <h3 className="font-semibold mb-2">主な機能</h3>
+            <h3 className="font-semibold mb-2">主な特徴</h3>
             <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
-              <li>管理画面からアンケートの作成・編集・削除</li>
               <li>
-                複数の質問タイプに対応（テキスト、メール、ラジオ、チェックボックス、プルダウン）
+                <strong>アプリ管理</strong>:
+                複数のアンケートを「アプリ」という単位でグループ化し、一括管理できます。
               </li>
-              <li>アンケート結果の集計と確認</li>
-              <li>テーマカラーや画像によるカスタマイズ</li>
-              <li>アプリ単位での管理（複数アプリの運用が可能）</li>
+              <li>
+                <strong>柔軟なデザイン設定</strong>:
+                テーマカラーやヘッダー画像を設定し、ブランドに合わせたアンケートページを作成可能です。
+              </li>
+              <li>
+                <strong>外部連携（Webhook）</strong>:
+                回答があった際に、DiscordやSlackなどの外部ツールへ即座に通知を送信できます。
+              </li>
+              <li>
+                <strong>回答の自動集計</strong>:
+                収集した回答はリアルタイムでグラフ化され、管理画面からすぐに確認・分析が可能です。
+              </li>
             </ul>
           </div>
         </CardContent>
@@ -50,250 +59,100 @@ export default function HelpPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>環境変数の設定</CardTitle>
+          <CardTitle>ご利用の流れ</CardTitle>
           <CardDescription>
-            アプリを動作させるために必要な環境変数を設定します。
+            アンケートを作成して公開するまでの基本的な手順をご案内します。
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-6">
           <div>
-            <h3 className="font-semibold mb-2">.env.local ファイルの作成</h3>
+            <h3 className="font-semibold mb-2 text-primary">
+              1. アプリを作成する
+            </h3>
             <p className="text-sm text-muted-foreground mb-2">
-              プロジェクトのルートディレクトリに{" "}
-              <code className="bg-muted px-1 py-0.5 rounded">.env.local</code>{" "}
-              ファイルを作成し、以下の環境変数を設定してください。
+              「アプリ管理」メニューから新しいアプリを作成します。アプリごとにプライバシーポリシーやお問い合わせ先のURLを設定することが可能です。
             </p>
-            <div className="bg-muted p-4 rounded-lg font-mono text-sm">
-              <div className="space-y-2">
-                <div>
-                  <span className="text-muted-foreground">
-                    # アプリ名（管理画面やフッターに表示されます）
-                  </span>
-                  <br />
-                  <span className="text-foreground">
-                    NEXT_PUBLIC_APP_NAME=アンケートアプリ
-                  </span>
-                </div>
-                <div className="mt-4">
-                  <span className="text-muted-foreground">
-                    # データベースURL（SQLiteの場合）
-                  </span>
-                  <br />
-                  <span className="text-foreground">
-                    DATABASE_URL=&quot;file:./dev.db&quot;
-                  </span>
-                </div>
-              </div>
-            </div>
           </div>
           <div>
-            <h3 className="font-semibold mb-2">環境変数の説明</h3>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li>
-                <strong className="text-foreground">
-                  NEXT_PUBLIC_APP_NAME
-                </strong>
-                :
-                アプリケーション全体で使用されるアプリ名。未設定の場合は「アンケートアプリ」がデフォルト値として使用されます。
-              </li>
-              <li>
-                <strong className="text-foreground">DATABASE_URL</strong>:
-                Prismaが使用するデータベース接続URL。SQLiteを使用する場合は{" "}
-                <code className="bg-muted px-1 py-0.5 rounded">
-                  file:./dev.db
-                </code>{" "}
-                を指定します。
-              </li>
-            </ul>
+            <h3 className="font-semibold mb-2 text-primary">
+              2. アンケートを作成する
+            </h3>
+            <p className="text-sm text-muted-foreground mb-2">
+              作成したアプリ内で、個別のアンケートを作成します。「スラッグ」は公開時のURLの一部として使用されます。
+            </p>
+          </div>
+          <div>
+            <h3 className="font-semibold mb-2 text-primary">3. 質問の追加</h3>
+            <p className="text-sm text-muted-foreground mb-2">
+              「質問」タブから、ラジオボタン、チェックボックス、テキストなどの形式で質問を作成します。必須入力や文字数制限などのバリデーションも設定可能です。
+            </p>
+          </div>
+          <div>
+            <h3 className="font-semibold mb-2 text-primary">
+              4. デザインのカスタマイズ
+            </h3>
+            <p className="text-sm text-muted-foreground mb-2">
+              「デザイン」設定から、テーマカラーやヘッダー画像などを設定し、アンケートページの見た目を調整します。
+            </p>
           </div>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>データベースのセットアップ</CardTitle>
-          <CardDescription>SQLiteデータベースを初期化します。</CardDescription>
+          <CardTitle>公開と配布方法</CardTitle>
+          <CardDescription>
+            作成したアンケートを対象者に共有する方法について説明します。
+          </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div>
-            <h3 className="font-semibold mb-2">マイグレーションの実行</h3>
-            <p className="text-sm text-muted-foreground mb-2">
-              以下のコマンドを実行してデータベースを初期化します。
-            </p>
-            <div className="bg-muted p-4 rounded-lg font-mono text-sm">
-              <code>npx prisma migrate dev --name init</code>
-            </div>
-            <p className="text-sm text-muted-foreground mt-2">
-              このコマンドにより、
-              <code className="bg-muted px-1 py-0.5 rounded">
-                prisma/migrations
+        <CardContent className="space-y-4 text-sm text-muted-foreground">
+          <p>
+            アンケートの公開URLは以下の形式になります：
+            <br />
+            <code className="bg-muted px-1 py-0.5 rounded text-foreground">
+              /[アプリSlug]/[アンケートSlug]/form
+            </code>
+          </p>
+          <div className="bg-destructive/10 p-4 border border-destructive/20 rounded-lg">
+            <h4 className="font-bold text-destructive mb-1">
+              重要：ユーザー識別パラメータ（auser_id）について
+            </h4>
+            <p>
+              本システムでは回答者を識別するため、URLパラメータ{" "}
+              <code className="bg-muted px-1 py-0.5 rounded text-foreground">
+                ?auser_id=ユーザーID
               </code>{" "}
-              ディレクトリ内のマイグレーションファイルが実行され、データベースが作成されます。
+              が必須となっています。
+            </p>
+            <p className="mt-2 text-xs text-destructive">
+              ※このパラメータが付与されていない場合、エラーが表示され回答することができません。配布時には必ず適切なIDが含まれていることをご確認ください。
             </p>
           </div>
+          <p>
+            Webhook設定を有効にすることで、回答受付のタイミングで外部システムへ通知を行う運用が可能です。
+          </p>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>開発サーバーの起動</CardTitle>
+          <CardTitle>回答結果の確認</CardTitle>
           <CardDescription>
-            アプリケーションをローカルで実行します。
+            集まった回答を確認・分析する方法について説明します。
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div>
-            <h3 className="font-semibold mb-2">依存関係のインストール</h3>
-            <p className="text-sm text-muted-foreground mb-2">
-              初回のみ、以下のコマンドで依存関係をインストールします。
-            </p>
-            <div className="bg-muted p-4 rounded-lg font-mono text-sm">
-              <code>npm install</code>
-            </div>
-          </div>
-          <div>
-            <h3 className="font-semibold mb-2">開発サーバーの起動</h3>
-            <p className="text-sm text-muted-foreground mb-2">
-              以下のコマンドで開発サーバーを起動します。
-            </p>
-            <div className="bg-muted p-4 rounded-lg font-mono text-sm">
-              <code>npm run dev</code>
-            </div>
-            <p className="text-sm text-muted-foreground mt-2">
-              起動後、ブラウザで{" "}
-              <a
-                href="http://localhost:3000"
-                className="text-primary underline"
-              >
-                http://localhost:3000
-              </a>{" "}
-              にアクセスしてください。
-            </p>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>基本的な使い方</CardTitle>
-          <CardDescription>
-            アプリケーションの基本的な操作手順です。
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div>
-            <h3 className="font-semibold mb-2">1. アプリの作成</h3>
-            <p className="text-sm text-muted-foreground mb-2">
-              まず、アプリを作成します。サイドバーの「アプリ管理」→「アプリ作成」から新しいアプリを作成できます。
-            </p>
-            <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground ml-4">
-              <li>アプリ名とスラッグ（URLの一部）を設定</li>
-              <li>プライバシーポリシーURLやお問い合わせ先を設定（任意）</li>
-            </ul>
-          </div>
-          <div>
-            <h3 className="font-semibold mb-2">2. アンケートの作成</h3>
-            <p className="text-sm text-muted-foreground mb-2">
-              「アンケート管理」→「新規作成」からアンケートを作成します。
-            </p>
-            <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground ml-4">
-              <li>タイトル、スラッグ、開催期間を設定</li>
-              <li>テーマカラーや画像を設定してデザインをカスタマイズ</li>
-              <li>説明文や注意事項を追加</li>
-            </ul>
-          </div>
-          <div>
-            <h3 className="font-semibold mb-2">3. 質問の追加</h3>
-            <p className="text-sm text-muted-foreground mb-2">
-              作成したアンケートの「質問」タブから質問項目を追加します。
-            </p>
-            <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground ml-4">
-              <li>
-                質問タイプを選択（テキスト、メール、ラジオ、チェックボックス、プルダウン）
-              </li>
-              <li>質問文を入力</li>
-              <li>必須項目や最大文字数などのバリデーションを設定</li>
-            </ul>
-          </div>
-          <div>
-            <h3 className="font-semibold mb-2">4. アンケートの公開</h3>
-            <p className="text-sm text-muted-foreground mb-2">
-              アンケートは設定したスラッグで自動的に公開されます。
-            </p>
-            <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground ml-4">
-              <li>
-                URL形式:{" "}
-                <code className="bg-muted px-1 py-0.5 rounded">
-                  http://localhost:3000/[スラッグ]?auser_id=USER_ID
-                </code>
-              </li>
-              <li>
-                <code className="bg-muted px-1 py-0.5 rounded">auser_id</code>{" "}
-                パラメータは必須です
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h3 className="font-semibold mb-2">5. 結果の確認</h3>
-            <p className="text-sm text-muted-foreground mb-2">
-              アンケートの「結果」タブから回答結果を確認できます。
-            </p>
-            <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground ml-4">
-              <li>各質問の回答をグラフとテキスト一覧で確認</li>
-              <li>回答ユーザーIDごとの回答も確認可能</li>
-            </ul>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>その他のコマンド</CardTitle>
-          <CardDescription>開発時に便利なコマンド一覧です。</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <div>
-              <code className="bg-muted px-2 py-1 rounded text-sm">
-                npm run build
-              </code>
-              <span className="text-sm text-muted-foreground ml-2">
-                本番用にビルド
-              </span>
-            </div>
-            <div>
-              <code className="bg-muted px-2 py-1 rounded text-sm">
-                npm run start
-              </code>
-              <span className="text-sm text-muted-foreground ml-2">
-                本番モードで起動
-              </span>
-            </div>
-            <div>
-              <code className="bg-muted px-2 py-1 rounded text-sm">
-                npm run lint
-              </code>
-              <span className="text-sm text-muted-foreground ml-2">
-                コードのリントチェック
-              </span>
-            </div>
-            <div>
-              <code className="bg-muted px-2 py-1 rounded text-sm">
-                npm run lint:fix
-              </code>
-              <span className="text-sm text-muted-foreground ml-2">
-                リントエラーを自動修正
-              </span>
-            </div>
-            <div>
-              <code className="bg-muted px-2 py-1 rounded text-sm">
-                npm run format
-              </code>
-              <span className="text-sm text-muted-foreground ml-2">
-                コードのフォーマット
-              </span>
-            </div>
-          </div>
+        <CardContent className="space-y-4 text-sm text-muted-foreground">
+          <p>
+            アンケート詳細画面の「結果」タブから、以下の情報を確認できます。
+          </p>
+          <ul className="list-disc list-inside space-y-1 ml-2">
+            <li>質問ごとの回答分布（グラフ表示）</li>
+            <li>回答者ごとの具体的な回答内容一覧</li>
+            <li>回答日時やユーザーIDごとの回答履歴</li>
+          </ul>
+          <p>
+            収集されたデータに基づき、傾向の把握や改善に役立てることができます。
+          </p>
         </CardContent>
       </Card>
     </div>
