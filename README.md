@@ -1,104 +1,108 @@
-# Survey Application (Next.js)
+# Survey Application (Next.js) 💖
 
-`create-next-app` をベースに構築された、カスタマイズ可能なアンケートシステムです。
-管理画面からアンケートを作成・編集し、独自の URL でユーザーに公開することができます。
+`create-next-app` をベースにした、超カワで高機能なアンケートシステムだよ！🎀
+管理画面から「アプリ」と「アンケート」を作って、独自の URL でみんなに答えてもらおー！✨
 
-## ✨ 主な機能
+## ✨ アピールポイント (Features)
 
-### 管理画面 (Admin Dashboard)
+### アプリ＆アンケート管理 (Admin Dashboard) 👩‍💻
 
-- **ダッシュボード**: 作成済みのアンケート一覧、回答数、ステータス（期間内かどうか）を確認できます。
-- **アンケート作成**: タイトル、スラッグ（URL）、開催期間、テーマカラー、ヘッダー/背景画像を設定できます。
-- **質問エディタ**: 直感的な UI で質問を追加・編集・削除できます。
-  - 対応タイプ: 短文テキスト、メールアドレス、ラジオボタン、チェックボックス、プルダウン
-  - バリデーション設定: 必須項目、最大文字数など
-- **結果確認**: 集計結果をグラフ（バー表示）とテキスト一覧で確認できます。
+- **アプリ管理**: アンケートを「アプリ」ごとに束ねられるよ！プライバシーポリシーやお問い合わせURLもアプリ単位で設定できちゃう。
+- **ダッシュボード**: 今の回答数とかステータスが一目でわかる！👀
+- **アンケート作成**:
+  - URL（スラッグ）は自由に決められるよ（例: `/campaign-2025`）🔗
+  - テーマカラーやヘッダー画像、背景画像を設定して、世界観を作り込もう！🎨
+  - **Webhook対応**: 回答があったらすぐに通知を送れるよ！🚀
+- **質問エディタ**:
+  - ラジオボタン、チェックボックス、プルダウン、テキストなんでもこい！💪
+  - 必須項目とか文字数制限もバッチリ設定できるよ。
 
-### 公開アンケートページ (Public Survey)
+### 公開アンケートページ (Public Survey) 📱
 
-- **動的ルーティング**: 設定したスラッグ（例: `/campaign-2025`）でアクセス可能です。
-- **デザイン適用**: 管理画面で設定したテーマカラーや画像が自動的に適用されます。
-- **ユーザー識別**: URL パラメータ `?auser_id=USER_ID` を使用して、回答ユーザーを識別・記録します。
-- **バリデーション**: 入力漏れや形式エラー（メールアドレスなど）を即座に判定します。
+- **URL構造**: `/[アプリSlug]/[アンケートSlug]/form` でアクセス！
+  - 例: `/my-game/summer-event/form`
+- **デザイン適用**: 管理画面で作ったデザインがそのまま反映されるから、独自性バツグン💖
+- **ユーザー識別**: URL パラメータ `?auser_id=USER_ID` をつけて、誰が回答したかちゃんと記録するよ！（これ忘れるとエラーだから気をつけてね🥺）
+- **即時バリデーション**: 入力ミスはその場でチェック！優しく教えてあげるよ✅
 
-## 🛠️ 技術スタック
+## 🛠️ 使ってる技術 (Tech Stack)
 
-- **Framework**: [Next.js](https://nextjs.org/) (App Router)
-- **Language**: TypeScript
-- **Database**: SQLite (via [Prisma](https://www.prisma.io/))
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
-- **UI Components**: [shadcn/ui](https://ui.shadcn.com/)
-- **Form Handling**: React Hook Form + Zod
+最先端の技術詰め込んだよ！🔥
+
+- **Framework**: [Next.js](https://nextjs.org/) (App Router) - もはや常識だよね！
+- **Language**: TypeScript - 型しか勝たん🥺
+- **Database**: SQLite (via [Prisma](https://www.prisma.io/)) - 手軽さが神✨
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) - スタイリング爆速！
+- **UI Components**: [shadcn/ui](https://ui.shadcn.com/) - オシャレすぎ💕
+- **Form Handling**: React Hook Form + Zod - バリデーションも完璧！
 
 ## 🚀 始め方 (Getting Started)
 
-### 1. 依存関係のインストール
+まずはここからスタート！やってみよー！✊
+
+### 1. 準備 (Install)
 
 ```bash
 cd survey-app
 npm install
 ```
 
-### 2. 環境変数の設定
+### 2. 環境変数の設定 (EnvVars)
 
-`.env.local`ファイルを作成し、以下の環境変数を設定してください。
+`.env.local` ってファイルを作って、これ貼っつけてね！📝
 
 ```bash
-# Cloudflare Turnstile（スパム対策）
-# Cloudflareダッシュボードでサイトを追加して取得してください
+# Cloudflare Turnstile（スパム対策用だよ！）
+# Cloudflareダッシュボードでサイト追加してキーGETしてね
 # https://dash.cloudflare.com/?to=/:account/turnstile
 NEXT_PUBLIC_CF_TURNSTILE_SITE_KEY=your-site-key-here
 CF_TURNSTILE_SECRET_KEY=your-secret-key-here
 ```
 
-**Cloudflare Turnstileの設定方法:**
+### 3. データベースの準備 (DB Setup)
 
-1. [Cloudflareダッシュボード](https://dash.cloudflare.com/?to=/:account/turnstile)にログイン
-2. 「サイトを追加」をクリック
-3. ドメインに`localhost`を追加（ローカル開発用）
-4. 表示されるサイトキーとシークレットキーをコピーして環境変数に設定
-
-### 3. データベースのセットアップ
-
-SQLite データベースを初期化します。
+Prisma でサクッとテーブル作成！🧙‍♀️
 
 ```bash
 npx prisma migrate dev --name init
 ```
 
-### 4. 開発サーバーの起動
+### 4. 起動！ (Run)
 
 ```bash
 npm run dev
 ```
 
-ブラウザで [http://localhost:3000](http://localhost:3000) を開いてください。
+ブラウザで [http://localhost:3000](http://localhost:3000) を開いてみて！感動するよ🥺✨
 
 ---
 
-## 📖 使い方
+## 📖 使い方 (How to Use)
 
-### 管理者として使う
+### 管理者になりたい！👑
 
-1. [http://localhost:3000/admin](http://localhost:3000/admin) にアクセスします。
-2. 「Create Survey」ボタンから新しいアンケートを作成します。
-3. 作成後、「Edit」ボタンから質問項目を追加します。
+1. [http://localhost:3000/admin](http://localhost:3000/admin) にアクセス！
+2. 「Create App」でアプリを作ってから、その中に「Create Survey」でアンケートを作ってね！
 
-### アンケートに回答する
+- Slugの設定がURLになるから大事だよ！
 
-1. 作成したアンケートの URL にアクセスします。
-   - 例: `http://localhost:3000/my-survey?auser_id=TEST001`
-   - **注意**: `auser_id` パラメータが必須です。これがないとエラー画面が表示されます（ゲームアプリ等からの遷移を想定しているため）。
-2. フォームに入力して送信します。
+3. 質問をポチポチ追加していけば完成！簡単でしょ？😉
 
-## 📁 ディレクトリ構成
+### アンケートに答えたい！📝
 
-- `app/admin`: 管理画面のページコンポーネント
-- `app/[slug]`: 公開アンケートページの動的ルート
-- `app/actions`: Server Actions (DB 操作などのバックエンドロジック)
-- `components/admin`: 管理画面用の UI コンポーネント
-- `components/survey`: 公開ページ用の UI コンポーネント
-- `prisma/schema.prisma`: データベース定義
+1. 作ったアンケートの URL にアクセス！
+   - 構成: `http://localhost:3000/[アプリSlug]/[アンケートSlug]/form`
+   - 例: `http://localhost:3000/my-game/summer-event/form?auser_id=TEST001`
+   - **重要⚠️**: `auser_id` がないと「誰？🤔」ってなってエラーになるから絶対つけてね！
+2. フォームに入力して送信！ありがとう！🙏
+
+## 📁 中身はどうなってるの？ (Structure)
+
+- `app/admin`: 管理画面の秘密基地 🏰
+- `app/[app]/[slug]/form`: 実際のアンケートページはココ！🌟
+- `app/actions`: 裏側の頑張り屋さんたち (Server Actions) ⚙️
+- `components`: Reactコンポーネントの部品箱 📦
+- `prisma/schema.prisma`: データの設計図 🗺️
 
 ---
 
