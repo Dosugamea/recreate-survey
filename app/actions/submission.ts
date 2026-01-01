@@ -72,6 +72,23 @@ export async function submitSurvey(
       };
     }
 
+    // 必須項目のチェック
+    const requiredQuestions = survey.questions.filter((q) => q.required);
+    const missingRequiredQuestionIds = requiredQuestions
+      .filter((q) => {
+        const value = rawAnswers[q.id];
+        // undefined, null, 空文字, 空配列は未入力とみなす
+        if (value === undefined || value === null || value === "") return true;
+        if (Array.isArray(value) && value.length === 0) return true;
+        return false;
+      })
+      .map((q) => q.id);
+
+    if (missingRequiredQuestionIds.length > 0) {
+      console.error("Missing required questions:", missingRequiredQuestionIds);
+      return { error: "未入力の必須項目があります。" };
+    }
+
     // 空の値をフィルタリング
     const validAnswers = Object.entries(rawAnswers).filter(([, value]) => {
       if (Array.isArray(value)) {
