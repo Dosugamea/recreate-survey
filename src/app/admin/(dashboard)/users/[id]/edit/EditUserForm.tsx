@@ -15,7 +15,7 @@ import {
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 import { updateUser } from "@/features/users/actions/users";
-import { PageHeader } from "@/features/admin/components/layout/PageHeader";
+import { PageHeader } from "@/features/admin/layout/components/PageHeader";
 import { User } from "@prisma/client";
 
 interface EditUserFormProps {

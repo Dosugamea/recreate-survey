@@ -1,5 +1,5 @@
-import { Sidebar } from "@/features/admin/components/layout/Sidebar";
-import { AdminMobileNav } from "@/features/admin/components/layout/AdminMobileNav";
+import { Sidebar } from "@/features/admin/layout/components/Sidebar";
+import { AdminMobileNav } from "@/features/admin/layout/components/AdminMobileNav";
 import { Footer } from "@/components/ui/footer";
 import { getCurrentUser } from "@/lib/auth-utils";
 

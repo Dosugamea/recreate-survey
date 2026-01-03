@@ -1,6 +1,6 @@
 import { CreateSurveyForm } from "@/features/admin/surveys/components/CreateSurveyForm";
 import type { Metadata } from "next";
-import { PageHeader } from "@/features/admin/components/layout/PageHeader";
+import { PageHeader } from "@/features/admin/layout/components/PageHeader";
 
 export async function generateMetadata(): Promise<Metadata> {
   const appName = process.env.NEXT_PUBLIC_APP_NAME;

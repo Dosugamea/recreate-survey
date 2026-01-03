@@ -10,7 +10,7 @@ import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { DeleteSurveyButton } from "@/app/admin/(dashboard)/surveys/[id]/DeleteSurveyButton";
 import { DuplicateSurveyButton } from "@/app/admin/(dashboard)/surveys/[id]/DuplicateSurveyButton";
-import { PageHeader } from "@/features/admin/components/layout/PageHeader";
+import { PageHeader } from "@/features/admin/layout/components/PageHeader";
 
 export async function generateMetadata(props: {
   params: Promise<{ id: string }>;

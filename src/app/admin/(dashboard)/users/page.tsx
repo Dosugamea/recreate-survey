@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { PlusCircle, Trash2, User as UserIcon, Edit, Lock } from "lucide-react";
 import Link from "next/link";
 import { deleteUser } from "@/features/users/actions/users";
-import { PageHeader } from "@/features/admin/components/layout/PageHeader";
+import { PageHeader } from "@/features/admin/layout/components/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getCurrentUser } from "@/lib/auth-utils";
 

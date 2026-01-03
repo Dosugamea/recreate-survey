@@ -12,7 +12,7 @@ import { format } from "date-fns";
 import { PlusCircle, Eye, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { AppFilterSelect } from "@/features/admin/surveys/components/AppFilterSelect";
-import { PageHeader } from "@/features/admin/components/layout/PageHeader";
+import { PageHeader } from "@/features/admin/layout/components/PageHeader";
 
 interface App {
   id: string;

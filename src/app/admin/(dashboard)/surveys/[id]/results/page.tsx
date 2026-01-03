@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { PageHeader } from "@/features/admin/components/layout/PageHeader";
+import { PageHeader } from "@/features/admin/layout/components/PageHeader";
 import { ExportCSVButton } from "@/app/admin/(dashboard)/surveys/[id]/results/ExportCSVButton";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";

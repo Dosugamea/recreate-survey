@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import { QuestionList } from "@/features/admin/questions/components/QuestionList";
-import { PageHeader } from "@/features/admin/components/layout/PageHeader";
+import { PageHeader } from "@/features/admin/layout/components/PageHeader";
 
 export async function generateMetadata(props: {
   params: Promise<{ id: string }>;
