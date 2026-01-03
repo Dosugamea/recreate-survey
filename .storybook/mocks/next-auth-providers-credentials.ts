@@ -1,4 +1,4 @@
-export default function Credentials(options: any) {
+export default function Credentials(options: unknown) {
   return {
     id: "credentials",
     name: "Credentials",

@@ -724,7 +724,7 @@ describe("submission actions", () => {
 
       vi.mocked(prisma.survey.findUnique).mockResolvedValue(mockSurvey);
       vi.mocked(prisma.response.findUnique).mockResolvedValue(null);
-      vi.mocked(prisma.response.create).mockResolvedValue(mockResponse as any);
+      vi.mocked(prisma.response.create).mockResolvedValue(mockResponse);
 
       await submitSurvey(surveyId, userId, rawAnswers, null);
 
