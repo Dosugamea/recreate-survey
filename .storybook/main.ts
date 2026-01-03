@@ -19,76 +19,97 @@ const config: StorybookConfig = {
   framework: "@storybook/nextjs-vite",
   staticDirs: ["../public"],
   async viteFinal(config) {
-    // Replace lib/prisma.ts and adapter with mocks for browser environment
-    // This prevents better-sqlite3 from being loaded in the browser
+    // Helper to resolve mock paths
+    const getMockPath = (filename: string) =>
+      path.resolve(__dirname, "./mocks", filename);
+
+    // Define aliases using an array format for better control and priority.
+    // We use RegExp for local files to match any path ending with the target filename,
+    // ensuring we catch relative, absolute, and aliased imports.
+    const aliases = [
+      // 1. Critical Libraries that fail in browser
+      {
+        find: "next-auth/providers/credentials",
+        replacement: getMockPath("next-auth-providers-credentials.ts"),
+      },
+      {
+        find: "next-auth",
+        replacement: getMockPath("next-auth.ts"),
+      },
+      {
+        find: "bcryptjs",
+        replacement: getMockPath("bcryptjs.ts"),
+      },
+
+      // 2. Local Project Files (Force Mocking)
+      // Catch any import ending in lib/auth/auth.ts (or .js/tsx etc implicitly)
+      // This prevents the real src/lib/auth/auth.ts from loading.
+      {
+        find: /.*\/lib\/auth\/auth(\.ts)?$/,
+        replacement: getMockPath("auth.ts"),
+      },
+      // Catch explicit alias usage for auth
+      { find: "@/lib/auth/auth", replacement: getMockPath("auth.ts") },
+
+      // Catch any import ending in lib/prisma.ts
+      {
+        find: /.*\/lib\/prisma(\.ts)?$/,
+        replacement: getMockPath("prisma.ts"),
+      },
+      // Catch explicit alias usage for prisma
+      { find: "@/lib/prisma", replacement: getMockPath("prisma.ts") },
+
+      // 3. Next.js modules
+      {
+        find: "next/navigation",
+        replacement: getMockPath("next-navigation.ts"),
+      },
+      { find: "next/cache", replacement: getMockPath("next-cache.ts") },
+
+      // 4. Prisma Packages
+      {
+        find: "@prisma/adapter-better-sqlite3",
+        replacement: getMockPath("adapter-better-sqlite3.ts"),
+      },
+      {
+        find: "@prisma/client",
+        replacement: getMockPath("prisma-client.ts"),
+      },
+      {
+        find: ".prisma/client",
+        replacement: getMockPath("prisma-client.ts"),
+      },
+    ];
+
+    // Merge with existing aliases, placing our overrides FIRST
     config.resolve = config.resolve || {};
-
-    const myAliases = {
-      "@/lib/prisma": path.resolve(__dirname, "./mocks/prisma.ts"),
-      "@prisma/adapter-better-sqlite3": path.resolve(
-        __dirname,
-        "./mocks/adapter-better-sqlite3.ts"
-      ),
-      "@prisma/client": path.resolve(__dirname, "./mocks/prisma-client.ts"),
-      ".prisma/client": path.resolve(__dirname, "./mocks/prisma-client.ts"),
-      "next/navigation": path.resolve(__dirname, "./mocks/next-navigation.ts"),
-      "next/cache": path.resolve(__dirname, "./mocks/next-cache.ts"),
-      "@/lib/auth/auth": path.resolve(__dirname, "./mocks/auth.ts"),
-      // Add mocks for libraries that cause issues in browser
-      bcryptjs: path.resolve(__dirname, "./mocks/bcryptjs.ts"),
-      "next-auth": path.resolve(__dirname, "./mocks/next-auth.ts"),
-      "next-auth/providers/credentials": path.resolve(
-        __dirname,
-        "./mocks/next-auth-providers-credentials.ts"
-      ),
-    };
-
+    let existingAliases: unknown[] = [];
     if (Array.isArray(config.resolve.alias)) {
-      config.resolve.alias = [
-        ...config.resolve.alias,
-        ...Object.entries(myAliases).map(([find, replacement]) => ({
-          find,
-          replacement,
-        })),
-      ];
-    } else {
-      config.resolve.alias = {
-        ...config.resolve.alias,
-        ...myAliases,
-      };
+      existingAliases = config.resolve.alias;
+    } else if (config.resolve.alias) {
+      existingAliases = Object.entries(config.resolve.alias).map(
+        ([find, replacement]) => ({ find, replacement })
+      );
     }
+    // @ts-expect-error: existingAliases is unknown[], which mismatches the strict Alias type expected by Vite, but we know it's valid from extraction above.
+    config.resolve.alias = [...aliases, ...existingAliases];
 
-    // Exclude better-sqlite3 and Prisma from optimization to prevent bundling
+    // Exclude problematic dependencies from optimization
     config.optimizeDeps = config.optimizeDeps || {};
     config.optimizeDeps.exclude = [
       ...(config.optimizeDeps.exclude || []),
       "better-sqlite3",
-      "@prisma/adapter-better-sqlite3",
       "@prisma/client",
       ".prisma/client",
     ];
 
-    // Externalize better-sqlite3 and Prisma for SSR to prevent loading in browser
+    // Handle SSR externals
     config.ssr = config.ssr || {};
+    const externals = ["better-sqlite3", "@prisma/client", ".prisma/client"];
     if (Array.isArray(config.ssr.external)) {
-      config.ssr.external = [
-        ...config.ssr.external,
-        "better-sqlite3",
-        "@prisma/client",
-        ".prisma/client",
-      ];
+      config.ssr.external = [...config.ssr.external, ...externals];
     } else {
-      config.ssr.external = [
-        "better-sqlite3",
-        "@prisma/client",
-        ".prisma/client",
-      ];
-    }
-    // Remove better-sqlite3 from noExternal if present
-    if (Array.isArray(config.ssr.noExternal)) {
-      config.ssr.noExternal = config.ssr.noExternal.filter(
-        (dep) => dep !== "better-sqlite3"
-      );
+      config.ssr.external = externals;
     }
 
     return config;
