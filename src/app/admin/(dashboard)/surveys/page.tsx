@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
-import { prisma } from "@/lib/prisma";
-import { SurveyList } from "@/features/admin/surveys/components/SurveyList";
+import { getSurveys } from "@/features/admin/surveys/actions/surveys";
+import { SurveysPageRoot } from "@/features/admin/surveys/components/SurveysPageRoot";
 
 export const dynamic = "force-dynamic";
 
@@ -23,23 +23,7 @@ export default async function AdminSurveysPage({
 }: AdminSurveysPageProps) {
   const { appId } = await searchParams;
 
-  // アプリ一覧を取得
-  const apps = await prisma.app.findMany({
-    orderBy: { name: "asc" },
-    select: {
-      id: true,
-      name: true,
-    },
-  });
+  const { apps, surveys } = await getSurveys(appId);
 
-  // アンケートを取得（appIdでフィルタリング）
-  const surveys = await prisma.survey.findMany({
-    where: appId ? { appId } : undefined,
-    include: {
-      app: true,
-    },
-    orderBy: { createdAt: "desc" },
-  });
-
-  return <SurveyList apps={apps} surveys={surveys} currentAppId={appId} />;
+  return <SurveysPageRoot apps={apps} surveys={surveys} currentAppId={appId} />;
 }

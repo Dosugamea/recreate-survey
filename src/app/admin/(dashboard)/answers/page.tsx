@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
-import { prisma } from "@/lib/prisma";
-import { SurveyList } from "@/features/admin/surveys/components/SurveyList";
+import { AnswersPageRoot } from "@/features/admin/answers/components/AnswersPageRoot";
+import { getAnswers } from "@/features/admin/answers/actions/answers";
 
 export const dynamic = "force-dynamic";
 
@@ -23,42 +23,7 @@ export default async function AdminSurveysResultsListPage({
 }: AdminSurveysResultsListPageProps) {
   const { appId } = await searchParams;
 
-  // アプリ一覧を取得
-  const apps = await prisma.app.findMany({
-    orderBy: { name: "asc" },
-    select: {
-      id: true,
-      name: true,
-    },
-  });
+  const { apps, surveys } = await getAnswers(appId);
 
-  // 回答があるアンケートを取得（appIdでフィルタリング）
-  const surveys = await prisma.survey.findMany({
-    where: {
-      ...(appId ? { appId } : {}),
-      responses: {
-        some: {}, // 少なくとも1つの回答が存在する
-      },
-    },
-    include: {
-      app: true,
-      _count: {
-        select: { responses: true },
-      },
-    },
-    orderBy: { createdAt: "desc" },
-  });
-
-  return (
-    <SurveyList
-      apps={apps}
-      surveys={surveys}
-      currentAppId={appId}
-      showResponseCount={true}
-      headerTitle="アンケート結果一覧"
-      headerDescription="回答があるアンケートの一覧を表示しています。各アンケートの結果を確認できます。"
-      showCreateButton={false}
-      showDetailButton={false}
-    />
-  );
+  return <AnswersPageRoot apps={apps} surveys={surveys} currentAppId={appId} />;
 }

@@ -7,6 +7,32 @@ import { surveySchema, SurveySchema } from "@/lib/schemas";
 import { prisma } from "@/lib/prisma";
 import { ensureUser } from "@/lib/auth-utils";
 
+export async function getSurveys(appId?: string) {
+  await ensureUser();
+  try {
+    const apps = await prisma.app.findMany({
+      orderBy: { name: "asc" },
+      select: {
+        id: true,
+        name: true,
+      },
+    });
+
+    const surveys = await prisma.survey.findMany({
+      where: appId ? { appId } : undefined,
+      include: {
+        app: true,
+      },
+      orderBy: { createdAt: "desc" },
+    });
+
+    return { apps, surveys };
+  } catch (e) {
+    console.error(e);
+    return { apps: [], surveys: [] };
+  }
+}
+
 export async function createSurvey(data: SurveySchema) {
   await ensureUser();
   const result = surveySchema.safeParse(data);

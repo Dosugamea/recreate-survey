@@ -163,21 +163,14 @@ export default async function SurveyPublicPage(props: {
     : false;
 
   // フッター用のリンクを構築
-  const footerLinks: Array<{ label: string; href: string }> = [];
-
-  if (app.privacyPolicyUrl) {
-    footerLinks.push({
-      label: "プライバシーポリシー",
-      href: app.privacyPolicyUrl,
-    });
-  }
-
-  if (app.contactUrl) {
-    footerLinks.push({
-      label: "お問い合わせ",
-      href: app.contactUrl,
-    });
-  }
+  const footerLinks = [
+    ...(app.privacyPolicyUrl
+      ? [{ label: "プライバシーポリシー", href: app.privacyPolicyUrl }]
+      : []),
+    ...(app.contactUrl
+      ? [{ label: "お問い合わせ", href: app.contactUrl }]
+      : []),
+  ];
 
   return (
     <>
