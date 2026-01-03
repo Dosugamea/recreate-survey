@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { renderHook, act, waitFor } from "@testing-library/react";
-import { useSurveyForm } from "./useSurveyForm";
+import { useSurveyForm } from "@/hooks/useSurveyForm";
 import type { Question } from "@prisma/client";
 import type { TurnstileInstance } from "@marsidev/react-turnstile";
 

@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
-import { DeleteResponseButton } from "./DeleteResponseButton";
+import { DeleteResponseButton } from "@/app/admin/(dashboard)/surveys/[id]/results/responses/DeleteResponseButton";
 
 export const dynamic = "force-dynamic";
 

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { hexToRgba } from "./utils";
+import { hexToRgba } from "@/lib/utils";
 
 describe("hexToRgba", () => {
   describe("3桁の短縮形（#RGB）のテスト", () => {

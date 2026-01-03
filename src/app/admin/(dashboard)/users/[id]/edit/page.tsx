@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { notFound, redirect } from "next/navigation";
-import EditUserForm from "./EditUserForm";
+import EditUserForm from "@/app/admin/(dashboard)/users/[id]/edit/EditUserForm";
 import { getCurrentUser } from "@/lib/auth-utils";
 
 interface PageProps {

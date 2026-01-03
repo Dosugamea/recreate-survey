@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { getSurveyPeriodStatus } from "./useSurveyPeriod";
+import { getSurveyPeriodStatus } from "@/hooks/useSurveyPeriod";
 import { format } from "date-fns";
 
 // Mock date-fns
