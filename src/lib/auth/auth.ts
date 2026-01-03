@@ -21,7 +21,7 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
     Credentials({
       async authorize(credentials) {
         const parsedCredentials = z
-          .object({ email: z.string().email(), password: z.string().min(6) })
+          .object({ email: z.email(), password: z.string().min(6) })
           .safeParse(credentials);
 
         if (parsedCredentials.success) {
@@ -32,7 +32,15 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
           if (!user.password) return null;
 
           const passwordsMatch = await bcrypt.compare(password, user.password);
-          if (passwordsMatch) return user;
+          if (passwordsMatch) {
+            // カスタムUser型に合わせてroleプロパティを含むオブジェクトを返す
+            return {
+              id: user.id,
+              email: user.email,
+              name: user.name,
+              role: user.role,
+            };
+          }
         }
 
         console.log("Invalid credentials");
