@@ -5,7 +5,10 @@ import { fileURLToPath } from "url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const config: StorybookConfig = {
-  stories: ["../components/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
+  stories: [
+    "../src/components/**/*.stories.@(js|jsx|mjs|ts|tsx)",
+    "../src/features/**/*.stories.@(js|jsx|mjs|ts|tsx)",
+  ],
   addons: [
     "@chromatic-com/storybook",
     "@storybook/addon-vitest",
@@ -30,7 +33,7 @@ const config: StorybookConfig = {
       ".prisma/client": path.resolve(__dirname, "./mocks/prisma-client.ts"),
       "next/navigation": path.resolve(__dirname, "./mocks/next-navigation.ts"),
       "next/cache": path.resolve(__dirname, "./mocks/next-cache.ts"),
-      "@/auth": path.resolve(__dirname, "./mocks/auth.ts"),
+      "@/lib/auth/auth": path.resolve(__dirname, "./mocks/auth.ts"),
       // Add mocks for libraries that cause issues in browser
       bcryptjs: path.resolve(__dirname, "./mocks/bcryptjs.ts"),
       "next-auth": path.resolve(__dirname, "./mocks/next-auth.ts"),

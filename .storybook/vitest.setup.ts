@@ -63,7 +63,7 @@ vi.mock("next/cache", () => ({
 }));
 
 // Mock @/auth
-vi.mock("@/auth", () => ({
+vi.mock("@/lib/auth/auth", () => ({
   auth: vi.fn(() => Promise.resolve(null)),
   signIn: vi.fn(),
   signOut: vi.fn(),
@@ -71,7 +71,7 @@ vi.mock("@/auth", () => ({
 }));
 
 // Mock apps actions
-vi.mock("@/app/actions/apps", () => ({
+vi.mock("@/features/admin/apps/actions/apps", () => ({
   getAllApps: vi.fn(() =>
     Promise.resolve([
       {
@@ -116,7 +116,7 @@ vi.mock("@/app/actions/apps", () => ({
 }));
 
 // Mock questions actions
-vi.mock("@/app/actions/questions", () => ({
+vi.mock("@/features/admin/questions/actions/questions", () => ({
   addQuestion: vi.fn(() => Promise.resolve({ success: true })),
   updateQuestion: vi.fn(() => Promise.resolve({ success: true })),
   deleteQuestion: vi.fn(() => Promise.resolve({ success: true })),
@@ -124,7 +124,7 @@ vi.mock("@/app/actions/questions", () => ({
 }));
 
 // Mock surveys actions
-vi.mock("@/app/actions/surveys", () => ({
+vi.mock("@/features/admin/surveys/actions/surveys", () => ({
   createSurvey: vi.fn(() => Promise.resolve({ success: true })),
   updateSurvey: vi.fn(() => Promise.resolve({ success: true })),
   deleteSurvey: vi.fn(() => Promise.resolve({ success: true })),

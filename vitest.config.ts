@@ -34,7 +34,7 @@ export default defineConfig({
         },
         resolve: {
           alias: {
-            "@": path.resolve(dirname, "."),
+            "@": path.resolve(dirname, "./src"),
           },
         },
       },
@@ -57,7 +57,8 @@ export default defineConfig({
         },
         resolve: {
           alias: {
-            "@": path.resolve(dirname, "."),
+            "@/prisma": path.resolve(dirname, "./prisma"),
+            "@": path.resolve(dirname, "./src"),
           },
         },
       },
