@@ -49,30 +49,50 @@ npm install
 
 ### 2. 環境変数の設定 (EnvVars)
 
-`.env` ってファイルを作って、これ貼っつけてね！📝
+`.env.example` をコピーして `.env` ファイルを作ってね！📝
 
 ```bash
-# Application
-NEXT_PUBLIC_APP_NAME="Survey App"
+# Windowsの場合
+copy .env.example .env
 
-# Database
-DATABASE_URL="file:./dev.db"
-
-# Auth.js (NextAuth v5) - セッション管理用
-AUTH_SECRET="your-secret-key-here-change-in-production"
-AUTH_URL="http://localhost:3000"
-
-# Cloudflare Turnstile（スパム対策用だよ！）
-# Cloudflareダッシュボードでサイト追加してキーGETしてね
-# https://dash.cloudflare.com/?to=/:account/turnstile
-NEXT_PUBLIC_CF_TURNSTILE_SITE_KEY=your-site-key-here
-CF_TURNSTILE_SECRET_KEY=your-secret-key-here
+# Mac/Linuxの場合
+cp .env.example .env
 ```
 
-**重要⚠️**: 本番環境では `AUTH_SECRET` を必ず変更してね！
+これでとりあえず動くよ！🎉 必要に応じて以下の値を変更してね：
 
-- `AUTH_SECRET` の生成: `npx auth secret` コマンドで自動生成できるよ！
-- `NEXT_PUBLIC_APP_NAME`: アプリ全体の名称（ページタイトルや管理画面のヘッダーに表示されるよ！）
+- **`NEXT_PUBLIC_APP_NAME`**: アプリ全体の名称（ページタイトルや管理画面のヘッダーに表示されるよ！）
+- **`AUTH_SECRET`**: 本番環境では必ず変更！`npx auth secret` コマンドで自動生成できるよ
+- **`NEXT_PUBLIC_CF_TURNSTILE_SITE_KEY`** / **`CF_TURNSTILE_SECRET_KEY`**: Cloudflare Turnstileの設定
+
+<details>
+<summary>📋 環境変数の詳細説明（クリックして展開）</summary>
+
+```bash
+# ============================================
+# Application Settings
+# ============================================
+NEXT_PUBLIC_APP_NAME="Survey App"
+
+# ============================================
+# Database
+# ============================================
+DATABASE_URL="file:./dev.db"
+
+# ============================================
+# Auth.js (NextAuth v5) - 認証・セッション管理
+# ============================================
+AUTH_SECRET="development-secret-key-change-in-production-min-32-chars"
+AUTH_URL="http://localhost:3000"
+
+# ============================================
+# Cloudflare Turnstile (オプション)
+# ============================================
+NEXT_PUBLIC_CF_TURNSTILE_SITE_KEY=""
+CF_TURNSTILE_SECRET_KEY=""
+```
+
+</details>
 
 ### 3. データベースの準備 (DB Setup)
 
