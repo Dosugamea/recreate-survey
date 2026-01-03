@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { AdminMobileNav } from "@/features/admin/layout/components/AdminMobileNav";
+import { SidebarMobile } from "@/features/admin/layout/components/SidebarMobile";
 
-const meta: Meta<typeof AdminMobileNav> = {
-  title: "Admin/Layout/AdminMobileNav",
-  component: AdminMobileNav,
+const meta: Meta<typeof SidebarMobile> = {
+  title: "Admin/Layout/SidebarMobile",
+  component: SidebarMobile,
   tags: ["autodocs"],
   parameters: {
     layout: "padded",
@@ -13,10 +13,14 @@ const meta: Meta<typeof AdminMobileNav> = {
       },
     },
   },
+  args: {
+    userName: "テストユーザー",
+    isAdmin: true,
+  },
 };
 
 export default meta;
-type Story = StoryObj<typeof AdminMobileNav>;
+type Story = StoryObj<typeof SidebarMobile>;
 
 export const Default: Story = {};
 
@@ -37,5 +41,12 @@ export const OnAppsPage: Story = {
         pathname: "/admin/apps",
       },
     },
+  },
+};
+
+export const NonAdminUser: Story = {
+  args: {
+    userName: "一般ユーザー",
+    isAdmin: false,
   },
 };

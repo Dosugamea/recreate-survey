@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Sidebar } from "@/features/admin/layout/components/Sidebar";
+import { SidebarDesktop } from "@/features/admin/layout/components/SidebarDesktop";
 
-const meta: Meta<typeof Sidebar> = {
-  title: "Admin/Layout/Sidebar",
-  component: Sidebar,
+const meta: Meta<typeof SidebarDesktop> = {
+  title: "Admin/Layout/SidebarDesktop",
+  component: SidebarDesktop,
   tags: ["autodocs"],
   parameters: {
     layout: "fullscreen",
@@ -13,10 +13,14 @@ const meta: Meta<typeof Sidebar> = {
       },
     },
   },
+  args: {
+    userName: "テストユーザー",
+    isAdmin: true,
+  },
 };
 
 export default meta;
-type Story = StoryObj<typeof Sidebar>;
+type Story = StoryObj<typeof SidebarDesktop>;
 
 export const Default: Story = {};
 
@@ -70,6 +74,16 @@ export const OnAppsCreatePage: Story = {
   },
 };
 
+export const OnUsersPage: Story = {
+  parameters: {
+    nextjs: {
+      navigation: {
+        pathname: "/admin/users",
+      },
+    },
+  },
+};
+
 export const OnHelpPage: Story = {
   parameters: {
     nextjs: {
@@ -77,5 +91,12 @@ export const OnHelpPage: Story = {
         pathname: "/admin/help",
       },
     },
+  },
+};
+
+export const NonAdminUser: Story = {
+  args: {
+    userName: "一般ユーザー",
+    isAdmin: false,
   },
 };

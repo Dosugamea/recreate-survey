@@ -1,5 +1,5 @@
-import { Sidebar } from "@/features/admin/layout/components/Sidebar";
-import { AdminMobileNav } from "@/features/admin/layout/components/AdminMobileNav";
+import { SidebarDesktop } from "@/features/admin/layout/components/SidebarDesktop";
+import { SidebarMobile } from "@/features/admin/layout/components/SidebarMobile";
 import { Footer } from "@/components/ui/footer";
 import { getCurrentUser } from "@/lib/auth-utils";
 
@@ -14,10 +14,10 @@ export default async function AdminLayout({
   return (
     <div className="flex min-h-screen flex-col lg:flex-row">
       <div className="flex items-center border-b bg-background px-4 py-3 lg:hidden">
-        <AdminMobileNav userName={userName} isAdmin={isAdmin} />
+        <SidebarMobile userName={userName} isAdmin={isAdmin} />
         <span className="text-lg font-semibold">{appName}</span>
       </div>
-      <Sidebar
+      <SidebarDesktop
         className="hidden lg:block fixed inset-y-0 left-0 w-64 border-r"
         userName={userName}
         isAdmin={isAdmin}
