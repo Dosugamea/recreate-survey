@@ -1,8 +1,11 @@
 "use server";
 
+import { ensureUser } from "@/lib/auth-utils";
 import { prisma } from "@/lib/prisma";
 
 export async function getAnswers(appId?: string) {
+  await ensureUser();
+
   // アプリ一覧を取得
   const apps = await prisma.app.findMany({
     orderBy: { name: "asc" },
