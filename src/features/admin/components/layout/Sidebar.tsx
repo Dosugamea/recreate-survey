@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { signOutAction } from "@/features/auth/actions/auth";
+import { signOutAction } from "@/features/auth/actions/signOut";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   userName: string;

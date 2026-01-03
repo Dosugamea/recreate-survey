@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { authenticate } from "./actions";
+import { signInAction } from "@/features/auth/actions/signIn";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,7 +15,7 @@ import {
 
 export default function LoginPage() {
   const [errorMessage, formAction, isPending] = useActionState(
-    authenticate,
+    signInAction,
     undefined
   );
 
