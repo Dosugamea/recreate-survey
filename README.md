@@ -49,9 +49,19 @@ npm install
 
 ### 2. 環境変数の設定 (EnvVars)
 
-`.env.local` ってファイルを作って、これ貼っつけてね！📝
+`.env` ってファイルを作って、これ貼っつけてね！📝
 
 ```bash
+# Application
+NEXT_PUBLIC_APP_NAME="Survey App"
+
+# Database
+DATABASE_URL="file:./dev.db"
+
+# Auth.js (NextAuth v5) - セッション管理用
+AUTH_SECRET="your-secret-key-here-change-in-production"
+AUTH_URL="http://localhost:3000"
+
 # Cloudflare Turnstile（スパム対策用だよ！）
 # Cloudflareダッシュボードでサイト追加してキーGETしてね
 # https://dash.cloudflare.com/?to=/:account/turnstile
@@ -59,13 +69,32 @@ NEXT_PUBLIC_CF_TURNSTILE_SITE_KEY=your-site-key-here
 CF_TURNSTILE_SECRET_KEY=your-secret-key-here
 ```
 
+**重要⚠️**: 本番環境では `AUTH_SECRET` を必ず変更してね！
+
+- `AUTH_SECRET` の生成: `npx auth secret` コマンドで自動生成できるよ！
+- `NEXT_PUBLIC_APP_NAME`: アプリ全体の名称（ページタイトルや管理画面のヘッダーに表示されるよ！）
+
 ### 3. データベースの準備 (DB Setup)
 
 Prisma でサクッとテーブル作成！🧙‍♀️
 
 ```bash
+# マイグレーション実行（テーブル作成）
 npx prisma migrate dev --name init
+
+# Prisma Clientの生成
+npx prisma generate
+
+# 初回管理者ユーザーの作成
+npx tsx scripts/seed-admin.ts
 ```
+
+これで管理者ユーザーが作成されるよ！👑
+
+- **📧 メールアドレス**: `admin@example.com`
+- **🔑 パスワード**: `password123`
+
+**注意**: 本番環境では必ずパスワードを変更してね！🔒
 
 ### 4. 起動！ (Run)
 
@@ -81,12 +110,16 @@ npm run dev
 
 ### 管理者になりたい！👑
 
-1. [http://localhost:3000/admin](http://localhost:3000/admin) にアクセス！
-2. 「Create App」でアプリを作ってから、その中に「Create Survey」でアンケートを作ってね！
+1. [http://localhost:3000/admin/login](http://localhost:3000/admin/login) にアクセス！
+2. 初回セットアップで作成した管理者アカウントでログイン：
+   - **メールアドレス**: `admin@example.com`
+   - **パスワード**: `password123`
+3. ログインしたら [http://localhost:3000/admin](http://localhost:3000/admin) のダッシュボードへ！
+4. 「Create App」でアプリを作ってから、その中に「Create Survey」でアンケートを作ってね！
 
 - Slugの設定がURLになるから大事だよ！
 
-3. 質問をポチポチ追加していけば完成！簡単でしょ？😉
+5. 質問をポチポチ追加していけば完成！簡単でしょ？😉
 
 ### アンケートに答えたい！📝
 
