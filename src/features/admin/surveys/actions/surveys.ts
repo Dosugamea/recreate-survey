@@ -29,14 +29,6 @@ export async function getSurveyById(id: string) {
 export async function getSurveys(appId?: string) {
   await ensureUser();
   try {
-    const apps = await prisma.app.findMany({
-      orderBy: { name: "asc" },
-      select: {
-        id: true,
-        name: true,
-      },
-    });
-
     const surveys = await prisma.survey.findMany({
       where: appId ? { appId } : undefined,
       include: {
@@ -45,10 +37,10 @@ export async function getSurveys(appId?: string) {
       orderBy: { createdAt: "desc" },
     });
 
-    return { apps, surveys };
+    return surveys;
   } catch (e) {
     console.error(e);
-    return { apps: [], surveys: [] };
+    return [];
   }
 }
 

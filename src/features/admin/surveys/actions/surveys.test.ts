@@ -5,6 +5,7 @@ import {
   deleteSurvey,
   duplicateSurvey,
   getSurveyById,
+  getSurveys,
 } from "@/features/admin/surveys/actions/surveys";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
@@ -88,6 +89,54 @@ describe("surveys actions", () => {
       );
       const result = await getSurveyById("survey-1");
       expect(result).toBeNull();
+    });
+  describe("getSurveys", () => {
+    it("should return surveys with app", async () => {
+      const mockSurveys = [
+        {
+          id: "survey-1",
+          title: "Test Survey",
+          app: { id: "app-1", name: "Test App" },
+        },
+      ];
+
+      vi.mocked(prisma.survey.findMany).mockResolvedValue(
+        mockSurveys as unknown as (Survey & { app: App })[]
+      );
+
+      const result = await getSurveys();
+
+      expect(prisma.survey.findMany).toHaveBeenCalledWith({
+        where: undefined,
+        include: {
+          app: true,
+        },
+        orderBy: { createdAt: "desc" },
+      });
+      expect(result).toEqual(mockSurveys);
+    });
+
+    it("should return surveys filtered by appId", async () => {
+      const appId = "app-1";
+      vi.mocked(prisma.survey.findMany).mockResolvedValue([]);
+
+      await getSurveys(appId);
+
+      expect(prisma.survey.findMany).toHaveBeenCalledWith({
+        where: { appId },
+        include: {
+          app: true,
+        },
+        orderBy: { createdAt: "desc" },
+      });
+    });
+
+    it("should return empty array on database error", async () => {
+      vi.mocked(prisma.survey.findMany).mockRejectedValue(
+        new Error("DB Error")
+      );
+      const result = await getSurveys();
+      expect(result).toEqual([]);
     });
   });
 

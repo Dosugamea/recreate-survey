@@ -4,6 +4,7 @@ import {
   updateApp,
   getApp,
   getAllApps,
+  getApps,
 } from "@/features/admin/apps/actions/apps";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
@@ -291,6 +292,58 @@ describe("apps actions", () => {
       );
 
       const result = await getAllApps();
+
+      expect(result).toEqual([]);
+    });
+  });
+
+  describe("getApps", () => {
+    it("should return apps ordered by name asc with select id and name", async () => {
+      const mockApps = [
+        {
+          id: "app-2",
+          name: "App B",
+          slug: "test-app-b",
+          privacyPolicyUrl: null,
+          faviconImageUrl: null,
+          copyrightNotice: null,
+          contactUrl: null,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: "app-1",
+          name: "App A",
+          slug: "test-app-a",
+          privacyPolicyUrl: null,
+          faviconImageUrl: null,
+          copyrightNotice: null,
+          contactUrl: null,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ];
+
+      vi.mocked(prisma.app.findMany).mockResolvedValue(mockApps);
+
+      const result = await getApps();
+
+      expect(prisma.app.findMany).toHaveBeenCalledWith({
+        orderBy: { name: "asc" },
+        select: {
+          id: true,
+          name: true,
+        },
+      });
+      expect(result).toEqual(mockApps);
+    });
+
+    it("should return empty array on database error", async () => {
+      vi.mocked(prisma.app.findMany).mockRejectedValue(
+        new Error("Database error")
+      );
+
+      const result = await getApps();
 
       expect(result).toEqual([]);
     });

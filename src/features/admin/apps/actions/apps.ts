@@ -101,3 +101,19 @@ export async function getAllApps() {
     return [];
   }
 }
+
+export async function getApps() {
+  await ensureUser();
+  try {
+    return await prisma.app.findMany({
+      orderBy: { name: "asc" },
+      select: {
+        id: true,
+        name: true,
+      },
+    });
+  } catch (e) {
+    console.error(e);
+    return [];
+  }
+}

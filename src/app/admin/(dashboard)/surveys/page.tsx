@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { getSurveys } from "@/features/admin/surveys/actions/surveys";
+import { getApps } from "@/features/admin/apps/actions/apps";
 import { SurveysPageRoot } from "@/features/admin/surveys/components/SurveysPageRoot";
 
 export const dynamic = "force-dynamic";
@@ -23,7 +24,7 @@ export default async function AdminSurveysPage({
 }: AdminSurveysPageProps) {
   const { appId } = await searchParams;
 
-  const { apps, surveys } = await getSurveys(appId);
+  const [apps, surveys] = await Promise.all([getApps(), getSurveys(appId)]);
 
   return <SurveysPageRoot apps={apps} surveys={surveys} currentAppId={appId} />;
 }
