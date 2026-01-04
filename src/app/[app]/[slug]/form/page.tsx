@@ -1,45 +1,30 @@
-import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import { cookies } from "next/headers";
-import { SurveyContainer } from "@/features/surveys/components/layout/SurveyContainer";
-import { SurveyTitle } from "@/features/surveys/components/header/SurveyTitle";
-import { SurveyWarn } from "@/features/surveys/components/messages/SurveyWarn";
-import { SurveyDescription } from "@/features/surveys/components/header/SurveyDescription";
-import { SurveyContent } from "@/features/surveys/components/layout/SurveyContent";
-import { SurveyNotes } from "@/features/surveys/components/messages/SurveyNotes";
-import { SurveyFooter } from "@/features/surveys/components/footer/SurveyFooter";
-import { SurveyBackToTop } from "@/features/surveys/components/footer/SurveyBackToTop";
 import { getSurveyPeriodStatus } from "@/hooks/useSurveyPeriod";
 import type { Metadata } from "next";
 import { metadata as notFoundMetadata } from "@/app/not-found";
+import {
+  getAppBySlug,
+  getPublicSurvey,
+} from "@/features/surveys/actions/surveys";
+import { SurveyFormPageRoot } from "@/features/surveys/components/SurveyFormPageRoot";
 
 export const dynamic = "force-dynamic";
 
-export async function generateMetadata(props: {
+interface PageProps {
   params: Promise<{ app: string; slug: string }>;
-}): Promise<Metadata> {
+  searchParams: Promise<{ auser_id?: string }>;
+}
+
+export async function generateMetadata(props: PageProps): Promise<Metadata> {
   const params = await props.params;
 
-  // まずAppを取得
-  const app = await prisma.app.findUnique({
-    where: { slug: params.app },
-  });
-
+  const app = await getAppBySlug(params.app);
   if (!app) {
     return notFoundMetadata;
   }
 
-  // Surveyを取得（AppのslugとSurveyのslugの両方で検索）
-  const survey = await prisma.survey.findFirst({
-    where: {
-      slug: params.slug,
-      app: {
-        slug: params.app,
-      },
-      isActive: true,
-    },
-  });
-
+  const survey = await getPublicSurvey(params.app, params.slug);
   if (!survey) {
     return notFoundMetadata;
   }
@@ -72,7 +57,6 @@ export async function generateMetadata(props: {
     },
   };
 
-  // ファビコンを設定
   if (app.faviconImageUrl) {
     metadata.icons = {
       icon: app.faviconImageUrl,
@@ -84,72 +68,23 @@ export async function generateMetadata(props: {
   return metadata;
 }
 
-export default async function SurveyPublicPage(props: {
-  params: Promise<{ app: string; slug: string }>;
-  searchParams: Promise<{ auser_id?: string }>;
-}) {
+export default async function SurveyPublicPage(props: PageProps) {
   const params = await props.params;
   const searchParams = await props.searchParams;
   const userId = searchParams.auser_id;
 
   // Appを取得
-  const app = await prisma.app.findUnique({
-    where: { slug: params.app },
-  });
-
+  const app = await getAppBySlug(params.app);
   if (!app) {
-    console.error(`[Survey Form] App not found with slug: "${params.app}"`);
-    // デバッグ用: すべてのAppのslugをログ出力
-    const allApps = await prisma.app.findMany({
-      select: { slug: true, name: true },
-    });
-    console.error(`[Survey Form] Available apps:`, allApps);
     notFound();
   }
 
-  // Surveyを取得（AppのslugとSurveyのslugの両方で検索）
-  const survey = await prisma.survey.findFirst({
-    where: {
-      slug: params.slug,
-      app: {
-        slug: params.app,
-      },
-    },
-    include: {
-      questions: {
-        orderBy: { order: "asc" },
-      },
-      app: true,
-    },
-  });
+  // Surveyを取得
+  const survey = await getPublicSurvey(params.app, params.slug);
 
   if (!survey) {
-    console.error(
-      `[Survey Form] Survey not found with slug: "${params.slug}" for app: "${params.app}"`
-    );
-    // デバッグ用: 該当AppのすべてのSurveyのslugをログ出力
-    const appSurveys = await prisma.survey.findMany({
-      where: { appId: app.id },
-      select: { slug: true, title: true },
-    });
-    console.error(
-      `[Survey Form] Available surveys for app "${params.app}":`,
-      appSurveys
-    );
     notFound();
   }
-
-  // Surveyが指定されたAppに属していない場合のエラーチェック
-  if (survey.app.slug !== params.app) {
-    notFound();
-  }
-
-  // Check activity
-  if (!survey.isActive) {
-    notFound();
-  }
-
-  // 期間判定を行う
   const { isExpired, periodMessage } = getSurveyPeriodStatus(
     survey.startAt,
     survey.endAt
@@ -162,49 +97,14 @@ export default async function SurveyPublicPage(props: {
     ? cookieStore.get(cookieName)?.value === "submitted"
     : false;
 
-  // フッター用のリンクを構築
-  const footerLinks = [
-    ...(app.privacyPolicyUrl
-      ? [{ label: "プライバシーポリシー", href: app.privacyPolicyUrl }]
-      : []),
-    ...(app.contactUrl
-      ? [{ label: "お問い合わせ", href: app.contactUrl }]
-      : []),
-  ];
-
   return (
-    <>
-      <SurveyContainer survey={survey}>
-        {!isExpired && userId ? (
-          <SurveyContent
-            survey={survey}
-            questions={survey.questions}
-            userId={userId}
-            appName={app.name}
-            isAlreadySubmitted={isAlreadySubmitted}
-          />
-        ) : (
-          <article>
-            <SurveyTitle
-              title={survey.title}
-              headerImage={survey.headerImage}
-            />
-            <SurveyWarn show={!userId} />
-            <SurveyDescription
-              description={survey.description}
-              themeColor={survey.themeColor}
-              periodMessage={periodMessage}
-            />
-          </article>
-        )}
-        <SurveyNotes survey={survey} />
-      </SurveyContainer>
-      <SurveyFooter
-        links={footerLinks.length > 0 ? footerLinks : undefined}
-        copyright={app.copyrightNotice ?? undefined}
-        themeColor={survey.themeColor}
-      />
-      <SurveyBackToTop />
-    </>
+    <SurveyFormPageRoot
+      app={app}
+      survey={survey}
+      userId={userId}
+      isAlreadySubmitted={isAlreadySubmitted}
+      isExpired={isExpired}
+      periodMessage={periodMessage}
+    />
   );
 }
