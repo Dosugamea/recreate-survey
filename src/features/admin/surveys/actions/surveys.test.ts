@@ -6,11 +6,20 @@ import {
   duplicateSurvey,
   getSurveyById,
   getSurveys,
+  getSurveyWithResults,
+  getSurveyResponses,
 } from "@/features/admin/surveys/actions/surveys";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import type { SurveySchema } from "@/lib/schemas";
-import type { Survey, Question, Prisma, App } from "@prisma/client";
+import type {
+  Survey,
+  Question,
+  Prisma,
+  App,
+  Answer,
+  Response,
+} from "@prisma/client";
 
 // Mock dependencies
 vi.mock("@/lib/prisma", () => ({
@@ -20,9 +29,15 @@ vi.mock("@/lib/prisma", () => ({
       update: vi.fn(),
       delete: vi.fn(),
       findUnique: vi.fn(),
+      findMany: vi.fn(),
     },
     question: {
       createMany: vi.fn(),
+    },
+    response: {
+      findMany: vi.fn(),
+      findUnique: vi.fn(),
+      delete: vi.fn(),
     },
     $transaction: vi.fn(),
   },
@@ -46,6 +61,10 @@ describe("surveys actions", () => {
     vi.mocked(prisma.survey.create).mockReset();
     vi.mocked(prisma.survey.update).mockReset();
     vi.mocked(prisma.survey.delete).mockReset();
+    vi.mocked(prisma.survey.findMany).mockReset();
+    vi.mocked(prisma.response.findMany).mockReset();
+    vi.mocked(prisma.response.findUnique).mockReset();
+    vi.mocked(prisma.response.delete).mockReset();
     vi.mocked(prisma.$transaction).mockReset();
   });
 
@@ -90,6 +109,68 @@ describe("surveys actions", () => {
       const result = await getSurveyById("survey-1");
       expect(result).toBeNull();
     });
+  });
+
+  describe("getSurveyWithResults", () => {
+    it("should return survey with questions, answers and response count", async () => {
+      const surveyId = "survey-1";
+      const mockSurvey = {
+        id: surveyId,
+        title: "Test Survey",
+        questions: [
+          {
+            id: "q-1",
+            label: "Question 1",
+            order: 1,
+            answers: [{ id: "a-1", value: "Answer 1" }],
+          },
+        ],
+        _count: {
+          responses: 1,
+        },
+      };
+
+      vi.mocked(prisma.survey.findUnique).mockResolvedValue(
+        mockSurvey as unknown as Survey & {
+          questions: (Question & { answers: Answer[] })[];
+          _count: { responses: number };
+        }
+      );
+
+      const result = await getSurveyWithResults(surveyId);
+
+      expect(prisma.survey.findUnique).toHaveBeenCalledWith({
+        where: { id: surveyId },
+        include: {
+          questions: {
+            orderBy: { order: "asc" },
+            include: {
+              answers: true,
+            },
+          },
+          _count: {
+            select: { responses: true },
+          },
+        },
+      });
+      expect(result).toEqual(mockSurvey);
+    });
+
+    it("should return null if survey not found", async () => {
+      vi.mocked(prisma.survey.findUnique).mockResolvedValue(null);
+      const result = await getSurveyWithResults("non-existent");
+      expect(result).toBeNull();
+    });
+
+    it("should return null on database error", async () => {
+      vi.mocked(prisma.survey.findUnique).mockRejectedValue(
+        new Error("DB Error")
+      );
+      const result = await getSurveyWithResults("survey-1");
+      expect(result).toBeNull();
+    });
+  });
+
   describe("getSurveys", () => {
     it("should return surveys with app", async () => {
       const mockSurveys = [
@@ -703,6 +784,47 @@ describe("surveys actions", () => {
       const result = await duplicateSurvey(surveyId);
 
       expect(result).toEqual({ error: "複製に失敗しました。" });
+    });
+  });
+
+  describe("getSurveyResponses", () => {
+    it("should return survey title and responses", async () => {
+      const surveyId = "survey-1";
+      const mockSurvey = { title: "Test Survey" };
+      const mockResponses = [
+        {
+          id: "res-1",
+          surveyId,
+          userId: "user-1",
+          submittedAt: new Date(),
+        } as Response,
+      ];
+
+      vi.mocked(prisma.survey.findUnique).mockResolvedValue(
+        mockSurvey as unknown as Survey
+      );
+      vi.mocked(prisma.response.findMany).mockResolvedValue(mockResponses);
+
+      const result = await getSurveyResponses(surveyId);
+
+      expect(result).toEqual({
+        survey: mockSurvey,
+        responses: mockResponses,
+      });
+      expect(prisma.survey.findUnique).toHaveBeenCalledWith({
+        where: { id: surveyId },
+        select: { title: true },
+      });
+      expect(prisma.response.findMany).toHaveBeenCalledWith({
+        where: { surveyId },
+        orderBy: { submittedAt: "desc" },
+      });
+    });
+
+    it("should return null if survey not found", async () => {
+      vi.mocked(prisma.survey.findUnique).mockResolvedValue(null);
+      const result = await getSurveyResponses("invalid");
+      expect(result).toBeNull();
     });
   });
 });
