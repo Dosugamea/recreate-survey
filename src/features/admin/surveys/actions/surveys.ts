@@ -414,3 +414,65 @@ export async function deleteResponse(surveyId: string, responseId: string) {
     return { error: "回答の削除に失敗しました。" };
   }
 }
+
+export async function getSurveyResponses(surveyId: string) {
+  await ensureUser();
+  try {
+    const survey = await prisma.survey.findUnique({
+      where: { id: surveyId },
+      select: { title: true },
+    });
+
+    if (!survey) return null;
+
+    const responses = await prisma.response.findMany({
+      where: { surveyId },
+      orderBy: { submittedAt: "desc" },
+    });
+
+    return { survey, responses };
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+}
+
+export async function getSurveyResponseDetail(
+  surveyId: string,
+  responseId: string
+) {
+  await ensureUser();
+  try {
+    const survey = await prisma.survey.findUnique({
+      where: { id: surveyId },
+      select: { title: true },
+    });
+
+    if (!survey) return null;
+
+    const response = await prisma.response.findUnique({
+      where: { id: responseId },
+      include: {
+        answers: {
+          include: {
+            question: true,
+          },
+        },
+        survey: {
+          include: {
+            questions: {
+              orderBy: { order: "asc" },
+            },
+          },
+        },
+      },
+    });
+
+    if (!response) return null;
+
+    return { survey, response };
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+}
