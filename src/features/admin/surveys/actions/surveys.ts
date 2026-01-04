@@ -26,6 +26,30 @@ export async function getSurveyById(id: string) {
   }
 }
 
+export async function getSurveyWithResults(id: string) {
+  await ensureUser();
+  try {
+    const survey = await prisma.survey.findUnique({
+      where: { id },
+      include: {
+        questions: {
+          orderBy: { order: "asc" },
+          include: {
+            answers: true,
+          },
+        },
+        _count: {
+          select: { responses: true },
+        },
+      },
+    });
+    return survey;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+}
+
 export async function getSurveys(appId?: string) {
   await ensureUser();
   try {
