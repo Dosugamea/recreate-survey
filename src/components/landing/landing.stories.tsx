@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Guide } from "@/components/guide";
+import { Landing } from "@/components/landing/landing";
 
-const meta: Meta<typeof Guide> = {
-  title: "Components/Guide",
-  component: Guide,
+const meta: Meta<typeof Landing> = {
+  title: "Components/Landing",
+  component: Landing,
   tags: ["autodocs"],
   argTypes: {
     children: {
@@ -18,7 +18,7 @@ const meta: Meta<typeof Guide> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof Guide>;
+type Story = StoryObj<typeof Landing>;
 
 export const Default: Story = {
   args: {},

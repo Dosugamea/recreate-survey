@@ -1,11 +1,11 @@
 import { FileText } from "lucide-react";
 import { ReactNode } from "react";
 
-interface GuideProps {
+interface LandingProps {
   children?: ReactNode;
 }
 
-export function Guide({ children }: GuideProps) {
+export function Landing({ children }: LandingProps) {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center font-sans dark:bg-black p-4">
       <main className="flex flex-col items-center text-center space-y-8 max-w-2xl">

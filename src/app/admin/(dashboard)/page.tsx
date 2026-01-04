@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Guide } from "@/components/guide";
+import { Landing } from "@/components/landing/landing";
 
 export async function generateMetadata(): Promise<Metadata> {
   const appName = process.env.NEXT_PUBLIC_APP_NAME;
@@ -11,5 +11,5 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function Home() {
-  return <Guide />;
+  return <Landing />;
 }
