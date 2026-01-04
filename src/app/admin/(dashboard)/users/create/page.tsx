@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth/auth";
 import { redirect } from "next/navigation";
-import CreateUserForm from "@/app/admin/(dashboard)/users/create/CreateUserForm";
+import CreateUserForm from "@/features/admin/users/components/CreateUserForm";
 
 export default async function CreateUserPage() {
   const session = await auth();

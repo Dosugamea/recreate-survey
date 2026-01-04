@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
-import { createUser } from "@/features/users/actions/users";
+import { createUser } from "@/features/admin/users/actions/users";
 import { PageHeader } from "@/features/admin/layout/components/PageHeader";
 
 export default function CreateUserForm() {

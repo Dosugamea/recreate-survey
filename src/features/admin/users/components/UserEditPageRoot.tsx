@@ -4,7 +4,7 @@ import { User } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { PageHeader } from "@/features/admin/layout/components/PageHeader";
 import { EditUserForm } from "@/features/admin/users/components/EditUserForm";
-import { updateUser } from "@/features/users/actions/users";
+import { updateUser } from "@/features/admin/users/actions/users";
 
 interface UserEditPageRootProps {
   user: User;
