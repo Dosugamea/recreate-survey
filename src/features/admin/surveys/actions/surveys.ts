@@ -14,6 +14,9 @@ export async function getSurveyById(id: string) {
       where: { id },
       include: {
         app: true,
+        questions: {
+          orderBy: { order: "asc" },
+        },
       },
     });
     return survey;

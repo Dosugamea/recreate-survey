@@ -4,11 +4,12 @@ import {
   updateSurvey,
   deleteSurvey,
   duplicateSurvey,
+  getSurveyById,
 } from "@/features/admin/surveys/actions/surveys";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import type { SurveySchema } from "@/lib/schemas";
-import type { Survey, Question, Prisma } from "@prisma/client";
+import type { Survey, Question, Prisma, App } from "@prisma/client";
 
 // Mock dependencies
 vi.mock("@/lib/prisma", () => ({
@@ -45,6 +46,49 @@ describe("surveys actions", () => {
     vi.mocked(prisma.survey.update).mockReset();
     vi.mocked(prisma.survey.delete).mockReset();
     vi.mocked(prisma.$transaction).mockReset();
+  });
+
+  describe("getSurveyById", () => {
+    it("should return survey with questions and app", async () => {
+      const surveyId = "survey-1";
+      const mockSurvey = {
+        id: surveyId,
+        title: "Test Survey",
+        app: { id: "app-1", name: "Test App" },
+        questions: [{ id: "q-1", label: "Question 1", order: 1 }],
+      };
+
+      vi.mocked(prisma.survey.findUnique).mockResolvedValue(
+        mockSurvey as unknown as Survey & { app: App; questions: Question[] }
+      );
+
+      const result = await getSurveyById(surveyId);
+
+      expect(prisma.survey.findUnique).toHaveBeenCalledWith({
+        where: { id: surveyId },
+        include: {
+          app: true,
+          questions: {
+            orderBy: { order: "asc" },
+          },
+        },
+      });
+      expect(result).toEqual(mockSurvey);
+    });
+
+    it("should return null if survey not found", async () => {
+      vi.mocked(prisma.survey.findUnique).mockResolvedValue(null);
+      const result = await getSurveyById("non-existent");
+      expect(result).toBeNull();
+    });
+
+    it("should return null on database error", async () => {
+      vi.mocked(prisma.survey.findUnique).mockRejectedValue(
+        new Error("DB Error")
+      );
+      const result = await getSurveyById("survey-1");
+      expect(result).toBeNull();
+    });
   });
 
   describe("createSurvey", () => {
