@@ -7,6 +7,22 @@ import { surveySchema, SurveySchema } from "@/lib/schemas";
 import { prisma } from "@/lib/prisma";
 import { ensureUser } from "@/lib/auth-utils";
 
+export async function getSurveyById(id: string) {
+  await ensureUser();
+  try {
+    const survey = await prisma.survey.findUnique({
+      where: { id },
+      include: {
+        app: true,
+      },
+    });
+    return survey;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+}
+
 export async function getSurveys(appId?: string) {
   await ensureUser();
   try {

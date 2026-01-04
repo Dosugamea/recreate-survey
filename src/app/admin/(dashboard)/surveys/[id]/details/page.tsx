@@ -1,18 +1,15 @@
 import type { Metadata } from "next";
-import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
-import { EditSurveyForm } from "@/features/admin/surveys/components/EditSurveyForm";
-import { PageHeader } from "@/features/admin/layout/components/PageHeader";
+import { getSurveyById } from "@/features/admin/surveys/actions/surveys";
+import { SurveyEditPageRoot } from "@/features/admin/surveys/components/SurveyEditPageRoot";
 
 export async function generateMetadata(props: {
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const params = await props.params;
+  const survey = await getSurveyById(params.id);
 
   const appName = process.env.NEXT_PUBLIC_APP_NAME;
-  const survey = await prisma.survey.findUnique({
-    where: { id: params.id },
-  });
 
   if (!survey) {
     return {
@@ -21,7 +18,7 @@ export async function generateMetadata(props: {
   }
 
   return {
-    title: `アンケート編集 | ${appName}`,
+    title: `アンケート編集 | ${survey.title} | ${appName}`,
     description: `「${survey.title}」の編集`,
   };
 }
@@ -32,28 +29,11 @@ export default async function EditSurveyPage(props: {
   params: Promise<{ id: string }>;
 }) {
   const params = await props.params;
-  const survey = await prisma.survey.findUnique({
-    where: { id: params.id },
-    include: {
-      app: true,
-    },
-  });
+  const survey = await getSurveyById(params.id);
 
   if (!survey) {
     notFound();
   }
 
-  return (
-    <div className="space-y-6">
-      <PageHeader
-        title={`アンケート情報編集: ${survey.title}`}
-        backHref={`/admin/surveys/${survey.id}`}
-        url={`/${survey.app.slug}/${survey.slug}/form`}
-        externalLinkHref={`/${survey.app.slug}/${survey.slug}/form?auser_id=dummy`}
-        externalLinkTitle="アンケートを開く"
-      />
-
-      <EditSurveyForm survey={survey} />
-    </div>
-  );
+  return <SurveyEditPageRoot survey={survey} />;
 }
