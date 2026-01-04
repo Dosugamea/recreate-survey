@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { surveySchema, SurveySchema } from "@/lib/schemas";
 import { createSurvey } from "@/features/admin/surveys/actions/surveys";
-import { useState, useTransition, useEffect } from "react";
+import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { SurveyPreview } from "@/features/admin/surveys/components/SurveyPreview";
 import {
@@ -34,7 +34,6 @@ import {
 import { CalendarIcon, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { getAllApps } from "@/features/admin/apps/actions/apps";
 import type { App } from "@prisma/client";
 
 function generateRandomSlug(): string {
@@ -52,14 +51,13 @@ function generateRandomSlug(): string {
   return `enq-${randomNumbers}-${randomChars}`;
 }
 
-export function CreateSurveyForm() {
+interface CreateSurveyFormProps {
+  apps: App[];
+}
+
+export function CreateSurveyForm({ apps }: CreateSurveyFormProps) {
   const [isPending, startTransition] = useTransition();
   const [serverError, setServerError] = useState<string | null>(null);
-  const [apps, setApps] = useState<App[]>([]);
-
-  useEffect(() => {
-    getAllApps().then(setApps);
-  }, []);
 
   const form = useForm<SurveySchema>({
     resolver: zodResolver(surveySchema),

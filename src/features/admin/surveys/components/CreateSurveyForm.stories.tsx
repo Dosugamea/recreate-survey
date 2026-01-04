@@ -13,4 +13,31 @@ const meta: Meta<typeof CreateSurveyForm> = {
 export default meta;
 type Story = StoryObj<typeof CreateSurveyForm>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  args: {
+    apps: [
+      {
+        id: "app-1",
+        name: "サンプルアプリ1",
+        slug: "sample-app-1",
+        privacyPolicyUrl: null,
+        faviconImageUrl: null,
+        copyrightNotice: null,
+        contactUrl: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: "app-2",
+        name: "サンプルアプリ2",
+        slug: "sample-app-2",
+        privacyPolicyUrl: null,
+        faviconImageUrl: null,
+        copyrightNotice: null,
+        contactUrl: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ],
+  },
+};

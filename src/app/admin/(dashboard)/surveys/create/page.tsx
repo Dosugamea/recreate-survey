@@ -1,6 +1,8 @@
-import { CreateSurveyForm } from "@/features/admin/surveys/components/CreateSurveyForm";
+import { getAllApps } from "@/features/admin/apps/actions/apps";
+import { SurveyCreatePageRoot } from "@/features/admin/surveys/components/SurveyCreatePageRoot";
 import type { Metadata } from "next";
-import { PageHeader } from "@/features/admin/layout/components/PageHeader";
+
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const appName = process.env.NEXT_PUBLIC_APP_NAME;
@@ -11,15 +13,8 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function CreateSurveyPage() {
-  return (
-    <div className="space-y-6">
-      <PageHeader
-        title="新しいアンケートを作成"
-        backHref="/admin/surveys"
-        description="詳細を入力して新しいアンケートキャンペーンを開始してください。"
-      />
-      <CreateSurveyForm />
-    </div>
-  );
+export default async function CreateSurveyPage() {
+  const apps = await getAllApps();
+
+  return <SurveyCreatePageRoot apps={apps} />;
 }
