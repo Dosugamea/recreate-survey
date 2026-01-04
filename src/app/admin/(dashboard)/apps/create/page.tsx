@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { CreateAppForm } from "@/features/admin/apps/components/CreateAppForm";
-import { PageHeader } from "@/features/admin/layout/components/PageHeader";
+import { AppCreatePageRoot } from "@/features/admin/apps/components/AppCreatePageRoot";
 
 export async function generateMetadata(): Promise<Metadata> {
   const appName = process.env.NEXT_PUBLIC_APP_NAME;
@@ -12,14 +11,5 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function CreateAppPage() {
-  return (
-    <div className="space-y-6">
-      <PageHeader
-        title="新しいアプリを作成"
-        backHref="/admin/apps"
-        description="アプリの基本情報を入力して新しいアプリを作成してください。"
-      />
-      <CreateAppForm />
-    </div>
-  );
+  return <AppCreatePageRoot />;
 }

@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
-import { EditAppForm } from "@/features/admin/apps/components/EditAppForm";
-import { PageHeader } from "@/features/admin/layout/components/PageHeader";
+import { getApp } from "@/features/admin/apps/actions/apps";
+import { AppEditPageRoot } from "@/features/admin/apps/components/AppEditPageRoot";
 
 export async function generateMetadata(props: {
   params: Promise<{ id: string }>;
@@ -10,9 +9,7 @@ export async function generateMetadata(props: {
   const params = await props.params;
 
   const appName = process.env.NEXT_PUBLIC_APP_NAME;
-  const app = await prisma.app.findUnique({
-    where: { id: params.id },
-  });
+  const app = await getApp(params.id);
 
   if (!app) {
     return {
@@ -32,22 +29,11 @@ export default async function EditAppPage(props: {
   params: Promise<{ id: string }>;
 }) {
   const params = await props.params;
-  const app = await prisma.app.findUnique({
-    where: { id: params.id },
-  });
+  const app = await getApp(params.id);
 
   if (!app) {
     notFound();
   }
 
-  return (
-    <div className="space-y-6">
-      <PageHeader
-        title="アプリ情報を編集"
-        backHref="/admin/apps"
-        description={`「${app.name}」の基本情報を編集できます。`}
-      />
-      <EditAppForm app={app} />
-    </div>
-  );
+  return <AppEditPageRoot app={app} />;
 }
