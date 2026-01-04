@@ -7,6 +7,7 @@ import { SurveyNotes } from "@/features/surveys/components/messages/SurveyNotes"
 import { SurveyFooter } from "@/features/surveys/components/footer/SurveyFooter";
 import { SurveyBackToTop } from "@/features/surveys/components/footer/SurveyBackToTop";
 import { App, Question, Survey } from "@prisma/client";
+import { getSurveyPeriodStatus } from "@/hooks/useSurveyPeriod";
 
 interface SurveyFormPageRootProps {
   app: App;
@@ -16,8 +17,6 @@ interface SurveyFormPageRootProps {
   };
   userId?: string;
   isAlreadySubmitted: boolean;
-  isExpired: boolean;
-  periodMessage: string;
 }
 
 /**
@@ -28,9 +27,11 @@ export function SurveyFormPageRoot({
   survey,
   userId,
   isAlreadySubmitted,
-  isExpired,
-  periodMessage,
 }: SurveyFormPageRootProps) {
+  const { isExpired, periodMessage } = getSurveyPeriodStatus(
+    survey.startAt,
+    survey.endAt
+  );
   // フッター用のリンクを構築
   const footerLinks = [
     ...(app.privacyPolicyUrl

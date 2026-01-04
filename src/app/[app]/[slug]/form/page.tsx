@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import { cookies } from "next/headers";
-import { getSurveyPeriodStatus } from "@/hooks/useSurveyPeriod";
 import type { Metadata } from "next";
 import { metadata as notFoundMetadata } from "@/app/not-found";
 import {
@@ -23,7 +22,6 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
   if (!app) {
     return notFoundMetadata;
   }
-
   const survey = await getPublicSurvey(params.app, params.slug);
   if (!survey) {
     return notFoundMetadata;
@@ -73,22 +71,14 @@ export default async function SurveyPublicPage(props: PageProps) {
   const searchParams = await props.searchParams;
   const userId = searchParams.auser_id;
 
-  // Appを取得
   const app = await getAppBySlug(params.app);
   if (!app) {
     notFound();
   }
-
-  // Surveyを取得
   const survey = await getPublicSurvey(params.app, params.slug);
-
   if (!survey) {
     notFound();
   }
-  const { isExpired, periodMessage } = getSurveyPeriodStatus(
-    survey.startAt,
-    survey.endAt
-  );
 
   // クッキーをチェックして、既に送信済みかどうかを確認
   const cookieStore = await cookies();
@@ -103,8 +93,6 @@ export default async function SurveyPublicPage(props: PageProps) {
       survey={survey}
       userId={userId}
       isAlreadySubmitted={isAlreadySubmitted}
-      isExpired={isExpired}
-      periodMessage={periodMessage}
     />
   );
 }
