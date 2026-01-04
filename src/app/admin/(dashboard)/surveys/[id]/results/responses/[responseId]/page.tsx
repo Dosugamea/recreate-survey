@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { getSurveyResponseDetail } from "@/features/admin/surveys/actions/surveys";
-import { SurveyResponseDetailPageRoot } from "@/features/admin/surveys/components/SurveyResponseDetailPageRoot";
+import { SurveyResponseDetailPageRoot } from "@/features/admin/surveys/pages/SurveyResponseIndividualDetailPageRoot";
 import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";

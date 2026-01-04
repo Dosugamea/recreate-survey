@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getSurveyById } from "@/features/admin/surveys/actions/surveys";
-import { SurveyDetailPageRoot } from "@/features/admin/surveys/components/SurveyDetailPageRoot";
+import { SurveyDetailPageRoot } from "@/features/admin/surveys/pages/SurveyDetailPageRoot";
 
 export async function generateMetadata(props: {
   params: Promise<{ id: string }>;

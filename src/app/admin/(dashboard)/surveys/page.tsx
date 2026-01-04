@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import { getSurveys } from "@/features/admin/surveys/actions/surveys";
 import { getApps } from "@/features/admin/apps/actions/apps";
-import { SurveysPageRoot } from "@/features/admin/surveys/components/SurveysPageRoot";
+import { SurveysPageRoot } from "@/features/admin/surveys/pages/SurveyListPageRoot";
 
 export const dynamic = "force-dynamic";
 

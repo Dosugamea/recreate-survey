@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getSurveyWithResults } from "@/features/admin/surveys/actions/surveys";
-import { SurveyResultsPageRoot } from "@/features/admin/surveys/components/SurveyResultsPageRoot";
+import { SurveyResultsPageRoot } from "@/features/admin/surveys/pages/SurveyResponseTotalResultsPageRoot";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";

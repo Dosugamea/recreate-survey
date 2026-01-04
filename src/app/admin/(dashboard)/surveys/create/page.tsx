@@ -1,5 +1,5 @@
 import { getAllApps } from "@/features/admin/apps/actions/apps";
-import { SurveyCreatePageRoot } from "@/features/admin/surveys/components/SurveyCreatePageRoot";
+import { SurveyCreatePageRoot } from "@/features/admin/surveys/pages/SurveyCreatePageRoot";
 import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
