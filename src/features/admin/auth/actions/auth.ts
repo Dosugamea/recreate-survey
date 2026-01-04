@@ -1,8 +1,14 @@
 "use server";
 
-import { signIn } from "@/lib/auth/auth";
+import { signIn, signOut } from "@/lib/auth/auth";
 import { AuthError } from "next-auth";
 
+/**
+ * サインインアクション
+ * @param prevState 前の状態
+ * @param formData フォームデータ
+ * @returns エラーメッセージまたはundefined
+ */
 export async function signInAction(
   prevState: string | undefined,
   formData: FormData
@@ -20,4 +26,11 @@ export async function signInAction(
     }
     throw error;
   }
+}
+
+/**
+ * サインアウトアクション
+ */
+export async function signOutAction() {
+  await signOut({ redirectTo: "/admin/login" });
 }
