@@ -1,7 +1,7 @@
 import { PageHeader } from "@/features/admin/layout/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ExportCSVButton } from "@/features/admin/surveys/components/ExportCSVButton";
+import { ExportCSVButton } from "@/features/admin/surveys/components/button/ExportCSVButton";
 import { Prisma } from "@prisma/client";
 
 type SurveyWithResults = Prisma.SurveyGetPayload<{

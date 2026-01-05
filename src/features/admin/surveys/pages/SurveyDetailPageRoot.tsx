@@ -7,8 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { Edit } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { DeleteSurveyButton } from "@/features/admin/surveys/components/DeleteSurveyButton";
-import { DuplicateSurveyButton } from "@/features/admin/surveys/components/DuplicateSurveyButton";
+import { DeleteSurveyButton } from "@/features/admin/surveys/components/button/DeleteSurveyButton";
+import { DuplicateSurveyButton } from "@/features/admin/surveys/components/button/DuplicateSurveyButton";
 
 interface SurveyDetailPageRootProps {
   survey: Survey & {

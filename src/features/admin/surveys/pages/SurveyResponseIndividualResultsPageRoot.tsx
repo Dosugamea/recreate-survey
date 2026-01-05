@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
-import { DeleteResponseButton } from "@/features/admin/surveys/components/DeleteResponseButton";
+import { DeleteResponseButton } from "@/features/admin/surveys/components/button/DeleteResponseButton";
 
 interface SurveyResponsesListPageRootProps {
   surveyId: string;

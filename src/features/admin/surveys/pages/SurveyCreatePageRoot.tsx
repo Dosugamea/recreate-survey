@@ -1,6 +1,6 @@
 import { App } from "@prisma/client";
 import { PageHeader } from "@/features/admin/layout/components/PageHeader";
-import { CreateSurveyForm } from "@/features/admin/surveys/components/CreateSurveyForm";
+import { CreateSurveyForm } from "@/features/admin/surveys/components/create/CreateSurveyForm";
 
 interface SurveyCreatePageRootProps {
   apps: App[];

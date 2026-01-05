@@ -3,10 +3,10 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { surveySchema, SurveySchema } from "@/lib/schemas";
-import { updateSurvey } from "@/features/admin/surveys/actions/surveys";
-import { useState, useTransition, useEffect } from "react";
+import { createSurvey } from "@/features/admin/surveys/actions/surveys";
+import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
-import { SurveyPreview } from "@/features/admin/surveys/components/SurveyPreview";
+import { SurveyPreview } from "@/features/admin/surveys/components/preview/SurveyPreview";
 import {
   Form,
   FormControl,
@@ -31,62 +31,57 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { CalendarIcon, Loader2, HelpCircle } from "lucide-react";
+import { CalendarIcon, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { Switch } from "@/components/ui/switch";
-import { getAllApps } from "@/features/admin/apps/actions/apps";
-import type { Survey } from "@prisma/client";
 import type { App } from "@prisma/client";
 
-interface EditSurveyFormProps {
-  survey: Survey;
+function generateRandomSlug(): string {
+  // ランダム4桁の数字を生成（0000-9999）
+  const randomNumbers = Math.floor(Math.random() * 10000)
+    .toString()
+    .padStart(4, "0");
+
+  // ランダムな大文字小文字3桁の英字を生成
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+  const randomChars = Array.from({ length: 3 }, () =>
+    chars.charAt(Math.floor(Math.random() * chars.length))
+  ).join("");
+
+  return `enq-${randomNumbers}-${randomChars}`;
 }
 
-export function EditSurveyForm({ survey }: EditSurveyFormProps) {
+interface CreateSurveyFormProps {
+  apps: App[];
+}
+
+export function CreateSurveyForm({ apps }: CreateSurveyFormProps) {
   const [isPending, startTransition] = useTransition();
   const [serverError, setServerError] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [apps, setApps] = useState<App[]>([]);
-
-  useEffect(() => {
-    getAllApps().then(setApps);
-  }, []);
 
   const form = useForm<SurveySchema>({
     resolver: zodResolver(surveySchema),
     defaultValues: {
-      appId: survey.appId,
-      title: survey.title,
-      slug: survey.slug,
-      description: survey.description || "",
-      notes: survey.notes || "",
-      startAt: survey.startAt ? new Date(survey.startAt) : new Date(),
-      endAt: survey.endAt
-        ? new Date(survey.endAt)
-        : new Date(Date.now() + 14 * 24 * 60 * 60 * 1000), // 今日から2週間後
-      themeColor: survey.themeColor,
-      headerImage: survey.headerImage || "",
-      bgImage: survey.bgImage || "",
-      webhookUrl: survey.webhookUrl || "",
-      isActive: survey.isActive,
+      appId: "",
+      title: "",
+      slug: generateRandomSlug(),
+      description: "",
+      notes: "",
+      startAt: new Date(),
+      endAt: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000), // 今日から2週間後
+      themeColor: "#6c4034",
+      headerImage: "",
+      bgImage: "",
+      webhookUrl: "",
     },
   });
 
   function onSubmit(data: SurveySchema) {
     setServerError(null);
-    setSuccessMessage(null);
     startTransition(async () => {
-      const response = await updateSurvey(survey.id, data);
+      const response = await createSurvey(data);
       if (response?.error) {
         setServerError(response.error);
-      } else {
-        setSuccessMessage("アンケート情報を更新しました！");
       }
     });
   }
@@ -101,12 +96,6 @@ export function EditSurveyForm({ survey }: EditSurveyFormProps) {
           {serverError && (
             <div className="bg-destructive/15 text-destructive text-sm p-3 rounded-md">
               {serverError}
-            </div>
-          )}
-
-          {successMessage && (
-            <div className="bg-green-500/15 text-green-600 text-sm p-3 rounded-md">
-              {successMessage}
             </div>
           )}
 
@@ -161,26 +150,13 @@ export function EditSurveyForm({ survey }: EditSurveyFormProps) {
               name="slug"
               render={({ field }) => (
                 <FormItem>
-                  <div className="flex items-center gap-2">
-                    <FormLabel>スラッグ (URLパス)</FormLabel>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <button
-                          type="button"
-                          className="inline-flex items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                          aria-label="スラッグについての説明"
-                        >
-                          <HelpCircle className="h-4 w-4 text-muted-foreground" />
-                        </button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>アンケートのURLとして使用される一意のIDです。</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </div>
+                  <FormLabel>スラッグ (URLパス)</FormLabel>
                   <FormControl>
                     <Input placeholder="autumn-campaign-2025" {...field} />
                   </FormControl>
+                  <FormDescription>
+                    アンケートのURLとして使用される一意のIDです。
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -340,25 +316,6 @@ export function EditSurveyForm({ survey }: EditSurveyFormProps) {
                 </FormItem>
               )}
             />
-
-            <FormField
-              control={form.control}
-              name="isActive"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>公開ステータス</FormLabel>
-                  <FormControl>
-                    <div className="**:data-[slot=switch]:h-7 **:data-[slot=switch]:w-12 **:data-[slot=switch-thumb]:size-6">
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -416,7 +373,7 @@ export function EditSurveyForm({ survey }: EditSurveyFormProps) {
 
           <Button type="submit" disabled={isPending}>
             {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            アンケート情報を更新
+            アンケートを作成
           </Button>
         </form>
       </Form>

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { EditSurveyForm } from "@/features/admin/surveys/components/EditSurveyForm";
+import { EditSurveyForm } from "@/features/admin/surveys/components/edit/EditSurveyForm";
 
 const meta: Meta<typeof EditSurveyForm> = {
   title: "Admin/Survey/EditSurveyForm",

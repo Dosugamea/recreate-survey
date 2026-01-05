@@ -1,4 +1,4 @@
-import { SurveyList } from "@/features/admin/surveys/components/SurveyList";
+import { SurveyList } from "@/features/admin/surveys/components/list/SurveyList";
 import { Prisma } from "@prisma/client";
 
 // SurveyListが期待するsurveysの型に合わせて定義

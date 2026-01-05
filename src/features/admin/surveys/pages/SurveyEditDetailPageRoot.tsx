@@ -1,6 +1,6 @@
 import { Survey, App } from "@prisma/client";
 import { PageHeader } from "@/features/admin/layout/components/PageHeader";
-import { EditSurveyForm } from "@/features/admin/surveys/components/EditSurveyForm";
+import { EditSurveyForm } from "@/features/admin/surveys/components/edit/EditSurveyForm";
 
 interface SurveyEditPageRootProps {
   survey: Survey & {
