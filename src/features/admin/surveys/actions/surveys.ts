@@ -6,6 +6,7 @@ import { cookies } from "next/headers";
 import { surveySchema, SurveySchema } from "@/lib/schemas";
 import { prisma } from "@/lib/prisma";
 import { ensureUser } from "@/lib/auth-utils";
+import { escapeCsvValue } from "@/lib/csv-utils";
 
 export async function getSurveyById(id: string) {
   await ensureUser();
@@ -289,18 +290,6 @@ export async function duplicateSurvey(surveyId: string) {
     console.error(e);
     return { error: "複製に失敗しました。" };
   }
-}
-
-/**
- * CSV形式の値をエスケープする
- */
-function escapeCsvValue(value: string): string {
-  // カンマ、改行、ダブルクォートを含む場合はダブルクォートで囲む
-  if (value.includes(",") || value.includes("\n") || value.includes('"')) {
-    // ダブルクォート自体は2つ重ねる
-    return `"${value.replace(/"/g, '""')}"`;
-  }
-  return value;
 }
 
 /**
