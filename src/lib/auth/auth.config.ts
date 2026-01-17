@@ -28,12 +28,14 @@ export const authConfig = {
     jwt({ token, user }) {
       if (user) {
         token.role = (user as { role: string }).role;
+        token.id = user.id;
       }
       return token;
     },
     session({ session, token }) {
       if (session.user) {
         (session.user as { role: string }).role = token.role as string;
+        session.user.id = token.sub || ""; // next-auth usually puts id in sub
       }
       return session;
     },

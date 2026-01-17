@@ -7,6 +7,7 @@ import { auth } from "@/lib/auth/auth";
 export async function getCurrentUser() {
   const session = await auth();
   return {
+    id: session?.user?.id || "",
     userName: session?.user?.name || "",
     isAdmin: session?.user?.role === "ADMIN",
   };
