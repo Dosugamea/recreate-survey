@@ -4,6 +4,7 @@ import Credentials from "next-auth/providers/credentials";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
+import { insertAuditLog } from "@/lib/logger-utils";
 
 async function getUser(email: string) {
   try {
@@ -33,6 +34,15 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
 
           const passwordsMatch = await bcrypt.compare(password, user.password);
           if (passwordsMatch) {
+            try {
+              await insertAuditLog({
+                action: "LOGIN",
+                resource: "AUTH",
+                userId: user.id,
+              });
+            } catch (e) {
+              console.error("Audit log failed during login", e);
+            }
             // カスタムUser型に合わせてroleプロパティを含むオブジェクトを返す
             return {
               id: user.id,

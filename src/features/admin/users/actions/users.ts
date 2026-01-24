@@ -2,6 +2,7 @@
 
 import { ensureAdmin, ensureUser } from "@/lib/auth-utils";
 import { prisma } from "@/lib/prisma";
+import { insertAuditLog } from "@/lib/logger-utils";
 import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
@@ -68,6 +69,24 @@ export async function createUser(formData: FormData) {
         role: validated.data.role,
       },
     });
+
+    // User logging manually needs ID, but prisma.create returns it.
+    // However, I need to capture it.
+    const createdUser = await prisma.user.findUnique({
+      where: { email: validated.data.email },
+    });
+    if (createdUser) {
+      await insertAuditLog({
+        action: "CREATE",
+        resource: "USER",
+        resourceId: createdUser.id,
+        details: {
+          name: createdUser.name,
+          email: createdUser.email,
+          role: createdUser.role,
+        },
+      });
+    }
 
     revalidatePath("/admin/users");
     return { success: true };
@@ -144,6 +163,13 @@ export async function updateUser(id: string, formData: FormData) {
       data,
     });
 
+    await insertAuditLog({
+      action: "UPDATE",
+      resource: "USER",
+      resourceId: id,
+      details: { name: data.name, email: data.email, role: data.role },
+    });
+
     revalidatePath("/admin/users");
     return { success: true };
   } catch (error) {
@@ -161,6 +187,11 @@ export async function deleteUser(id: string) {
   try {
     await prisma.user.delete({
       where: { id },
+    });
+    await insertAuditLog({
+      action: "DELETE",
+      resource: "USER",
+      resourceId: id,
     });
     revalidatePath("/admin/users");
     return { success: true };
