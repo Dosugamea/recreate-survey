@@ -5,6 +5,7 @@ import {
   HelpCircle,
   BarChart3,
   User,
+  History,
   LucideIcon,
 } from "lucide-react";
 
@@ -91,6 +92,12 @@ export const navigationConfig: NavSection[] = [
         label: "ヘルプ",
         href: "/admin/help",
         icon: HelpCircle,
+      },
+      {
+        label: "監査ログ",
+        href: "/admin/audit-logs",
+        icon: History,
+        adminOnly: true,
       },
     ],
   },
