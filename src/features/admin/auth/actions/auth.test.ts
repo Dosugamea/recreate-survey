@@ -31,7 +31,9 @@ describe("auth actions", () => {
 
       await signInAction(undefined, formData);
 
-      expect(signIn).toHaveBeenCalledWith("credentials", formData);
+      expect(signIn).toHaveBeenCalledWith("credentials", formData, {
+        redirectTo: "/admin",
+      });
     });
 
     it("should return 'Invalid credentials.' if CredentialsSignin error occurs", async () => {
