@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { QuestionFormSchema } from "@/lib/schemas";
 import { revalidatePath } from "next/cache";
 import { ensureUser } from "@/lib/auth-utils";
+import { insertAuditLog } from "@/lib/logger-utils";
 
 export async function addQuestion(surveyId: string, data: QuestionFormSchema) {
   await ensureUser();
@@ -20,7 +21,7 @@ export async function addQuestion(surveyId: string, data: QuestionFormSchema) {
       ? JSON.stringify(data.options.map((o) => o.value))
       : null;
 
-    await prisma.question.create({
+    const createdQuestion = await prisma.question.create({
       data: {
         surveyId,
         type: data.type,
@@ -30,6 +31,13 @@ export async function addQuestion(surveyId: string, data: QuestionFormSchema) {
         options: optionsJson,
         order: nextOrder,
       },
+    });
+
+    await insertAuditLog({
+      action: "CREATE",
+      resource: "QUESTION",
+      resourceId: createdQuestion.id,
+      details: { surveyId, label: data.label, type: data.type },
     });
 
     revalidatePath(`/admin/surveys/${surveyId}/details`);
@@ -63,6 +71,13 @@ export async function updateQuestion(
       },
     });
 
+    await insertAuditLog({
+      action: "UPDATE",
+      resource: "QUESTION",
+      resourceId: questionId,
+      details: { surveyId, label: data.label, type: data.type },
+    });
+
     revalidatePath(`/admin/surveys/${surveyId}/details`);
     return { success: true };
   } catch (e) {
@@ -77,6 +92,14 @@ export async function deleteQuestion(questionId: string, surveyId: string) {
     await prisma.question.delete({
       where: { id: questionId },
     });
+
+    await insertAuditLog({
+      action: "DELETE",
+      resource: "QUESTION",
+      resourceId: questionId,
+      details: { surveyId },
+    });
+
     revalidatePath(`/admin/surveys/${surveyId}/details`);
     return { success: true };
   } catch {
@@ -99,6 +122,14 @@ export async function reorderQuestions(
         })
       )
     );
+
+    await insertAuditLog({
+      action: "REORDER",
+      resource: "QUESTION",
+      resourceId: surveyId, // Question reordering is often logged per survey
+      details: { surveyId, itemCount: items.length },
+    });
+
     revalidatePath(`/admin/surveys/${surveyId}/details`);
     return { success: true };
   } catch (e) {

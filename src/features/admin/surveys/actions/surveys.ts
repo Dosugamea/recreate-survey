@@ -7,6 +7,7 @@ import { surveySchema, SurveySchema } from "@/lib/schemas";
 import { prisma } from "@/lib/prisma";
 import { ensureUser } from "@/lib/auth-utils";
 import { escapeCsvValue } from "@/lib/csv-utils";
+import { insertAuditLog } from "@/lib/logger-utils";
 
 export async function getSurveyById(id: string) {
   await ensureUser();
@@ -97,7 +98,7 @@ export async function createSurvey(data: SurveySchema) {
   }
 
   try {
-    await prisma.survey.create({
+    const createdSurvey = await prisma.survey.create({
       data: {
         appId,
         title,
@@ -112,6 +113,14 @@ export async function createSurvey(data: SurveySchema) {
         webhookUrl: webhookUrl || null,
       },
     });
+
+    await insertAuditLog({
+      action: "CREATE",
+      resource: "SURVEY",
+      resourceId: createdSurvey.id,
+      details: { title, slug },
+    });
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
     if (e.code === "P2002") {
@@ -180,6 +189,13 @@ export async function updateSurvey(surveyId: string, data: SurveySchema) {
         isActive: isActive !== undefined ? isActive : undefined,
       },
     });
+
+    await insertAuditLog({
+      action: "UPDATE",
+      resource: "SURVEY",
+      resourceId: surveyId,
+      details: { title, slug },
+    });
   } catch (e) {
     if (e && typeof e === "object" && "code" in e && e.code === "P2002") {
       return { error: "Slug already exists. Please choose another one." };
@@ -196,6 +212,11 @@ export async function deleteSurvey(surveyId: string) {
   try {
     await prisma.survey.delete({
       where: { id: surveyId },
+    });
+    await insertAuditLog({
+      action: "DELETE",
+      resource: "SURVEY",
+      resourceId: surveyId,
     });
   } catch (e) {
     console.error(e);
@@ -284,6 +305,17 @@ export async function duplicateSurvey(surveyId: string) {
       return newSurvey;
     });
 
+    await insertAuditLog({
+      action: "CREATE",
+      resource: "SURVEY",
+      resourceId: duplicatedSurvey.id,
+      details: {
+        title: duplicatedSurvey.title,
+        sourceSurveyId: surveyId,
+        note: "Duplicated",
+      },
+    });
+
     // 複製したアンケートのIDを返す（クライアント側でリダイレクト）
     return { success: true, surveyId: duplicatedSurvey.id };
   } catch (e) {
@@ -363,6 +395,13 @@ export async function exportSurveyResultsAsCSV(surveyId: string) {
     const bom = "\uFEFF";
     const csvWithBom = bom + csvContent;
 
+    await insertAuditLog({
+      action: "EXPORT",
+      resource: "SURVEY",
+      resourceId: surveyId,
+      details: { title: survey.title },
+    });
+
     return { success: true, csv: csvWithBom };
   } catch (e) {
     console.error(e);
@@ -396,6 +435,16 @@ export async function deleteResponse(surveyId: string, responseId: string) {
     // 回答済みクッキーを削除（テスト回答を削除した場合などに即座に反映されるように）
     const cookieStore = await cookies();
     cookieStore.delete(`survey_${surveyId}_${deletedResponse.userId}`);
+
+    await insertAuditLog({
+      action: "DELETE",
+      resource: "RESPONSE",
+      resourceId: responseId,
+      details: {
+        surveyId,
+        userId: deletedResponse.userId,
+      },
+    });
 
     return { success: true };
   } catch (e) {

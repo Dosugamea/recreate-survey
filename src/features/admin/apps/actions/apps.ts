@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { appSchema, AppSchema } from "@/lib/schemas";
 import { prisma } from "@/lib/prisma";
 import { ensureUser } from "@/lib/auth-utils";
+import { insertAuditLog } from "@/lib/logger-utils";
 
 export async function createApp(data: AppSchema) {
   await ensureUser();
@@ -23,7 +24,7 @@ export async function createApp(data: AppSchema) {
   } = result.data;
 
   try {
-    await prisma.app.create({
+    const createdApp = await prisma.app.create({
       data: {
         name,
         slug,
@@ -32,6 +33,13 @@ export async function createApp(data: AppSchema) {
         copyrightNotice: copyrightNotice || null,
         contactUrl: contactUrl || null,
       },
+    });
+
+    await insertAuditLog({
+      action: "CREATE",
+      resource: "APP",
+      resourceId: createdApp.id,
+      details: { name, slug },
     });
   } catch (e: unknown) {
     console.error(e);
@@ -69,6 +77,13 @@ export async function updateApp(appId: string, data: AppSchema) {
         copyrightNotice: copyrightNotice || null,
         contactUrl: contactUrl || null,
       },
+    });
+
+    await insertAuditLog({
+      action: "UPDATE",
+      resource: "APP",
+      resourceId: appId,
+      details: { name, slug },
     });
   } catch (e: unknown) {
     console.error(e);

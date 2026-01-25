@@ -3,8 +3,8 @@ import { getCurrentUser } from "@/lib/auth-utils";
 import { headers } from "next/headers";
 
 interface CreateAuditLogParams {
-  action: "CREATE" | "UPDATE" | "DELETE" | "LOGIN";
-  resource: "SURVEY" | "USER" | "AUTH";
+  action: "CREATE" | "UPDATE" | "DELETE" | "LOGIN" | "EXPORT" | "REORDER";
+  resource: "SURVEY" | "USER" | "AUTH" | "APP" | "QUESTION" | "RESPONSE";
   resourceId?: string;
   details?: Record<string, unknown>;
   userId?: string; // 明示的に指定する場合（ログイン直後など）
