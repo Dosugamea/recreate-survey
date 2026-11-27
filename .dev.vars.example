@@ -1,0 +1,19 @@
+# Cloudflare Workers ローカルプレビュー用環境変数ファイル (.dev.vars のテンプレート)
+# 使用時はこのファイルを .dev.vars にコピーして値を設定してください。
+
+# Next.js の環境モード ("development" | "production")
+NEXTJS_ENV=development
+
+# アプリケーション名
+NEXT_PUBLIC_APP_NAME="Survey App"
+
+# PostgreSQL 接続文字列
+DATABASE_URL="postgresql://user:password@localhost:5432/survey"
+
+# Auth.js (NextAuth v5) シークレットキー & ベースURL
+AUTH_SECRET="development-secret-key-change-in-production-min-32-chars"
+AUTH_URL="http://localhost:8787"
+
+# Cloudflare Turnstile
+NEXT_PUBLIC_CF_TURNSTILE_SITE_KEY=""
+CF_TURNSTILE_SECRET_KEY=""

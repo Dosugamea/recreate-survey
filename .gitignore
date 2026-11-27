@@ -46,3 +46,9 @@ next-env.d.ts
 refs
 *storybook.log
 storybook-static
+
+# cloudflare / opennext
+/.open-next/
+/.wrangler/
+.dev.vars
+
