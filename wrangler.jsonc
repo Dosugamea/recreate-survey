@@ -1,0 +1,34 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "main": ".open-next/worker.js",
+  "name": "survey-app",
+  "compatibility_date": "2026-09-01",
+  "compatibility_flags": [
+    // Node.js API を Cloudflare Workers 上で有効化
+    "nodejs_compat",
+    // グローバル fetch のパブリックアクセス許可
+    "global_fetch_strictly_public"
+  ],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      // "name" と一致させる必要があります
+      "service": "survey-app"
+    }
+  ],
+  "images": {
+    // Cloudflare Images バインディング（画像最適化用）
+    "binding": "IMAGES"
+  }
+  // R2 による ISR / データキャッシュを有効にする場合は以下を設定し、open-next.config.ts も更新してください
+  // "r2_buckets": [
+  //   {
+  //     "binding": "NEXT_INC_CACHE_R2_BUCKET",
+  //     "bucket_name": "<BUCKET_NAME>"
+  //   }
+  // ]
+}

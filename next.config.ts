@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
 
 const nextConfig: NextConfig = {
   images: {
@@ -25,3 +26,6 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
+
+// ローカル開発時に Cloudflare Workers のバインディングを利用可能にする
+initOpenNextCloudflareForDev();
